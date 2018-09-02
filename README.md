@@ -1,18 +1,30 @@
-# Rebirth and Challenge Script for NGU Idle
+# NGU Rebirth Script
 
-Written by Unponderable and Tatsumasa.
+Rebirth and Challenge script for NGU idle
 
-Also thanks to EvoGeek, the genesis of much of this script.
+Written by __Unponderable__ and __Tatsumasa__\
+Also thanks to __EvoGeek__, the genesis of much of this script
 
-REQUIREMENTS TO FULLY USE THIS SCRIPT:
-1. Must have 1-energy-capped all Basic Training skills
-2. Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD
-3. Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, Custom Energy Button 1
-4. Must have puchased with AP: Insta Training Cap (10,000 AP)
+#### Change Log
+
+0.4c - Various bugfixes. Added option to not use Wandoos. Added option to set default loop settings. Added support for Double Basic Training perk (see settings).\
+0.4 - Added new settings to let you customize how challenge runs are done. Fixed 100-LC using blood at the start of a run. Added some bonus settings, too.\
+0.3 - Better challenge support. Better GUI. Better everything. Fixed numerous bugs (and dumb design decisions).\
+0.2b - Added support for some of the challenges. Added a GUI to let you select some basic run options. Cleaned up some functions that weren't used.\
+0.1b - Initial release.
+
+
+#### Requirements to fully use this script
+
+Must have 1-energy-capped all Basic Training skills\
+Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD\
+Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, Custom Energy Button 1\
+Must have puchased with AP: Insta Training Cap (10,000 AP)\
 
 I strongly suggest having Auto Boost, Auto Merge, and Advanced Loot Filter, as the script does not (currently) do inventory management.
 
-SETUP
+#### Setup
+
 1. If you're doing regular runs, have stats/number sufficient to sustainably kill up through Boss 37 within the first few seconds of your rebirth. The script assumes you have blood magic unlocked from the get-go.
 1a. If you're doing challenge runs, have stats sufficient to kill Boss 37 within a couple short rebirths.
 2. Setup beards as desired. Beards will not be touched in this script. Magic beards are more useful for this scripts' purposes.
@@ -26,16 +38,16 @@ SETUP
 9. Load script and select your run choice with the menu, changing settings beforehand if desired.
 10. Quit at anytime with Escape.
 
-FAQs
+#### FAQs
 
-Q: WTF do I do?
+__Q__: WTF do I do?
 
-A: Read the instructions. Open the script in a text editor and change settings, if desired. Once you're ready, load the script, select your run, then go.
+__A__: Read the instructions. Open the script in a text editor and change settings, if desired. Once you're ready, load the script, select your run, then go.
 
-Q: I can't sustain 3-minute rebirths above boss 37 and therefore challenge runs don't work! What do I do?
+__Q__: I can't sustain 3-minute rebirths above boss 37 and therefore challenge runs don't work! What do I do?
 
-A: Come back when you have more stats or change the challenge run sequence to use longer duration runs.
+__A__: Come back when you have more stats or change the challenge run sequence to use longer duration runs.
 
-Q: HALP. It's giving me an error about the game not being visible/not finding TopLeft.png!
+__Q__: HALP. It's giving me an error about the game not being visible/not finding TopLeft.png!
 
-A: The script attempts to match the image TopLeft.png with the top left corner of the game screen. Make sure NGU idle is fully visible on the screen. Make sure the script is being run in the same file directory as the images that it came with. If you're still having issues, you may have an incompatible aspect ratio or scaling factor. For reference, the script was tested in Chrome and Firefox at 100% zoom on a 1920x1080 resolution monitor. I guess try matching that, if possible? If that doesn't work, I don't really know how to fix it, sorry :-/
+__A__: The script attempts to match the image TopLeft.png with the top left corner of the game screen. Make sure NGU idle is fully visible on the screen. Make sure the script is being run in the same file directory as the images that it came with. If you're still having issues, you may have an incompatible aspect ratio or scaling factor. For reference, the script was tested in Chrome and Firefox at 100% zoom on a 1920x1080 resolution monitor. I guess try matching that, if possible? If that doesn't work, I don't really know how to fix it, sorry :-/
