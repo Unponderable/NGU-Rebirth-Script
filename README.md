@@ -21,7 +21,7 @@ Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD\
 Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, Custom Energy Button 1\
 Must have puchased with AP: Insta Training Cap (10,000 AP)\
 
-I strongly suggest having Auto-boost, Auto-merge, and some variety of loot filter, as the script does not (currently) do inventory management.
+I strongly suggest having Auto Boost, Auto Merge, and Advanced Loot Filter, as the script does not (currently) do inventory management.
 
 #### Setup
 
@@ -42,7 +42,7 @@ I strongly suggest having Auto-boost, Auto-merge, and some variety of loot filte
 
 __Q__: WTF do I do?
 
-__A__: Open the script in a text editor and read the instructions. Once you're ready, load the script, select your run, then go.
+__A__: Read the instructions. Open the script in a text editor and change settings, if desired. Once you're ready, load the script, select your run, then go.
 
 __Q__: I can't sustain 3-minute rebirths above boss 37 and therefore challenge runs don't work! What do I do?
 
