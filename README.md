@@ -1,6 +1,4 @@
-# NGU Rebirth Script
-
-Rebirth and Challenge Script for NGU Idle
+# Rebirth and Challenge Script for NGU Idle
 
 Written by Unponderable and Tatsumasa.
 
@@ -12,7 +10,7 @@ REQUIREMENTS TO FULLY USE THIS SCRIPT:
 3. Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, Custom Energy Button 1
 4. Must have puchased with AP: Insta Training Cap (10,000 AP)
 
-I strongly suggest having Auto-boost, Auto-merge, and some variety of loot filter, as the script does not (currently) do inventory management.
+I strongly suggest having Auto Boost, Auto Merge, and Advanced Loot Filter, as the script does not (currently) do inventory management.
 
 SETUP
 1. If you're doing regular runs, have stats/number sufficient to sustainably kill up through Boss 37 within the first few seconds of your rebirth. The script assumes you have blood magic unlocked from the get-go.
