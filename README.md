@@ -1,14 +1,16 @@
 # NGU Rebirth Script
 
-Compatible with NGU Idle Build 0.402
+Rebirth and Challenge Script for NGU Idle
+
 Written by Unponderable and Tatsumasa.
+
 Also thanks to EvoGeek, the genesis of much of this script.
 
 REQUIREMENTS TO FULLY USE THIS SCRIPT:
-Must have 1-energy-capped all Basic Training skills
-Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD
-Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, Custom Energy Button 1
-Must have puchased with AP: Insta Training Cap (10,000 AP)
+1. Must have 1-energy-capped all Basic Training skills
+2. Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD
+3. Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, Custom Energy Button 1
+4. Must have puchased with AP: Insta Training Cap (10,000 AP)
 
 I strongly suggest having Auto-boost, Auto-merge, and some variety of loot filter, as the script does not (currently) do inventory management.
 
