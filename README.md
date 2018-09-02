@@ -1,17 +1,8 @@
 # NGU Rebirth Script
 
-;MasterScript 0.4c
-;Compatible with NGU Idle Build 0.402
-;Written by Unponderable and Tatsumasa.
-;Also thanks to EvoGeek, the genesis of much of this script.
-;
-;Change Log
-;0.4c - Various bugfixes. Added option to not use Wandoos. Added option to set default loop settings. Added support for Double Basic Training perk (see settings).
-;0.4 - Added new settings to let you customize how challenge runs are done. Fixed 100-LC using blood at the start of a run. Added some bonus settings, too.
-;0.3 - Better challenge support. Better GUI. Better everything. Fixed numerous bugs (and dumb design decisions).
-;0.2 beta - Added support for some of the challenges. Added a GUI to let you select some basic run options. Cleaned up some functions that weren't used.
-;0.1 beta - Initial release.
-;
+Compatible with NGU Idle Build 0.402
+Written by Unponderable and Tatsumasa.
+Also thanks to EvoGeek, the genesis of much of this script.
 
 REQUIREMENTS TO FULLY USE THIS SCRIPT:
 Must have 1-energy-capped all Basic Training skills
