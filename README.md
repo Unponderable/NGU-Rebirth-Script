@@ -32,7 +32,7 @@ FAQs
 
 Q: WTF do I do?
 
-A: Open the script in a text editor and read the instructions. Once you're ready, load the script, select your run, then go.
+A: Read the instructions. Open the script in a text editor and change settings, if desired. Once you're ready, load the script, select your run, then go.
 
 Q: I can't sustain 3-minute rebirths above boss 37 and therefore challenge runs don't work! What do I do?
 
