@@ -199,18 +199,16 @@ Global AugmentationPlusX := 860 - 329
 
 Global Scissors1Y := 585 - 323
 Global Scissors2Y := 615 - 323
-
 Global Milk1Y := 645 - 323
 Global Milk2Y := 675 - 323
-
 Global Cannon1Y := 710 - 323
 Global Cannon2Y := 740 - 323
-
 Global Shoulder1Y := 775 - 323
 Global Shoulder2Y := 805 - 323
-
 Global Buster1Y := 840 - 323
 Global Buster2Y := 870 - 323
+
+Global AugBBX := 515
 
 Global AdvTrainingPlusX := 1210 - 329
 Global AdvTrainingBothY := 550 - 323
@@ -218,6 +216,9 @@ Global AdvTrainingBothY := 550 - 323
 Global TimeMachinePlusX := 850 - 329
 Global TimeMachineEnergyY := 550 - 323
 Global TimeMachineMagicY := 650 - 323
+Global TimeMachineEnergyBBX := 507
+Global TimeMachineEnergyBBY := 231
+Global TimeMachineMagicBBY := 331
 
 Global BloodMagicPlusX := 815 - 329
 Global BloodMagicCapX := 890 - 329
@@ -323,6 +324,14 @@ Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requir
 	{
 		Send ^{Click, %X%,%Y%}
 	}
+}
+
+PixelGetColor2(X,Y)
+{
+	X += TopLeftX
+	Y += TopLeftY
+	PixelGetColor, value, %X%, %Y%
+	return value
 }
 
 Timer() ; Sets up a tooltip at ToolTipX and ToolTipY to display what's going on in the script.
@@ -898,7 +907,7 @@ AugmentationMenu() ; Clicks on the augmentation menu
 	Sleep 500
 }
 
-AugmentationScissors() ; Adds energy to Safety Scissors and then Danger Scissors
+AugmentationScissors() ; Adds energy to Safety Scissors and then Danger Scissors, if you're not capped.
 {
 	if NACFlag = 1
 	{
@@ -906,13 +915,40 @@ AugmentationScissors() ; Adds energy to Safety Scissors and then Danger Scissors
 	}
 	
 	CurrentStep := A_ThisFunc
-	Click2(AugmentationPlusX, Scissors1Y)
-	Sleep 500
-	Click2(AugmentationPlusX, Scissors2Y)
-	Sleep 500
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,Scissors1Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Scissors1Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Scissors1Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Scissors1Y)
+		Sleep 500
+	}
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,Scissors2Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Scissors2Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Scissors2Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Scissors2Y)
+		Sleep 500
+	}
+	
 }
 
-AugmentationMilk() ; Adds energy to Milk Infusion and then Drinking the Milk Too
+AugmentationMilk() ; Adds energy to Milk Infusion and then Drinking the Milk Too, if you're not capped.
 {
 	if NACFlag = 1
 	{
@@ -920,13 +956,39 @@ AugmentationMilk() ; Adds energy to Milk Infusion and then Drinking the Milk Too
 	}
 	
 	CurrentStep := A_ThisFunc
-	Click2(AugmentationPlusX, Milk1Y)
-	Sleep 500
-	Click2(AugmentationPlusX, Milk2Y)
-	Sleep 500
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,Milk1Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Milk1Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Milk1Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Milk1Y)
+		Sleep 500
+	}
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,Milk2Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Milk2Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Milk2Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Milk2Y)
+		Sleep 500
+	}
 }
 
-AugmentationCannon() ; Adds energy to Cannon Implant and then Missile Launcher
+AugmentationCannon() ; Adds energy to Cannon Implant and then Missile Launcher, if you're not capped.
 {
 	if NACFlag = 1
 	{
@@ -934,13 +996,38 @@ AugmentationCannon() ; Adds energy to Cannon Implant and then Missile Launcher
 	}
 	
 	CurrentStep := A_ThisFunc
-	Click2(AugmentationPlusX, Cannon1Y)
-	Sleep 500
-	Click2(AugmentationPlusX, Cannon2Y)
-	Sleep 500
+	Aug_BB1 := PixelGetColor2(AugBBX,Cannon1Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Cannon1Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Cannon1Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Cannon1Y)
+		Sleep 500
+	}
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,Cannon2Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Cannon2Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Cannon2Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Cannon2Y)
+		Sleep 500
+	}
 }
 
-AugmentationShoulder() ; Adds energy to Shoulder Mounted and then Actual Ammunition
+AugmentationShoulder() ; Adds energy to Shoulder Mounted and then Actual Ammunition, if you're not capped.
 {
 	if NACFlag = 1
 	{
@@ -948,13 +1035,38 @@ AugmentationShoulder() ; Adds energy to Shoulder Mounted and then Actual Ammunit
 	}
 	
 	CurrentStep := A_ThisFunc
-	Click2(AugmentationPlusX, Shoulder1Y)
-	Sleep 500
-	Click2(AugmentationPlusX, Shoulder2Y)
-	Sleep 500
+	Aug_BB1 := PixelGetColor2(AugBBX,Shoulder1Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Shoulder1Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Shoulder1Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Shoulder1Y)
+		Sleep 500
+	}
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,Shoulder2Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Shoulder2Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Shoulder2Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Shoulder2Y)
+		Sleep 500
+	}
 }
 
-AugmentationBuster() ; Adds energy to Energy Buster and then Charge Shot
+AugmentationBuster() ; Adds energy to Energy Buster and then Charge Shot, if you're not capped.
 {
 	if NACFlag = 1
 	{
@@ -962,10 +1074,35 @@ AugmentationBuster() ; Adds energy to Energy Buster and then Charge Shot
 	}
 	
 	CurrentStep := A_ThisFunc
-	Click2(AugmentationPlusX, Buster1Y)
-	Sleep 500
-	Click2(AugmentationPlusX, Buster2Y)
-	Sleep 500
+	Aug_BB1 := PixelGetColor2(AugBBX,Buster1Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Buster1Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Buster1Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Buster1Y)
+		Sleep 500
+	}
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,Buster2Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Buster2Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Buster2Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Buster2Y)
+		Sleep 500
+	}
 }
 
 Augmentation(X) ;Adds energy to Augmentation X (up to 4 = Energy Buster)
@@ -1025,27 +1162,52 @@ TimeMachineMenu() ; Clicks on the Time Machine menu
 	Sleep 500
 }
 
-TimeMachineEnergy() ; Clicks to add energy to the time machine (inside the Time Mahine Menu)
+TimeMachineEnergy() ; Clicks to add energy to the time machine (inside the Time Mahine Menu), if you're not capped.
 {
 	CurrentStep := A_ThisFunc
-	Click2(TimeMachinePlusX, TimeMachineEnergyY)
-	Sleep 500
+	
+	TM_BB1 := PixelGetColor2(TimeMachineEnergyBBX,TimeMachineEnergyBBY)
+	Sleep, 10
+	TM_BB2 := PixelGetColor2(TimeMachineEnergyBBX,TimeMachineEnergyBBY)
+	Sleep, 10
+	TM_BB3 := PixelGetColor2(TimeMachineEnergyBBX,TimeMachineEnergyBBY)
+	if ((TM_BB1 != 0xFFFFFF) && (TM_BB2 != 0xFFFFFF) && (TM_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(TimeMachinePlusX, TimeMachineEnergyY)
+		Sleep 500
+	}
+	
 }
 
-TimeMachineMagic() ; Clicks to add magic to the time machine (inside the Time Mahine Menu)
+TimeMachineMagic() ; Clicks to add magic to the time machine (inside the Time Mahine Menu), if you're not capped.
 {
 	CurrentStep := A_ThisFunc
-	Click2(TimeMachinePlusX, TimeMachineMagicY)
-	Sleep 500
+	
+	TM_BB1 := PixelGetColor2(TimeMachineEnergyBBX,TimeMachineMagicBBY)
+	Sleep, 10
+	TM_BB2 := PixelGetColor2(TimeMachineEnergyBBX,TimeMachineMagicBBY)
+	Sleep, 10
+	TM_BB3 := PixelGetColor2(TimeMachineEnergyBBX,TimeMachineMagicBBY)
+	if ((TM_BB1 != 0xFFFFFF) && (TM_BB2 != 0xFFFFFF) && (TM_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(TimeMachinePlusX, TimeMachineMagicY)
+		Sleep 500
+	}
 }
 
 TimeMachineBoth() ; Clicks to add energy and then magic to the time machine (inside the Time Mahine Menu)
 {
-	CurrentStep := A_ThisFunc
-	Click2(TimeMachinePlusX, TimeMachineEnergyY)
-	Sleep 500
-	Click2(TimeMachinePlusX, TimeMachineMagicY)
-	Sleep 500
+	;CurrentStep := A_ThisFunc
+	TimeMachineEnergy()
+	TimeMachineMagic()
 }
 
 ;====Blood Magic====
@@ -2433,11 +2595,6 @@ StartTest() ;Used for debug/testing purposes
 {
 	WinActivate, Play NGU IDLE
 	ScriptStart()
-	;X:=[1,0,1,1,1,1,1,1,1]
-	;Y:=[1,1,1,1,1,1,1]
-	;NGUSet(defEnergyNGU,defMagicNGU)
-	SaveINI()
-	
 	;MsgBox, Test done!	
 }
 
