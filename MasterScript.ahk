@@ -1,4 +1,4 @@
-;MasterScript 0.4e
+;MasterScript 0.4f
 ;Compatible with NGU Idle Build 0.402
 ;Written by Unponderable and Tatsumasa.
 
