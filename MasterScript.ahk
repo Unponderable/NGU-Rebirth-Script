@@ -4,9 +4,9 @@
 
 ;Check the README for setup instructions.
 
-;Most settings can be changed when you run the script. Settings below are optional.
+;Settings can be changed when you run the script. Mess with stuff below at your own risk.
 
-;TIP: Use Blaze's junkyard spreadsheet to help figure out what Wandoos version/Augments you should be running: https://docs.google.com/spreadsheets/d/1S1JXe3kZeqzxBOVXMo2-Db6iSrfeS42oTeBuVIarjmY/edit?usp=sharing
+;PRO TIP: Use Blaze's junkyard spreadsheet from #help-and-info in the NGU Discord to help figure out what Wandoos version/Augments you should be running.
 ;Optimality may change depending on the challenge type or run duration.
 
 ;-------
