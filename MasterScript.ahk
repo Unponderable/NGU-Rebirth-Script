@@ -1,16 +1,10 @@
 ;MasterScript 0.4c
 ;Compatible with NGU Idle Build 0.402
 ;Written by Unponderable and Tatsumasa.
-;Also thanks to EvoGeek, the genesis of much of this script.
-;
-;Change Log
-;0.4c - Various bugfixes. Added option to not use Wandoos. Added option to set default loop settings. Added support for Double Basic Training perk (see settings).
-;0.4 - Added new settings to let you customize how challenge runs are done. Fixed 100-LC using blood at the start of a run. Added some bonus settings, too.
-;0.3 - Better challenge support. Better GUI. Better everything. Fixed numerous bugs (and dumb design decisions).
-;0.2 beta - Added support for some of the challenges. Added a GUI to let you select some basic run options. Cleaned up some functions that weren't used.
-;0.1 beta - Initial release.
-;
 
+;Check the README for setup instructions.
+
+;Most settings can be changed when you run the script. Settings below are optional.
 
 ;-------BONUS SETTINGS! CHANGE THESE ONLY IF YOU WANT TO!-------
 
@@ -1449,7 +1443,7 @@ MoneyPitCheckShort() ; If Money Pit is ready, throw money into Money Pit.
 			Loadout(3)
 			MoneyPitMenu()
 			MoneyPit()
-			InventoryMenu() ;temporarily disabled
+			InventoryMenu()
 			Loadout(1)
 		}
 		Else
@@ -1486,7 +1480,7 @@ TitanCheck() ; If the zone 1 back from the furthest unlocked zone isn't a titan,
 	WalderpTimerStart := A_TickCount
 }
 
-TitanCheck2() ;If current adventure zone is a titan, go one zone back
+TitanCheck2() ;If current adventure zone is a titan, go one zone back. Note: doesn't work if you're in ITOPOD.
 {
 	CurrentStep := A_ThisFunc
 	Search1X := 895 - 329 + TopLeftX
@@ -1526,12 +1520,10 @@ SpellCheck(X) ; Checks if the Xth blood magic spell is set to autocast. If it's 
 	Search2X := 845 - 329 + TopLeftX
 	Search2Y := 555 + (PixelDiff * (X - 1)) - 323 + TopLeftY
 	SearchFileName = BloodMagicBlankCheck.png
-	;ImageSearch, SearchX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	ImageSearch, SearchX, SearchY, Search1X-25, Search1Y-25, Search2X+25, Search2Y+25, *%ImageSearchVariance% %SearchFileName%
 	If SearchX
 	{
 		MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
-		;MsgBox Hit!
 		Sleep 500
 	}
 }
