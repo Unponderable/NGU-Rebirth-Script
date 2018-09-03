@@ -7,8 +7,8 @@ Also thanks to __EvoGeek__, the genesis of much of this script
 
 #### Change Log
 
-0.4e - Settings are now saved to an INI file and loaded on start. Added remaining settings to GUI.
-0.4d - Added nominal support for adding to NGUs during a non-challenge run. Added setting for always capping blood magic/Wandoos.
+0.4e - Settings are now saved to an INI file and loaded on start. Added remaining settings to GUI.\
+0.4d - Added nominal support for adding to NGUs during a non-challenge run. Added setting for always capping blood magic/Wandoos.\
 0.4c - Various bugfixes. Added option to not use Wandoos. Added option to set default loop settings. Added support for Double Basic Training perk (see settings).\
 0.4 - Added new settings to let you customize how challenge runs are done. Fixed 100-LC using blood at the start of a run. Added some bonus settings, too.\
 0.3 - Better challenge support. Better GUI. Better everything. Fixed numerous bugs (and dumb design decisions).\
@@ -23,7 +23,7 @@ The Script uses AutoHotKey. Must be downloaded and installed!
 Must have 1-energy-capped all Basic Training skills\
 Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD\
 Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, Custom Energy Button 1\
-Must have puchased with AP: Insta Training Cap (10,000 AP)\
+Must have puchased with AP: Insta Training Cap (10,000 AP)
 
 I strongly suggest having Auto Boost, Auto Merge, and Advanced Loot Filter, as the script does not (currently) do inventory management.
 
