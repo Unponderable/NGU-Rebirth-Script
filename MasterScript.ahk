@@ -1,4 +1,4 @@
-;MasterScript 0.4d
+;MasterScript 0.4e
 ;Compatible with NGU Idle Build 0.402
 ;Written by Unponderable and Tatsumasa.
 
@@ -6,81 +6,50 @@
 
 ;Most settings can be changed when you run the script. Settings below are optional.
 
-;-------BONUS SETTINGS! CHANGE THESE ONLY IF YOU WANT TO!-------
-
-Global defRebirthTimeSetting := 3 ;Default target rebirth time, in minutes. Set between 3 and 60.
-
-Global defLoopOption := 1 ;Default setting for whether loop is enabled or disabled. 1 = enabled, 0 = disabled.
-
-Global defLoopOptionValue := 0 ;Default setting for number of times to loop. 0 = infinite.
-
-Global defMaxAdventureZone := 18 ; Number equal to the number of zones to the right of the safe zone that you can adventure in at the start of a rebirth, wearing Loadout 2 gear. 16, for example, is Beardverse.
-; Used to kill a couple of monsters for time machine. 0 = you can always adventure in your maximum unlocked zone
-
-Global defMaxSustainableBloodSpellNumber := 7 ; The default highest blood spell you can sustain the gold for (should be a number between 1 to 8)
-
-Global defWandoosVersion := 1 ; Set default Wandoos version. 0 = Wandoos 98; 1 = Wandoos MEH; 2 = Wandoos XL. (-1 = Don't use Wandoos)
-
-Global defOptimalAugmentation := 4 ; Set default augmentation to power up. 0 = Scissors; 1 = Milk; 2 = Cannon; 3 = Shoulder Mounted; 4 = Energy Buster
-
 ;TIP: Use Blaze's junkyard spreadsheet to help figure out what Wandoos version/Augments you should be running: https://docs.google.com/spreadsheets/d/1S1JXe3kZeqzxBOVXMo2-Db6iSrfeS42oTeBuVIarjmY/edit?usp=sharing
 ;Optimality may change depending on the challenge type or run duration.
 
-;The following options allow you to customize how challenge runs are done.
-;Challenge runs will do special "first" rebirth(s) until blood magic is unlocked, then will do runs in the sequence below, and then will run 1-hour runs until the challenge is complete.
-;By default, the interim runs are 10 x 3-minute rebirths, 5 x 7-minute rebirths, and then 5 x 12-minute rebirths.
-;Below, you can change that default sequence if you wish.
-Global defChallenge1RunIterations = 10 ;number of times to run 1st set of interim runs
-Global defChallenge1RunLength = 3 ;minutes to run 1st set of interim runs
-Global defChallenge2RunIterations = 5 ;number of times to run 2nd set of interim runs
-Global defChallenge2RunLength = 7 ;minutes to run 2nd set of interim runs
-Global defChallenge3RunIterations = 5 ;number of times to run 3rd set of interim runs
-Global defChallenge3RunLength = 12 ;minutes to run 3rd set of interim runs
+;-------
 
-Global defEnableNGUs = 1 ;Set to 1 to enable putting energy into NGUs during the run. Automatically disabled during challenge runs.
+Global defRebirthTimeSetting
+Global defLoopOption
+Global defLoopOptionValue
+Global defMaxAdventureZone
+Global defMaxSustainableBloodSpellNumber
+Global defWandoosVersion
+Global defOptimalAugmentation
 
-;1 to put energy/magic into the selected NGU. 0 to skip.
-;Idle energy/magic will be evenly distributed amongst the selected NGUs.
-;Works best if you only pick one at a time.
-Global defNGU_Augments := 0
-Global defNGU_Wandoos := 0
-Global defNGU_Respawn := 0
-Global defNGU_Gold := 0
-Global defNGU_Adventure := 1
-Global defNGU_PowerAlpha := 0
-Global defNGU_DropChance := 0
-Global defNGU_MagicNGU := 0
-Global defNGU_PP := 0
+Global defChallenge1RunIterations
+Global defChallenge1RunLength
+Global defChallenge2RunIterations
+Global defChallenge2RunLength
+Global defChallenge3RunIterations
+Global defChallenge3RunLength
 
-Global defNGU_Yggdrasil := 0
-Global defNGU_EXP := 1
-Global defNGU_PowerBeta := 0
-Global defNGU_Number := 0
-Global defNGU_TimeMachine := 0
-Global defNGU_EnergyNGU := 0
-Global defNGU_AdventureBeta := 0
+Global defEnableNGUs
+Global defNGU_Augments
+Global defNGU_Wandoos
+Global defNGU_Respawn
+Global defNGU_Gold
+Global defNGU_Adventure
+Global defNGU_PowerAlpha
+Global defNGU_DropChance
+Global defNGU_MagicNGU
+Global defNGU_PP
 
-Global EquipLoadout3ForMoneyPit = 0 ;Set to 1 if you want to switch to Loadout 3 when you throw money into the money pit. Requires a third loadout slot, obviously. Potentially useful for shocking certain gear. Otherwise leave at 0.
+Global defNGU_Yggdrasil
+Global defNGU_EXP
+Global defNGU_PowerBeta
+Global defNGU_Number
+Global defNGU_TimeMachine
+Global defNGU_EnergyNGU
+Global defNGU_AdventureBeta
 
-Global DoNotSave = 0 ; Set to 1 if you don't want to save to get the daily AP bonus. Useful if the save button creates a browser prompt that kills the script.
-
-Global DoubleBasicTrainingPerk = 0 ; Set to 1 if you have the double basic training perk. Leave at 0 otherwise.
-
-Global AlwaysCap = 0 ; Set to 1 if you always want to try to cap Blood Magic/Wandoos. Set to 0 to try adding and only ocassionally cap.
-;Note: If you're not maxed out, then always capping means you may never reach a new breakpoint.
-
-;-------END OF BONUS SETTINGS! -------
-
-
-;-------ADVANCED SETTINGS! CHANGE THESE ONLY IF YOU MUST!-------
-
-Global ImageSearchVariance := 10
-;ImageSearch is how the script detects some things in the game.
-;Variance is the fuzz factor if the colors on your screen are slightly off from the image.
-;Allowable values are 0-255, but if you get much higher than 50, you're at high risk for script nonfunctionality.
-
-;-------END OF ADVANCED SETTINGS! MESS WITH STUFF BELOW AT YOUR OWN RISK!-------
-
+Global EquipLoadout3ForMoneyPit
+Global DoNotSave
+Global DoubleBasicTrainingPerk
+Global AlwaysCap
+Global ImageSearchVariance
 
 Global RebirthTimeSetting := defRebirthTimeSetting 
 Global MaxAdventureZone := defMaxAdventureZone
@@ -465,7 +434,6 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 	
 }
 
-
 EnergyCustom2() ; Clicks the 2nd Custom Energy Button
 {
 	CurrentStep := A_ThisFunc
@@ -541,7 +509,7 @@ Magic4X() ; Clicks the 1/4 Idle Magic Button
 	Sleep 500
 }
 
-MagicPercent1() ; Clicks either the 1st or 2nd Custom Percent Magic Button
+MagicPercent1() ; Clicks the 1st Custom Percent Magic Button
 {
 	CurrentStep := A_ThisFunc
 	Click2(PercentMagic2X-25, PercentBothY)
@@ -566,7 +534,7 @@ MagicCustomPercent1Set(X) ;Sets Custom Magic Percent Button 1 to be X.
 	Sleep 500
 }
 
-MagicPercent2() ; Clicks either the 1st or 2nd Custom Percent Magic Button
+MagicPercent2() ; Clicks the 2nd Custom Percent Magic Button
 {
 	CurrentStep := A_ThisFunc
 	Click2(PercentMagic2X, PercentBothY)
@@ -2395,6 +2363,7 @@ Esc:: ;Escape will quit the script at any time.
 
 RunStart()
 {
+	LoadINI()
 	OptionSelect()
 	WinWait,Run Options
 	WinWaitClose
@@ -2466,8 +2435,9 @@ StartTest() ;Used for debug/testing purposes
 	ScriptStart()
 	;X:=[1,0,1,1,1,1,1,1,1]
 	;Y:=[1,1,1,1,1,1,1]
-	NGUSet(defEnergyNGU,defMagicNGU)
-
+	;NGUSet(defEnergyNGU,defMagicNGU)
+	SaveINI()
+	
 	;MsgBox, Test done!	
 }
 
@@ -2479,42 +2449,48 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 		LoopToggle := "Disabled"
 	
 	Gui, Add, Tab3,, Run|Settings|NGU Settings|Challenge Sequence|About
-	Gui, Add, Text,, Challenge:
-	Gui, Add, DropDownList, vChallengeChoice gChallengeChoiceChange, None||Basic|No Augs|24-Hour|100 Level|No Equipment|Troll|No Rebirth|Blind
-	Gui, Add, Text,,
-	Gui, Add, Text,section, Duration of Run:
-	Gui, Add, Edit, vRunDurationChoiceText w40
+	Gui, Add, Text,section, Challenge:
+	Gui, Add, DropDownList, vChallengeChoice gChallengeChoiceChange x+10, None||Basic|No Augs|24-Hour|100 Level|No Equipment|Troll|No Rebirth|Blind
+	Gui, Add, Text,xs,
+	Gui, Add, Text,section, Rebirth duration:
+	Gui, Add, Edit, vRunDurationChoiceText x+10 w40
 	Gui, Add, UpDown, vRunDurationChoice Range3-60, %defRebirthTimeSetting%
 	Gui, Add, Text,X+10,minutes
 	Gui, Add, Text,xs,
-	Gui, Add, Checkbox, vRepeatChoice gEnableLoopNumber Checked%defLoopOption%, Loop?
-	Gui, Add, Text,,
-	Gui, Add, Text,, Number of times to loop:
-	Gui, Add, Edit, vLoopNumberText %LoopToggle%
-	Gui, Add, UpDown, vLoopNumber gLoopUnlimited,%defLoopOptionValue%
+	Gui, Add, Checkbox, vRepeatChoice gEnableLoopNumber Checked%defLoopOption% section, Loop?
+	Gui, Add, Edit, vLoopNumberText %LoopToggle% x+10 w75
+	Gui, Add, UpDown, vLoopNumber gLoopUnlimited,%defLoopOptionValue% x+10
+	Gui, Add, Text, x+10, times
+	Gui, Add, Text,xs,
 	
 	if defLoopOptionValue = 0
 		GuiControl,Text,LoopNumberText,Infinite
 	
-	Gui, Add, Button, default, Run  ; The label ButtonOK (if it exists) will be run when the button is pressed.
-	Gui, Add, Button, default x+m, Cancel
+	Gui, Add, Button, default, Run  ; The label ButtonRun (if it exists) will be run when the button is pressed.
+	Gui, Add, Button, x+m, Cancel
+	Gui, Add, Button, gSaveDefaults x+m, Save Defaults
 	
 	Gui, Tab, Settings
-	Gui, Add, Text, ,Maximum Adventure Zone
+	Gui, Add, Text, section,Adventure Zone
 	Var := defMaxAdventureZone + 1
-	Gui, Add, DropDownList, vAdvZoneChoice altSubmit Choose%Var%, All|1. Tutorial Zone|2. Sewers|3. Forest|4. Cave of Many Things|5. The Sky|6. High Security Base|7. Titan - GRB|8. Clock Dimension|9. Titan - GCT|10. The 2D Universe|11. Ancient Battlefield|12. Titan - Jake|13. A Very Strange Place|14. Mega Lands|15. Titan - UUG|16. The Beardverse|17. Titan - Walderp|18. Badly Drawn World|19. Boring-Ass Earth|20. Titan - The Beast|21. (Unreleased)
-	Gui, Add, Text,,
-	Gui, Add, Text,, Maximum Blood Spell
+	Gui, Add, DropDownList, x+10 vAdvZoneChoice altSubmit Choose%Var%, All|1. Tutorial Zone|2. Sewers|3. Forest|4. Cave of Many Things|5. The Sky|6. High Security Base|7. Titan - GRB|8. Clock Dimension|9. Titan - GCT|10. The 2D Universe|11. Ancient Battlefield|12. Titan - Jake|13. A Very Strange Place|14. Mega Lands|15. Titan - UUG|16. The Beardverse|17. Titan - Walderp|18. Badly Drawn World|19. Boring-Ass Earth|20. Titan - The Beast|21. (Unreleased)
+	Gui, Add, Text,xs section, Blood Spell
 	Var := defMaxSustainableBloodSpellNumber
-	Gui, Add, DropDownList, vBloodSpellChoice altSubmit Choose%Var%, 1. Poke Yourself|2. Filthy Papercuts|3. A Big-Ass Hickey|4. Barbed Wire|5. Grand Theft Blood Bank|6. Self Decapitation|7. Hug a Woodchipper|8. Turn Yourself Inside Out
-	Gui, Add, Text,,
-	Gui, Add, Text,,Wandoos Version
+	Gui, Add, DropDownList, x+10 vBloodSpellChoice altSubmit Choose%Var%, 1. Poke Yourself|2. Filthy Papercuts|3. A Big-Ass Hickey|4. Barbed Wire|5. Grand Theft Blood Bank|6. Self Decapitation|7. Hug a Woodchipper|8. Turn Yourself Inside Out
+	Gui, Add, Text,xs section,Wandoos Version
 	Var := defWandoosVersion + 2
-	Gui, Add, DropDownList, vWandoosChoice altSubmit Choose%Var%, None|98|MEH|XL
-	Gui, Add, Text,,
-	Gui, Add, Text,,Augmentation
+	Gui, Add, DropDownList, x+10 vWandoosChoice altSubmit Choose%Var%, None|98|MEH|XL
+	Gui, Add, Text,xs section,Augmentation
 	Var := defOptimalAugmentation + 1
-	Gui, Add, DropDownList, vAugChoice altSubmit Choose%Var%, Safety Scissors|Milk Infusion|Cannon Implant|Shoulder Mounted|Energy Buster
+	Gui, Add, DropDownList, x+10 vAugChoice altSubmit Choose%Var%, Safety Scissors|Milk Infusion|Cannon Implant|Shoulder Mounted|Energy Buster
+	Gui, Add, Text,xs,Advanced Options:
+	Gui, Add, Checkbox, vEquipLoadout3ForMoneyPit Checked%EquipLoadout3ForMoneyPit%,Loadout 3 for Money Pit
+	Gui, Add, Checkbox,vDoNotSave Checked%DoNotSave%,Do Not Save
+	Gui, Add, Checkbox,vDoubleBasicTrainingPerk Checked%DoubleBasicTrainingPerk%,Double Basic Training Perk
+	Gui, Add, Checkbox,vAlwaysCap Checked%AlwaysCap%,Always Cap Blood Magic/Wandoos
+	Gui, Add, Text,section,ImageSearch Variance:
+	Gui, Add, Edit,x+10 w50
+	Gui, Add, Updown, vImageSearchVariance Range0-255,%ImageSearchVariance%
 	
 	Gui, Tab,NGU Settings
 	Gui, Add, Checkbox, vEnableNGUs gToggleNGUs Checked%defEnableNGUs%, Put energy/magic into NGUs?
@@ -2567,14 +2543,14 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Add, Text, xs section +Wrap w200, E. 60 minute runs repeated, until the challenge is completed.
 	
 	Gui, Tab, About
-	Gui, Add, Text, +Wrap w200,MasterScript for NGU Idle
+	Gui, Add, Text, +Wrap w200,Universal Rebirth AHK Script for NGU Idle
 	Gui, Add, Text, +Wrap w200,
 	Gui, Add, Text, +Wrap w200,Written by:
 	Gui, Add, Text, +Wrap w200,Unponderable and Tatsumasa
 	Gui, Add, Text, +Wrap w200,
 	Gui, Add, Link, +Wrap w200, Visit #scripting in the <a href="https://discord.gg/HFD6b6">NGU Discord</a>
 	Gui, Add, Text, +Wrap w200,
-	Gui, Add, Text, +Wrap w200,Instructions and default settings can be found in the script file.
+	Gui, Add, Link, +Wrap w200,<a href="https://github.com/Unponderable/NGU-Rebirth-Script">Github</a>
 	
 	Gui, Show,, Run Options
 	OnMessage(0x200, "TTGUI")
@@ -2631,7 +2607,27 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	
 	ButtonRun:
 	Gui, Submit  ; Save the input from the user to each control's associated variable.
+	GUIApply()
+	Gui Destroy
+	Return
+	
+	ButtonCancel:
+	GuiClose:
+	GuiEscape:
+	Gui Destroy
+	Tooltip, Aw  :(
+	Sleep, 1000
+	ExitApp
+	
+	SaveDefaults:
+	Gui, Submit, NoHide  ; Save the input from the user to each control's associated variable.
+	GUIApply()
+	SaveINI()
+	return
+}
 
+GUIApply() ;Called when the GUI is RUN or Save Defaults
+{
 	MaxAdventureZone := AdvZoneChoice - 1 ;copy setting and convert to the appropriate format
 	MaxSustainableBloodSpellNumber := BloodSpellChoice
 	WandoosVersion := WandoosChoice - 2
@@ -2644,17 +2640,6 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	{
 		MagicNGU[index]:= MNGU%index%
 	}
-	
-	Gui Destroy
-	Return
-	
-	ButtonCancel:
-	GuiClose:
-	GuiEscape:
-	Gui Destroy
-	Tooltip, Aw  :(
-	Sleep, 1000
-	ExitApp
 }
 
 TTGUI(wParam, lParam, Msg) {
@@ -2673,21 +2658,42 @@ IfEqual, OutputVarControl, Edit2
 
 	Help := "Number of times to run the challenge or (if no challenge selected) to rebirth.`n0 = Infinite"
 
-IfEqual, OutputVarControl, Static7
+IfEqual, OutputVarControl, Static8
 
 	Help := "The zone that you can adventure in at the start of a rebirth, wearing Loadout 2 gear."
 
 else IfEqual, OutputVarControl, Static9
 
-	Help := "Highest blood spell you can afford."
+	Help := "Highest blood spell you can afford and want to put magic into."
 
-else IfEqual, OutputVarControl, Static11
+else IfEqual, OutputVarControl, Static10
 
 	Help := "Wandoos version to put energy/magic into."
 	
-else IfEqual, OutputVarControl, Static13
+else IfEqual, OutputVarControl, Static11
 
 	Help := "Augmentation to put energy into."
+	
+else IfEqual, OutputVarControl, Button5
+
+	Help := "Switch to Loadout 3 when you throw money into the money pit.`nRequires a third loadout slot, obviously.`nPotentially useful for shocking certain gear.."
+	
+else IfEqual, OutputVarControl, Button6
+
+	Help := "Don't save to get the daily AP bonus.`nUseful if the save button creates a browser prompt that kills the script."
+
+else IfEqual, OutputVarControl, Button7
+
+	Help := "If you have the double basic training perk from ITOPOD.`nAffects time before the script starts Adv. Training."
+	
+else IfEqual, OutputVarControl, Button8
+
+	Help := "Always try to cap Blood Magic/Wandoos.`nNote: If you're not maxed out, then always capping means you may never reach a new breakpoint."
+	
+else IfEqual, OutputVarControl, Static13
+
+	Help := "ImageSearch is how the script detects some things in the game.`nVariance is the fuzz factor if the colors on your screen are slightly off from the image.`nAllowable values are 0-255, but if you get much higher than 50, you're at high risk for script nonfunctionality."	
+	
 ;ToolTip % OutputVarControl
 ToolTip % Help
 
@@ -2907,5 +2913,106 @@ NoRebirthRun() ;Attempts to do a No Rebirth run.
 	
 }
 
+SaveINI()
+{
+	Iniwrite, %RunDurationChoice%, Settings.ini,Default Run Options,defRebirthTimeSetting
+	Iniwrite, %RepeatChoice%, Settings.ini,Default Run Options,defLoopOption
+	Iniwrite, %LoopNumber%, Settings.ini,Default Run Options,defLoopOptionValue
+	Iniwrite, %MaxAdventureZone%, Settings.ini,Default Run Options,defMaxAdventureZone
+	Iniwrite, %MaxSustainableBloodSpellNumber%, Settings.ini,Default Run Options,defMaxSustainableBloodSpellNumber
+	Iniwrite, %WandoosVersion%, Settings.ini,Default Run Options,defWandoosVersion
+	Iniwrite, %OptimalAugmentation%, Settings.ini,Default Run Options,defOptimalAugmentation
+
+	Iniwrite, %Challenge1RunIterations%, Settings.ini,Default Run Options,defChallenge1RunIterations
+	Iniwrite, %Challenge1RunLength%, Settings.ini,Default Run Options,defChallenge1RunLength
+	Iniwrite, %Challenge2RunIterations%, Settings.ini,Default Run Options,defChallenge2RunIterations
+	Iniwrite, %Challenge2RunLength%, Settings.ini,Default Run Options,defChallenge2RunLength
+	Iniwrite, %Challenge3RunIterations%, Settings.ini,Default Run Options,defChallenge3RunIterations
+	Iniwrite, %Challenge3RunLength%, Settings.ini,Default Run Options,defChallenge3RunLength
+
+	Iniwrite, %EnableNGUs%, Settings.ini,Default Run Options,defEnableNGUs
+	
+	for index in EnergyNGU
+	{
+		ENGU%index% := EnergyNGU[index]
+	}
+	
+	Iniwrite, %ENGU1%, Settings.ini,Default Run Options,defNGU_Augments
+	Iniwrite, %ENGU2%, Settings.ini,Default Run Options,defNGU_Wandoos
+	Iniwrite, %ENGU3%, Settings.ini,Default Run Options,defNGU_Respawn
+	Iniwrite, %ENGU4%, Settings.ini,Default Run Options,defNGU_Gold
+	Iniwrite, %ENGU5%, Settings.ini,Default Run Options,defNGU_Adventure
+	Iniwrite, %ENGU6%, Settings.ini,Default Run Options,defNGU_PowerAlpha
+	Iniwrite, %ENGU7%, Settings.ini,Default Run Options,defNGU_DropChance
+	Iniwrite, %ENGU8%, Settings.ini,Default Run Options,defNGU_MagicNGU
+	Iniwrite, %ENGU9%, Settings.ini,Default Run Options,defNGU_PP
+	
+	for index in MagicNGU
+	{
+		MNGU%index% := MagicNGU[index]
+	}
+	
+	Iniwrite, %MNGU1%, Settings.ini,Default Run Options,defNGU_Yggdrasil
+	Iniwrite, %MNGU2%, Settings.ini,Default Run Options,defNGU_EXP
+	Iniwrite, %MNGU3%, Settings.ini,Default Run Options,defNGU_PowerBeta
+	Iniwrite, %MNGU4%, Settings.ini,Default Run Options,defNGU_Number
+	Iniwrite, %MNGU5%, Settings.ini,Default Run Options,defNGU_TimeMachine
+	Iniwrite, %MNGU6%, Settings.ini,Default Run Options,defNGU_EnergyNGU
+	Iniwrite, %MNGU7%, Settings.ini,Default Run Options,defNGU_AdventureBeta
+	
+	Iniwrite, %EquipLoadout3ForMoneyPit%,Settings.ini,Miscellaneous Settings,EquipLoadout3ForMoneyPit ;TODO
+	Iniwrite, %DoNotSave%,Settings.ini,Miscellaneous Settings,DoNotSave
+	Iniwrite, %DoubleBasicTrainingPerk%,Settings.ini,Miscellaneous Settings,DoubleBasicTrainingPerk
+	Iniwrite, %AlwaysCap%,Settings.ini,Miscellaneous Settings,AlwaysCap
+	Iniwrite, 10,Settings.ini,Miscellaneous Settings,ImageSearchVariance
+
+}
+
+LoadINI()
+{
+	Iniread, defRebirthTimeSetting, Settings.ini,Default Run Options,defRebirthTimeSetting,3
+	Iniread, defLoopOption, Settings.ini,Default Run Options,defLoopOption,1
+	Iniread, defLoopOptionValue, Settings.ini,Default Run Options,defLoopOptionValue,0
+	Iniread, defMaxAdventureZone, Settings.ini,Default Run Options,defMaxAdventureZone,16
+	Iniread, defMaxSustainableBloodSpellNumber, Settings.ini,Default Run Options,defMaxSustainableBloodSpellNumber,5
+	Iniread, defWandoosVersion, Settings.ini,Default Run Options,defWandoosVersion,0
+	Iniread, defOptimalAugmentation, Settings.ini,Default Run Options,defOptimalAugmentation,1
+	
+	Iniread, defChallenge1RunIterations, Settings.ini,Default Run Options,defChallenge1RunIterations,10
+	Iniread, defChallenge1RunLength, Settings.ini,Default Run Options,defChallenge1RunLength,3
+	Iniread, defChallenge2RunIterations, Settings.ini,Default Run Options,defChallenge2RunIterations,5
+	Iniread, defChallenge2RunLength, Settings.ini,Default Run Options,defChallenge2RunLength,7
+	Iniread, defChallenge3RunIterations, Settings.ini,Default Run Options,defChallenge3RunIterations,5
+	Iniread, defChallenge3RunLength, Settings.ini,Default Run Options,defChallenge3RunLength,12
+	
+	Iniread, defEnableNGUs, Settings.ini,Default Run Options,defEnableNGUs,0
+	
+	Iniread, defNGU_Augments, Settings.ini,Default Run Options,defNGU_Augments,0
+	Iniread, defNGU_Wandoos, Settings.ini,Default Run Options,defNGU_Wandoos,0
+	Iniread, defNGU_Respawn, Settings.ini,Default Run Options,defNGU_Respawn,0
+	Iniread, defNGU_Gold, Settings.ini,Default Run Options,defNGU_Gold,0
+	Iniread, defNGU_Adventure, Settings.ini,Default Run Options,defNGU_Adventure,0
+	Iniread, defNGU_PowerAlpha, Settings.ini,Default Run Options,defNGU_PowerAlpha,0
+	Iniread, defNGU_DropChance, Settings.ini,Default Run Options,defNGU_DropChance,0
+	Iniread, defNGU_MagicNGU, Settings.ini,Default Run Options,defNGU_MagicNGU,0
+	Iniread, defNGU_PP, Settings.ini,Default Run Options,defNGU_PP,0
+	
+	Iniread, defNGU_Yggdrasil, Settings.ini,Default Run Options,defNGU_Yggdrasil,0
+	Iniread, defNGU_EXP, Settings.ini,Default Run Options,defNGU_EXP,0
+	Iniread, defNGU_PowerBeta, Settings.ini,Default Run Options,defNGU_PowerBeta,0
+	Iniread, defNGU_Number, Settings.ini,Default Run Options,defNGU_Number,0
+	Iniread, defNGU_TimeMachine, Settings.ini,Default Run Options,defNGU_TimeMachine,0
+	Iniread, defNGU_EnergyNGU, Settings.ini,Default Run Options,defNGU_EnergyNGU,0
+	Iniread, defNGU_AdventureBeta, Settings.ini,Default Run Options,defNGU_AdventureBeta,0
+	
+	Iniread, EquipLoadout3ForMoneyPit,Settings.ini,Miscellaneous Settings,EquipLoadout3ForMoneyPit,0
+	Iniread, DoNotSave,Settings.ini,Miscellaneous Settings,DoNotSave,0
+	Iniread, DoubleBasicTrainingPerk,Settings.ini,Miscellaneous Settings,DoubleBasicTrainingPerk,0
+	Iniread, AlwaysCap,Settings.ini,Miscellaneous Settings,AlwaysCap,0
+	Iniread, ImageSearchVariance,Settings.ini,Miscellaneous Settings,ImageSearchVariance,10
+}
+
 ;TODO rewrite imagesearches to use white/black pixelsearches, where possible
+;		In particular, to the Add energy/magic buttons to time machine
 ;TODO add option to start runs from current rebirth instead of starting a new one
+;TODO Add objective to the display
