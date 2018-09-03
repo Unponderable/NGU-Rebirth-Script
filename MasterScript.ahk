@@ -1,16 +1,10 @@
-;MasterScript 0.4c
+;MasterScript 0.4d
 ;Compatible with NGU Idle Build 0.402
 ;Written by Unponderable and Tatsumasa.
-;Also thanks to EvoGeek, the genesis of much of this script.
-;
-;Change Log
-;0.4c - Various bugfixes. Added option to not use Wandoos. Added option to set default loop settings. Added support for Double Basic Training perk (see settings).
-;0.4 - Added new settings to let you customize how challenge runs are done. Fixed 100-LC using blood at the start of a run. Added some bonus settings, too.
-;0.3 - Better challenge support. Better GUI. Better everything. Fixed numerous bugs (and dumb design decisions).
-;0.2 beta - Added support for some of the challenges. Added a GUI to let you select some basic run options. Cleaned up some functions that weren't used.
-;0.1 beta - Initial release.
-;
 
+;Check the README for setup instructions.
+
+;Most settings can be changed when you run the script. Settings below are optional.
 
 ;-------BONUS SETTINGS! CHANGE THESE ONLY IF YOU WANT TO!-------
 
@@ -43,13 +37,39 @@ Global defChallenge2RunLength = 7 ;minutes to run 2nd set of interim runs
 Global defChallenge3RunIterations = 5 ;number of times to run 3rd set of interim runs
 Global defChallenge3RunLength = 12 ;minutes to run 3rd set of interim runs
 
+Global defEnableNGUs = 1 ;Set to 1 to enable putting energy into NGUs during the run. Automatically disabled during challenge runs.
+
+;1 to put energy/magic into the selected NGU. 0 to skip.
+;Idle energy/magic will be evenly distributed amongst the selected NGUs.
+;Works best if you only pick one at a time.
+Global defNGU_Augments := 0
+Global defNGU_Wandoos := 0
+Global defNGU_Respawn := 0
+Global defNGU_Gold := 0
+Global defNGU_Adventure := 1
+Global defNGU_PowerAlpha := 0
+Global defNGU_DropChance := 0
+Global defNGU_MagicNGU := 0
+Global defNGU_PP := 0
+
+Global defNGU_Yggdrasil := 0
+Global defNGU_EXP := 1
+Global defNGU_PowerBeta := 0
+Global defNGU_Number := 0
+Global defNGU_TimeMachine := 0
+Global defNGU_EnergyNGU := 0
+Global defNGU_AdventureBeta := 0
+
 Global EquipLoadout3ForMoneyPit = 0 ;Set to 1 if you want to switch to Loadout 3 when you throw money into the money pit. Requires a third loadout slot, obviously. Potentially useful for shocking certain gear. Otherwise leave at 0.
 
 Global DoNotSave = 0 ; Set to 1 if you don't want to save to get the daily AP bonus. Useful if the save button creates a browser prompt that kills the script.
 
 Global DoubleBasicTrainingPerk = 0 ; Set to 1 if you have the double basic training perk. Leave at 0 otherwise.
 
-;-------END OF DEFAULT SETTINGS! -------
+Global AlwaysCap = 0 ; Set to 1 if you always want to try to cap Blood Magic/Wandoos. Set to 0 to try adding and only ocassionally cap.
+;Note: If you're not maxed out, then always capping means you may never reach a new breakpoint.
+
+;-------END OF BONUS SETTINGS! -------
 
 
 ;-------ADVANCED SETTINGS! CHANGE THESE ONLY IF YOU MUST!-------
@@ -74,6 +94,21 @@ Global Challenge2RunIterations := defChallenge2RunIterations
 Global Challenge2RunLength := defChallenge2RunLength
 Global Challenge3RunIterations := defChallenge3RunIterations
 Global Challenge3RunLength := defChallenge3RunLength
+
+Global EnableNGUs := defEnableNGUs
+Global defEnergyNGU := [defNGU_Augments,defNGU_Wandoos,defNGU_Respawn,defNGU_Gold,defNGU_Adventure,defNGU_PowerAlpha,defNGU_DropChance,defNGU_MagicNGU,defNGU_PP]
+Global EnergyNGU := defEnergyNGU
+for index in EnergyNGU
+{
+	ENGU%index% := EnergyNGU[index]
+}
+Global defMagicNGU := [defNGU_Yggdrasil,defNGU_EXP,defNGU_PowerBeta,defNGU_Number,defNGU_TimeMachine,defNGU_EnergyNGU,defNGU_AdventureBeta]
+Global MagicNGU := defMagicNGU
+for index in MagicNGU
+{
+	MNGU%index% := MagicNGU[index]
+}
+
 
 CoordMode, Mouse, Client
 CoordMode, Pixel, Client
@@ -108,6 +143,7 @@ Global SleepStatus
 Global CurrentStatus
 Global ChallengeFlag
 Global TransformFlag
+Global NGUSet
 
 Global TopLeftX = 0
 Global TopLeftY = 0
@@ -261,6 +297,7 @@ Global 100LFlag := 0
 Global NRCFlag := 0
 
 RunStart()
+;StartTest()
 
 SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the game, based on an image search. Run everytime you run a script.
 {
@@ -428,6 +465,14 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 	
 }
 
+
+EnergyCustom2() ; Clicks the 2nd Custom Energy Button
+{
+	CurrentStep := A_ThisFunc
+	Click2(PercentEnergy2X, CapBothY)
+	Sleep 500
+}
+
 EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 {
 	CurrentStep := A_ThisFunc
@@ -447,11 +492,30 @@ EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 	
 }
 
-EnergyCustom2() ; Clicks the 2nd Custom Energy Button
+EnergyPercent1() ; Clicks either the 1st Custom Percent Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(PercentEnergy2X, CapBothY)
+	Click2(PercentEnergy2X-25, PercentBothY)
 	Sleep 500
+}
+
+EnergyCustomPercent1Set(X) ;Sets Custom Energy Percent Button 1 to be X.
+{
+	CurrentStep := A_ThisFunc
+	
+	Click2(EnergyInputX,IdleBothY)
+	Sleep 500
+	
+	Send %X%
+	Sleep 500
+	
+	Send, {Shift down}
+	Sleep 500
+	Click2(PercentEnergy2X-25, PercentBothY)
+	Sleep 500
+	Send, {Shift up}
+	Sleep 500
+	
 }
 
 EnergyPercent2() ; Clicks either the 2nd Custom Percent Energy Button
@@ -474,6 +538,31 @@ Magic4X() ; Clicks the 1/4 Idle Magic Button
 {
 	CurrentStep := A_ThisFunc
 	Click2(Magic4X, IdleBothY)
+	Sleep 500
+}
+
+MagicPercent1() ; Clicks either the 1st or 2nd Custom Percent Magic Button
+{
+	CurrentStep := A_ThisFunc
+	Click2(PercentMagic2X-25, PercentBothY)
+	Sleep 500
+}
+
+MagicCustomPercent1Set(X) ;Sets Custom Magic Percent Button 1 to be X.
+{
+	CurrentStep := A_ThisFunc
+	
+	Click2(EnergyInputX,IdleBothY)
+	Sleep 500
+	
+	Send %X%
+	Sleep 500
+	
+	Send, {Shift down}
+	Sleep 500
+	Click2(PercentMagic2X-25, PercentBothY)
+	Sleep 500
+	Send, {Shift up}
 	Sleep 500
 }
 
@@ -1010,6 +1099,12 @@ BloodMagicCap(X) ; Caps Blood Magic in the Xth Spell (inside the Blood Magic Men
 
 BloodMagicPlus(X) ; Adds Blood Magic in the Xth Spell (inside the Blood Magic Menu)
 {
+	if AlwaysCap = 1
+	{
+		BloodMagicCap(X)
+		return
+	}
+	
 	CurrentStep := A_ThisFunc
 	PixelDiff = 35
 	TempY := BloodMagicY + PixelDiff * (X - 1)
@@ -1062,6 +1157,11 @@ WandoosPlusEnergy() ; Clicks to add energy to the Energy Dump (inside the Wandoo
 	{
 		return
 	}
+	if AlwaysCap = 1
+	{
+		WandoosCapEnergy()
+		return
+	}
 	
 	CurrentStep := A_ThisFunc
 	Click2(WandoosPlusX, WandoosEnergyY)
@@ -1074,7 +1174,11 @@ WandoosPlusMagic() ; Clicks to add magic to the Magic Dump (inside the Wandoos m
 	{
 		return
 	}
-	
+	if AlwaysCap = 1
+	{
+		WandoosCapMagic()
+		return
+	}
 	CurrentStep := A_ThisFunc
 	Click2(WandoosPlusX, WandoosMagicY)
 	Sleep 500
@@ -1084,6 +1188,12 @@ WandoosPlusBoth() ; Clicks to add energy to the Energy Dump and then add magic t
 {
 	if (100LFlag = 1) || (WandoosVersion=-1)
 	{
+		return
+	}
+	
+	if AlwaysCap = 1
+	{
+		WandoosCapBoth()
 		return
 	}
 	
@@ -1198,6 +1308,68 @@ NGUAdd(X) ; Clicks to add energy/magic to the Xth item in NGUs. Call NGUMagicMen
 	Sleep 500
 }
 
+;Applies energy and magic to NGUs
+;EnergyNGUs and MagicNGUs are arrays of 1s and 0s corresponding to which NGU to dump into.
+;Until I work out something better or 4G releases Custom Idle % buttons, it puts in 1/4 of idle energy per NGU.
+NGUSet(EnergyNGUs:=0,MagicNGUs:=0) 
+{
+	NGUMenu()
+	
+	;if !NGUSet
+	;{
+	;	EnergyCount:=0 ; Figure out the % of energy to put into each
+	;	For index, value in EnergyNGUs
+	;	{
+	;		if EnergyNGUs[index] = 1
+	;		{
+	;			EnergyCount++
+	;		}
+	;	}
+	;	;EnergyCustomPercent1Set(Floor(100/EnergyCount)) ;Set the %
+	;
+	;}
+	;EnergyPercent1()
+	
+	if EnergyNGUs
+		Energy4X()
+	
+	For index, value in EnergyNGUs ; Put energy into the NGUs
+	{
+		if EnergyNGUs[index] = 1
+		{
+			NGUAdd(index)
+		}
+	}
+	
+	NGUMagicMenu()
+	
+	;if !NGUSet
+	;{
+	;	MagicCount:=0 ; Figure out the % of magic to put into each
+	;	For index, value in MagicNGUs
+	;	{
+	;		if MagicNGUs[index] = 1
+	;		{
+	;			MagicCount++
+	;		}
+	;	}
+	;	MagicCustomPercent1Set(Floor(100/MagicCount)) ;Set the %
+	;}
+	;MagicPercent1()
+	
+	if MagicNGUs
+		Magic4X()
+	
+	For index, value in MagicNGUs ;Put magic into the NGUs
+	{
+		if MagicNGUs[index] = 1
+		{
+			NGUAdd(index)
+		}
+	}
+	
+	NGUSet := 1
+}
 
 ;====Yggdrasil====
 
@@ -1449,7 +1621,7 @@ MoneyPitCheckShort() ; If Money Pit is ready, throw money into Money Pit.
 			Loadout(3)
 			MoneyPitMenu()
 			MoneyPit()
-			InventoryMenu() ;temporarily disabled
+			InventoryMenu()
 			Loadout(1)
 		}
 		Else
@@ -1486,7 +1658,7 @@ TitanCheck() ; If the zone 1 back from the furthest unlocked zone isn't a titan,
 	WalderpTimerStart := A_TickCount
 }
 
-TitanCheck2() ;If current adventure zone is a titan, go one zone back
+TitanCheck2() ;If current adventure zone is a titan, go one zone back. Note: doesn't work if you're in ITOPOD.
 {
 	CurrentStep := A_ThisFunc
 	Search1X := 895 - 329 + TopLeftX
@@ -1526,12 +1698,10 @@ SpellCheck(X) ; Checks if the Xth blood magic spell is set to autocast. If it's 
 	Search2X := 845 - 329 + TopLeftX
 	Search2Y := 555 + (PixelDiff * (X - 1)) - 323 + TopLeftY
 	SearchFileName = BloodMagicBlankCheck.png
-	;ImageSearch, SearchX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	ImageSearch, SearchX, SearchY, Search1X-25, Search1Y-25, Search2X+25, Search2Y+25, *%ImageSearchVariance% %SearchFileName%
 	If SearchX
 	{
 		MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
-		;MsgBox Hit!
 		Sleep 500
 	}
 }
@@ -2002,13 +2172,14 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 		}
 		Energy4X()
 		TimeMachineEnergy()
-		TimeMachineEnergy()
+		if !EnableNGUs
+			TimeMachineEnergy()
 		FightMenu()
 		NukeBoss()
 		AugmentationMenu()
 		Augmentation(OptimalAugmentation) ;setting
 		WandoosMenu()
-		if Mod(a_index, 5) = 0 ;Every 5 loops, cap the magic spell.
+		if Mod(a_index, 5) = 0 ;Every 5 loops, cap Wandoos.
 		{
 			WandoosCapBoth()
 		}
@@ -2031,6 +2202,11 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 		}
 		TimeMachineMenu()
 		TimeMachineMagic()
+		if EnableNGUs
+		{
+			NGUSet(EnergyNGU,MagicNGU)
+			TimeMachineMenu()
+		}
 	}
 	;CurrentMerging() ;Until I add settings for boosting/merging
 	;BoostCube() 
@@ -2101,7 +2277,10 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 			{
 				BloodMagicPlus(MaxSustainableBloodSpellNumber) ;setting
 			}
+			
 		}
+		if EnableNGUs
+			NGUSet(EnergyNGU,MagicNGU)
 	}
 	RegainBoth()
 	if !100LFlag
@@ -2128,8 +2307,8 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 				BloodMagicPlus(MaxSustainableBloodSpellNumber) ;setting
 			}
 		}
-		;NGUMenu()
-		;NGUAdd(1)
+		if EnableNGUs
+			NGUSet(EnergyNGU,MagicNGU)
 	}
 	SaveCheck()
 	MoneyPitCheckShort()
@@ -2182,8 +2361,6 @@ RebirthScript2(X) ;Looks at X and runs the appropriate function
 	}
 }
 
-
-
 RebirthBoss37Check() ;Does a rebirth, does some initial boss fighting, then determines if blood magic is unlocked. If unlocked, sets Boss37Check to 1.
 {
 	Rebirth()
@@ -2216,7 +2393,6 @@ Esc:: ;Escape will quit the script at any time.
 }
 
 
-;^!2:: ;Ctrl-Alt-2 starts a run per prompt and settings. Prompt for run duration overrides settings.
 RunStart()
 {
 	OptionSelect()
@@ -2284,9 +2460,14 @@ RunStart()
 	Return
 }
 
-^!3:: ;Ctrl-Alt-3 is used for testing purposes
+StartTest() ;Used for debug/testing purposes
 {
-	;ScriptStart()
+	WinActivate, Play NGU IDLE
+	ScriptStart()
+	;X:=[1,0,1,1,1,1,1,1,1]
+	;Y:=[1,1,1,1,1,1,1]
+	NGUSet(defEnergyNGU,defMagicNGU)
+
 	;MsgBox, Test done!	
 }
 
@@ -2297,7 +2478,7 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	if defLoopOption = 0
 		LoopToggle := "Disabled"
 	
-	Gui, Add, Tab3,, Run|Settings|Challenge Sequence|About
+	Gui, Add, Tab3,, Run|Settings|NGU Settings|Challenge Sequence|About
 	Gui, Add, Text,, Challenge:
 	Gui, Add, DropDownList, vChallengeChoice gChallengeChoiceChange, None||Basic|No Augs|24-Hour|100 Level|No Equipment|Troll|No Rebirth|Blind
 	Gui, Add, Text,,
@@ -2334,6 +2515,30 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Add, Text,,Augmentation
 	Var := defOptimalAugmentation + 1
 	Gui, Add, DropDownList, vAugChoice altSubmit Choose%Var%, Safety Scissors|Milk Infusion|Cannon Implant|Shoulder Mounted|Energy Buster
+	
+	Gui, Tab,NGU Settings
+	Gui, Add, Checkbox, vEnableNGUs gToggleNGUs Checked%defEnableNGUs%, Put energy/magic into NGUs?
+	Gui, Add, Text,,Note: disabled during challenges.
+	Gui, Add, Text,,
+	Gui, Add, Text,section,Energy NGUs
+	Gui, Add, Checkbox,vENGU1 Checked%defNGU_Augments%,Augments
+	Gui, Add, Checkbox,vENGU2 Checked%defNGU_Wandoos%,Wandoos
+	Gui, Add, Checkbox,vENGU3 Checked%defNGU_Respawn%,Respawn
+	Gui, Add, Checkbox,vENGU4 Checked%defNGU_Gold%,Gold
+	Gui, Add, Checkbox,vENGU5 Checked%defNGU_Adventure%,Adventure
+	Gui, Add, Checkbox,vENGU6 Checked%defNGU_PowerAlpha%,Power Alpha
+	Gui, Add, Checkbox,vENGU7 Checked%defNGU_DropChance%,Drop Chance
+	Gui, Add, Checkbox,vENGU8 Checked%defNGU_MagicNGU%,Magic NGU
+	Gui, Add, Checkbox,vENGU9 Checked%defNGU_PP%,PP
+	Gui, Add, Text,ys,Magic NGUs
+	Gui, Add, Checkbox,vMNGU1 Checked%defNGU_Yggdrasil%,Yggdrasil
+	Gui, Add, Checkbox,vMNGU2 Checked%defNGU_EXP%,EXP
+	Gui, Add, Checkbox,vMNGU3 Checked%defNGU_PowerBeta%,Power Beta
+	Gui, Add, Checkbox,vMNGU4 Checked%defNGU_Number%,Number
+	Gui, Add, Checkbox,vMNGU5 Checked%defNGU_TimeMachine%,Time Machine
+	Gui, Add, Checkbox,vMNGU6 Checked%defNGU_EnergyNGU%,Energy NGU
+	Gui, Add, Checkbox,vMNGU7 Checked%defNGU_AdventureBeta%,Adventure Beta
+	
 	
 	Gui, Tab, Challenge Sequence
 	;Gui, Add, Text, +Wrap,Challenge runs will do:
@@ -2384,6 +2589,32 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 			GuiControl, Disabled, LoopNumberText
 	return
 	
+	ToggleNGUs:
+		GuiControlGet, OutputVar ,,EnableNGUs
+		if OutputVar = 1
+		{
+			for index in EnergyNGU
+			{
+				GuiControl, Enabled, ENGU%index%
+			}
+			for index in MagicNGU
+			{
+				GuiControl, Enabled, MNGU%index%
+			}
+		}
+		Else
+		{
+			for index in EnergyNGU
+			{
+				GuiControl, Disabled, ENGU%index%
+			}
+			for index in MagicNGU
+			{
+				GuiControl, Disabled, MNGU%index%
+			}
+		}
+	return
+	
 	LoopUnlimited:
 		GuiControlGet, OutputVar ,,LoopNumber
 		if LoopNumber = 0
@@ -2405,6 +2636,14 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	MaxSustainableBloodSpellNumber := BloodSpellChoice
 	WandoosVersion := WandoosChoice - 2
 	OptimalAugmentation := AugChoice - 1
+	for index in EnergyNGU
+	{
+		EnergyNGU[index]:= ENGU%index%
+	}
+	for index in MagicNGU
+	{
+		MagicNGU[index]:= MNGU%index%
+	}
 	
 	Gui Destroy
 	Return
@@ -2507,6 +2746,8 @@ ChallengeNumberSet() ;Converts the challenge choice to an appropriate number. Al
 
 ChallengeRun(X)
 {
+	EnableNGUs := 0 ;disable NGUs during challenges
+	
 	if (X = 1) || (X = 3) || (X = 5) || (X = 9) ;Basics, 24-Hour, NEC, Blind
 	{
 		ChallengeRunSequence(X)
@@ -2632,7 +2873,12 @@ NoRebirthRun() ;Attempts to do a No Rebirth run.
 		Magic2X()
 		TimeMachineMagic()
 		TimeMachineMagic()
-		if RebirthTimerTime >= 1800000 ;if advanced training is unlocked, boost wandoos speed
+		if !DoubleBasicTrainingPerk
+			AdvTrainTime:=1800000
+		Else
+			AdvTrainTime:=900000
+		
+		if RebirthTimerTime >= AdvTrainTime ;if advanced training is unlocked (plus a few minutes), boost wandoos speed
 		{
 			Energy4X()
 			AdvTrainingMenu()
