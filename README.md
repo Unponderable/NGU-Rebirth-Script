@@ -1,6 +1,6 @@
 # NGU Rebirth Script
 
-Rebirth and Challenge script for NGU idle
+Rebirth and Challenge AutoHotKey script for NGU Idle
 
 Written by __Unponderable__ and __Tatsumasa__\
 Also thanks to __EvoGeek__, the genesis of much of this script
@@ -16,6 +16,8 @@ Also thanks to __EvoGeek__, the genesis of much of this script
 
 
 #### Requirements to fully use this script
+
+The Script uses AutoHotKey. Must be downloaded and installed!
 
 Must have 1-energy-capped all Basic Training skills\
 Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD\
