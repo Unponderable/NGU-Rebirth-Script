@@ -7,6 +7,7 @@ Also thanks to __EvoGeek__, the genesis of much of this script
 
 #### Change Log
 
+0.d - Added nominal support for adding to NGUs during a non-challenge run. Added setting for always capping blood magic/Wandoos.
 0.4c - Various bugfixes. Added option to not use Wandoos. Added option to set default loop settings. Added support for Double Basic Training perk (see settings).\
 0.4 - Added new settings to let you customize how challenge runs are done. Fixed 100-LC using blood at the start of a run. Added some bonus settings, too.\
 0.3 - Better challenge support. Better GUI. Better everything. Fixed numerous bugs (and dumb design decisions).\
