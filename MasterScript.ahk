@@ -368,7 +368,7 @@ Timer() ; Sets up a tooltip at ToolTipX and ToolTipY to display what's going on 
 	FormatTime, LastRebirthTime, %LastRebirthYear%, HH:mm:ss
 	
 	IfWinActive, Play NGU IDLE
-		ToolTip, Diagnostic Tooltip`n`nOverall Time: %OverallTime%`nCurrent Status: %CurrentStatus%`nRebirth Time: %RebirthTime%`nLast RebirthTime: %LastRebirthTime%`nLast Rebirth Milli: %LastRebirthTimerTime%`nCurrent Function: %CurrentStep%`n`nStats:`n# of Completions: %Completions%`n`nEsc: Quit, ToolTipX, ToolTipY
+		ToolTip, Diagnostic Tooltip`n`nOverall Time: %OverallTime%`nCurrent Status: %CurrentStatus%`nRebirth Time: %RebirthTime%`nLast RebirthTime: %LastRebirthTime%`nLast Rebirth Milli: %LastRebirthTimerTime%`nCurrent Function: %CurrentStep%`n`nStats:`n# of Completions: %Completions%`n`nEsc: Quit`nF12: Pause/Unpause (experimental), ToolTipX, ToolTipY
 	Else
 		ToolTip
 	
@@ -2523,6 +2523,7 @@ Esc:: ;Escape will quit the script at any time.
 	ExitApp
 }
 
+f12::Pause,Toggle ;Experimental. F12 pauses and unpauses the script.
 
 RunStart()
 {
