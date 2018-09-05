@@ -2158,6 +2158,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 				AdventureRight(MaxAdventureZone)
 				TitanCheck2()
 			}
+			AugmentationMenu()
 			RegainBoth()
 		}
 		AugmentationMenu()
@@ -3028,6 +3029,7 @@ NoRebirthRun() ;Attempts to do a No Rebirth run.
 				AdventureRight(MaxAdventureZone)
 				TitanCheck2()
 			}
+			WandoosMenu()
 			RegainBoth()
 		}
 		WandoosMenu()
