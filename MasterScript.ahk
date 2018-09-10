@@ -1,5 +1,4 @@
-;MasterScript 0.4f
-;Compatible with NGU Idle Build 0.402
+;MasterScript 0.4g
 ;Written by Unponderable and Tatsumasa.
 
 ;Check the README for setup instructions.
@@ -129,6 +128,8 @@ Global BloodMagicMainY := 605 - 323
 Global WandoosMainY := 635 - 323
 Global NGUMainY := 665 - 323
 Global YGGMainY := 695 - 323
+Global DiggersMainY := 725 - 323
+Global SelloutMainY := 830 - 323
 
 Global ConfirmX := 755 - 329
 Global ConfirmY := 640 - 323
@@ -246,6 +247,17 @@ Global NGUToMagicY := 445 - 323
 Global YGGButtonsX := 1150 - 329
 Global YGGMaxY := 770 - 323
 Global YGGAllY := 810 - 323
+
+Global DiggersPageX := 660 - 329
+Global DiggersPageY := 435 - 323
+Global DiggersLeftCapX := 870 - 329
+Global DiggersRightCapX := 1185 - 329
+Global DiggersTopCapY := 510 - 323
+Global DiggersBottomCapY := 700 - 323
+Global DiggersLeftActiveX := 660 - 329
+Global DiggersRightActiveX := 975 - 329
+Global DiggersTopActiveY := 565 - 323
+Global DiggersBottomActiveY := 755 - 323
 
 Global ChallengeChoice
 Global RepeatChoice
@@ -1524,6 +1536,134 @@ YGGAll() ; Clicks on the "Harvest/Eat All Fruits Above Tier 1!" button (inside t
 	Sleep 500	
 }
 
+;===GOLD DIGGERS===
+
+DiggersMenu()
+{
+	CurrentStep := A_ThisFunc
+	Click2(MainMenuX, DiggersMainY)
+	Sleep 250
+}
+
+DiggersPage(X)
+{
+	CurrentStep := A_ThisFunc
+	PixelDiff := 65
+	TempX := DiggersPageX + PixelDiff * (X - 1)
+	Click2(TempX, DiggersPageY)
+	Sleep 250
+}
+
+DiggersCap1()
+{
+	CurrentStep := A_ThisFunc
+	Click2(DiggersLeftCapX, DiggersTopCapY)
+	Sleep 250
+}
+
+DiggersCap2()
+{
+	CurrentStep := A_ThisFunc
+	Click2(DiggersRightCapX, DiggersTopCapY)
+	Sleep 250
+}
+
+DiggersCap3()
+{
+	CurrentStep := A_ThisFunc
+	Click2(DiggersLeftCapX, DiggersBottomCapY)
+	Sleep 250
+}
+
+DiggersCap4()
+{
+	CurrentStep := A_ThisFunc
+	Click2(DiggersRightCapX, DiggersBottomCapY)
+	Sleep 250
+}
+
+DiggersActivate1()
+{
+	CurrentStep := A_ThisFunc
+	Click2(DiggersLeftActiveX, DiggersTopActiveY)
+	Sleep 250
+}
+
+DiggersActivate2()
+{
+	CurrentStep := A_ThisFunc
+	Click2(DiggersRightActiveX, DiggersTopActiveY)
+	Sleep 250
+}
+
+DiggersActivate3()
+{
+	CurrentStep := A_ThisFunc
+	Click2(DiggersLeftActiveX, DiggersBottomActiveY)
+	Sleep 250
+}
+
+DiggersActivate4()
+{
+	CurrentStep := A_ThisFunc
+	Click2(DiggersRightActiveX, DiggersBottomActiveY)
+	Sleep 250
+}
+
+;Activates and caps diggers corresponding to the input array
+;DiggerArray is an array of 1s and 0s corresponding to digger, starting with page 1 top left, then page 1 top right, then page 1 bottom left, then page 1 bottom right, then page 2 top left, and so on...
+;Does not check to see what is already activated, so only call it once per rebirth
+DiggersSet(DiggerArray:=0)
+{
+	DiggersMenu()
+	
+	For index, value in DiggerArray
+	{
+		if mod(A_Index,4)=1 ;activates the page, if any of the 4 diggers are set to 1
+		{
+			N := floor((index-1)/4)+1 ;formula to calculate correct page #
+			if DiggerArray[index] || DiggerArray[index+1] || DiggerArray[index+2] || DiggerArray[index+3]
+				DiggersPage(N)
+		}
+		
+		if DiggerArray[index] = 1
+		{
+			q := mod(index,4)
+			
+			if q = 1
+			{
+				DiggersCap1()
+				DiggersActivate1()
+			}
+			else if q = 2
+			{
+				DiggersCap2()
+				DiggersActivate2()
+			}
+			else if q = 3
+			{
+				DiggersCap3()
+				DiggersActivate3()
+			}
+			else
+			{
+				DiggersCap4()
+				DiggersActivate4()
+			}
+			
+		}
+	}
+}
+
+;===SELLOUT SHOP===
+
+SelloutMenu()
+{
+	CurrentStep := A_ThisFunc
+	Click2(MainMenuX, SelloutMainY)
+	Sleep 250
+}
+
 ;====General Functions====
 
 ScriptStart() ;Sets up the scripts to run. Call this first, always.
@@ -1986,6 +2126,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		AdventureRight(MaxAdventureZone)
 		TitanCheck2()
 	}
+	DiggersSet([0,1,1,0,0,0,0,0,0,0,0,0]) ;TODO make this less dumb
 	AugmentationMenu()
 	EnergyCustom1() ; requires XP purchase
 	AugmentationMilk()
@@ -2272,6 +2413,7 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 	CurrentFarmingShort() ;currently runs ITOPOD()
 	InventoryMenu()
 	Loadout(1)
+	DiggersSet([0,0,1,0,0,0,0,0,0,0,0,1]) ;TODO make this less dumb
 	if !100LFlag
 	{
 		BloodMagicMenu()
@@ -3015,6 +3157,7 @@ NoRebirthRun() ;Attempts to do a No Rebirth run.
 	RegainMagic()
 	BloodMagicMenu()
 	BloodAssign_CostEfficient(MaxSustainableBloodSpellNumber) ;get some counterfeit gold multiplier to get some gold for augs (until the 20th loop)
+	DiggersSet([0,1,1,0,0,0,0,0,0,0,0,0]) ;TODO make this less dumb
 	While ChallengeFlag = 1
 	{
 		if Mod(a_index, 20) = 0 ;Every 20 loops, move to last unlocked adventure zone, reset magic and energy for redistribution
