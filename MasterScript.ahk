@@ -2126,7 +2126,6 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		AdventureRight(MaxAdventureZone)
 		TitanCheck2()
 	}
-	DiggersSet([0,1,1,0,0,0,0,0,0,0,0,0]) ;TODO make this less dumb
 	AugmentationMenu()
 	EnergyCustom1() ; requires XP purchase
 	AugmentationMilk()
@@ -2268,6 +2267,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	}
 	InventoryMenu() ;Equip Loadout 1
 	Loadout(1)
+	DiggersSet([0,1,1,0,0,0,0,0,0,0,0,0]) ;TODO make this less dumb
 	
 	BloodAssignInitial :=0
 		
@@ -3157,7 +3157,6 @@ NoRebirthRun() ;Attempts to do a No Rebirth run.
 	RegainMagic()
 	BloodMagicMenu()
 	BloodAssign_CostEfficient(MaxSustainableBloodSpellNumber) ;get some counterfeit gold multiplier to get some gold for augs (until the 20th loop)
-	DiggersSet([0,1,1,0,0,0,0,0,0,0,0,0]) ;TODO make this less dumb
 	While ChallengeFlag = 1
 	{
 		if Mod(a_index, 20) = 0 ;Every 20 loops, move to last unlocked adventure zone, reset magic and energy for redistribution
