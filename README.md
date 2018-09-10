@@ -7,7 +7,7 @@ Also thanks to __EvoGeek__, the genesis of much of this script
 
 #### Change Log
 
-0.4g - Added beta support for Gold Diggers. Script will assume you have at least 2 slots and will assign them at the start of a run.
+0.4g - Added beta support for Gold Diggers. Script will assume you have at least 2 slots and will assign them at the start of a run.\
 0.4f - Time Machine and Augmentation functions will now check if you're capped. If capped, it won't add energy/magic.\
 0.4e - Settings are now saved to an INI file and loaded on start. Added remaining settings to GUI.\
 0.4d - Added nominal support for adding to NGUs during a non-challenge run. Added setting for always capping blood magic/Wandoos.\
