@@ -1650,6 +1650,8 @@ DiggersSet(DiggerArray:=0,OnlyCap:=0)
 		if DiggerArray[index] = 1
 		{
 			q := mod(index,4)
+			if q=0
+				q:=4
 			
 			DiggersCap%q%()
 			if !OnlyCap
@@ -1676,7 +1678,7 @@ DiggerSmartActivate(Position)
 		XSearch:=DiggersLeftActiveX
 		YSearch:=DiggersBottomActiveY
 	}
-	else if ((Position = 0) | (Positon = 4)) ;bottomright
+	else if Position = 4 ;bottomright
 	{
 		XSearch:=DiggersRightActiveX
 		YSearch:=DiggersBottomActiveY
