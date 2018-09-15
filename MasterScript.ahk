@@ -2534,6 +2534,7 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 	FightMenu()
 	NukeBoss()
 	Sleep 5000
+	FightBoss()
 	While RebirthTimerTime <= Multi2
 	{
 		FightBoss()
