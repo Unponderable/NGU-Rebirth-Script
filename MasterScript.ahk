@@ -1,4 +1,4 @@
-;MasterScript 0.4g
+;MasterScript 0.5
 ;Written by Unponderable and Tatsumasa.
 
 ;Check the README for setup instructions.
