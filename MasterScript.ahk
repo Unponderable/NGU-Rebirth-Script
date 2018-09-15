@@ -44,6 +44,19 @@ Global defNGU_TimeMachine
 Global defNGU_EnergyNGU
 Global defNGU_AdventureBeta
 
+Global defDigger_1
+Global defDigger_2
+Global defDigger_3
+Global defDigger_4
+Global defDigger_5
+Global defDigger_6
+Global defDigger_7
+Global defDigger_8
+Global defDigger_9
+Global defDigger_10
+Global defDigger_11
+Global defDigger_12
+
 Global EquipLoadout3ForMoneyPit
 Global DoNotSave
 Global DoubleBasicTrainingPerk
@@ -76,6 +89,13 @@ for index in MagicNGU
 {
 	MNGU%index% := MagicNGU[index]
 }
+Global defDiggers :=[defDigger_1,defDigger_2,defDigger_3,defDigger_4,defDigger_5,defDigger_6,defDigger_7,defDigger_8,defDigger_9,defDigger_10,defDigger_11,defDigger_12]
+Global DiggerLoadout := defDiggers
+for index in DiggerLoadout
+{
+	Digger%index% := defDiggers[index]
+}
+
 
 
 CoordMode, Mouse, Client
@@ -1612,8 +1632,9 @@ DiggersActivate4()
 
 ;Activates and caps diggers corresponding to the input array
 ;DiggerArray is an array of 1s and 0s corresponding to digger, starting with page 1 top left, then page 1 top right, then page 1 bottom left, then page 1 bottom right, then page 2 top left, and so on...
-;Does not check to see what is already activated, so only call it once per rebirth
-DiggersSet(DiggerArray:=0)
+;Calls DiggerSmartActivate(), which will activate the digger if it's checked
+;Set OnlyCap to anything other than zero to skip the DiggerSmartActivate() function (effectively just hitting the cap button)
+DiggersSet(DiggerArray:=0,OnlyCap:=0)
 {
 	DiggersMenu()
 	
@@ -1630,29 +1651,49 @@ DiggersSet(DiggerArray:=0)
 		{
 			q := mod(index,4)
 			
-			if q = 1
-			{
-				DiggersCap1()
-				DiggersActivate1()
-			}
-			else if q = 2
-			{
-				DiggersCap2()
-				DiggersActivate2()
-			}
-			else if q = 3
-			{
-				DiggersCap3()
-				DiggersActivate3()
-			}
-			else
-			{
-				DiggersCap4()
-				DiggersActivate4()
-			}
-			
+			DiggersCap%q%()
+			if !OnlyCap
+				DiggerSmartActivate(q)
 		}
 	}
+}
+
+;Activates the digger in Position if the checkbox is not checked
+DiggerSmartActivate(Position)
+{
+	if Position = 1 ;topleft
+	{
+		XSearch:=DiggersLeftActiveX
+		YSearch:=DiggersTopActiveY
+	}
+	else if Position = 2 ;topright
+	{
+		XSearch:=DiggersRightActiveX
+		YSearch:=DiggersTopActiveY
+	}
+	else if Position = 3 ;bottomleft
+	{
+		XSearch:=DiggersLeftActiveX
+		YSearch:=DiggersBottomActiveY
+	}
+	else if ((Position = 0) | (Positon = 4)) ;bottomright
+	{
+		XSearch:=DiggersRightActiveX
+		YSearch:=DiggersBottomActiveY
+	}
+	
+	XSearch+=TopLeftX
+	YSearch+=TopLeftY
+	
+	SearchFileName = BloodMagicCheck.png ;(it's the same checkmark)
+	ImageSearch, FoundX, FoundY, XSearch-25, YSearch-25, XSearch+25, YSearch+25, *%ImageSearchVariance% %SearchFileName%
+	
+	If !FoundX
+	{
+		MouseClick,L,XSearch,YSearch
+		Sleep 500
+	}
+
 }
 
 ;===SELLOUT SHOP===
@@ -2267,7 +2308,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	}
 	InventoryMenu() ;Equip Loadout 1
 	Loadout(1)
-	DiggersSet([0,1,1,0,0,0,0,0,0,0,0,0]) ;TODO make this less dumb
+	DiggersSet(DiggerLoadout)
 	
 	BloodAssignInitial :=0
 		
@@ -2319,6 +2360,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		TimeMachineEnergy()
 		Magic2X()
 		TimeMachineMagic()
+		DiggersSet(DiggerLoadout)
 		WandoosMenu()
 		if A_Index < 10
 		{
@@ -2413,7 +2455,7 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 	CurrentFarmingShort() ;currently runs ITOPOD()
 	InventoryMenu()
 	Loadout(1)
-	DiggersSet([0,0,1,0,0,0,0,0,0,0,0,1]) ;TODO make this less dumb
+	
 	if !100LFlag
 	{
 		BloodMagicMenu()
@@ -2421,7 +2463,6 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 	}
 	WandoosMenu()
 	WandoosCapEnergy()
-	TimeMachineMenu()
 	While RebirthTimerTime <= Multi1
 	{
 		if Mod(a_index, 20) = 0 ;Every 20 loops, move to last unlocked adventure zone
@@ -2443,6 +2484,7 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 			CurrentFarmingShort()
 			TimeMachineMenu()
 		}
+		TimeMachineMenu()
 		Energy4X()
 		TimeMachineEnergy()
 		if !EnableNGUs
@@ -2478,8 +2520,8 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 		if EnableNGUs
 		{
 			NGUSet(EnergyNGU,MagicNGU)
-			TimeMachineMenu()
 		}
+		DiggersSet(DiggerLoadout)
 	}
 	;CurrentMerging() ;Until I add settings for boosting/merging
 	;BoostCube() 
@@ -2530,6 +2572,7 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 	}
 	While ((RebirthTimerTime <= 1800000) && (RebirthTimerTime <= Multi3)) ;Until run time reaches 30 minutes or exceeds input time
 	{
+		DiggersSet(DiggerLoadout)
 		FightMenu()
 		NukeBoss()
 		
@@ -2564,6 +2607,7 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 	EnergyMax()
 	While ((RebirthTimerTime <= 3600000)  && (RebirthTimerTime <= Multi3)) ;Until run time reaches 60 minutes or exceeds input time
 	{
+		DiggersSet(DiggerLoadout)
 		FightMenu()
 		NukeBoss()
 		if !100LFlag
@@ -2739,6 +2783,7 @@ StartTest() ;Used for debug/testing purposes
 {
 	WinActivate, Play NGU IDLE
 	ScriptStart()
+	
 	;MsgBox, Test done!	
 }
 
@@ -2749,7 +2794,7 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	if defLoopOption = 0
 		LoopToggle := "Disabled"
 	
-	Gui, Add, Tab3,, Run|Settings|NGU Settings|Challenge Sequence|About
+	Gui, Add, Tab3,, Run|Settings|NGUs|Diggers|Challenge Sequence|About
 	Gui, Add, Text,section, Challenge:
 	Gui, Add, DropDownList, vChallengeChoice gChallengeChoiceChange x+10, None||Basic|No Augs|24-Hour|100 Level|No Equipment|Troll|No Rebirth|Blind
 	Gui, Add, Text,xs,
@@ -2793,7 +2838,7 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Add, Edit,x+10 w50
 	Gui, Add, Updown, vImageSearchVariance Range0-255,%ImageSearchVariance%
 	
-	Gui, Tab,NGU Settings
+	Gui, Tab,NGUs
 	Gui, Add, Checkbox, vEnableNGUs gToggleNGUs Checked%defEnableNGUs%, Put energy/magic into NGUs?
 	Gui, Add, Text,,Note: disabled during challenges.
 	Gui, Add, Text,,
@@ -2803,23 +2848,46 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Add, Checkbox,vENGU3 Checked%defNGU_Respawn%,Respawn
 	Gui, Add, Checkbox,vENGU4 Checked%defNGU_Gold%,Gold
 	Gui, Add, Checkbox,vENGU5 Checked%defNGU_Adventure%,Adventure
-	Gui, Add, Checkbox,vENGU6 Checked%defNGU_PowerAlpha%,Power Alpha
+	Gui, Add, Checkbox,vENGU6 Checked%defNGU_PowerAlpha%,Power A
 	Gui, Add, Checkbox,vENGU7 Checked%defNGU_DropChance%,Drop Chance
 	Gui, Add, Checkbox,vENGU8 Checked%defNGU_MagicNGU%,Magic NGU
 	Gui, Add, Checkbox,vENGU9 Checked%defNGU_PP%,PP
 	Gui, Add, Text,ys,Magic NGUs
 	Gui, Add, Checkbox,vMNGU1 Checked%defNGU_Yggdrasil%,Yggdrasil
 	Gui, Add, Checkbox,vMNGU2 Checked%defNGU_EXP%,EXP
-	Gui, Add, Checkbox,vMNGU3 Checked%defNGU_PowerBeta%,Power Beta
+	Gui, Add, Checkbox,vMNGU3 Checked%defNGU_PowerBeta%,Power B
 	Gui, Add, Checkbox,vMNGU4 Checked%defNGU_Number%,Number
 	Gui, Add, Checkbox,vMNGU5 Checked%defNGU_TimeMachine%,Time Machine
 	Gui, Add, Checkbox,vMNGU6 Checked%defNGU_EnergyNGU%,Energy NGU
-	Gui, Add, Checkbox,vMNGU7 Checked%defNGU_AdventureBeta%,Adventure Beta
+	Gui, Add, Checkbox,vMNGU7 Checked%defNGU_AdventureBeta%,Adventure B
 	
+	for index in defDiggers
+	{
+		NumDiggers += defDigger_%index%
+	}
+	global NumDig
+	
+	Gui, Tab,Diggers
+	Gui, Add, Text,vNumDig,%NumDiggers% Digger Slots Required
+	Gui, Add, Text,,
+	Gui, Add, Checkbox,gDigCount vDigger1 Checked%defDigger_1% section,Drop Chance
+	Gui, Add, Checkbox,gDigCount vDigger2 Checked%defDigger_2% ys,Wandoos
+	Gui, Add, Checkbox,gDigCount vDigger3 Checked%defDigger_3% section xs,Stat
+	Gui, Add, Checkbox,gDigCount vDigger4 Checked%defDigger_4% ys,Adventure
+	Gui, Add, Text,,
+	Gui, Add, Checkbox,gDigCount vDigger5 Checked%defDigger_5% section xs,Energy NGU
+	Gui, Add, Checkbox,gDigCount vDigger6 Checked%defDigger_6% ys,Magic NGU
+	Gui, Add, Checkbox,gDigCount vDigger7 Checked%defDigger_7% section xs,Energy Beard
+	Gui, Add, Checkbox,gDigCount vDigger8 Checked%defDigger_8% ys,Magic Beard
+	Gui, Add, Text,,
+	Gui, Add, Checkbox,gDigCount vDigger9 Checked%defDigger_9% section xs,PP
+	Gui, Add, Checkbox,gDigCount vDigger10 Checked%defDigger_10% ys,Daycare
+	Gui, Add, Checkbox,gDigCount vDigger11 Checked%defDigger_11% section xs,Blood
+	Gui, Add, Checkbox,gDigCount vDigger12 Checked%defDigger_12% ys,EXP
 	
 	Gui, Tab, Challenge Sequence
 	;Gui, Add, Text, +Wrap,Challenge runs will do:
-	Gui, Add, Text, +Wrap w200,A. Special runs (up to 15 minutes) to unlock blood magic.
+	Gui, Add, Text, +Wrap w200,A. Special runs (up to 15 minutes) to unlock blood magic. ;TODO add option to change this time
 	Gui, Add, Text, section, B. 
 	Gui, Add, Edit,X+10 w40
 	Gui, Add, UpDown, vChallenge1RunIterations Range1-100,%defChallenge1RunIterations%
@@ -2864,6 +2932,16 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 			GuiControl, Enabled, LoopNumberText
 		Else
 			GuiControl, Disabled, LoopNumberText
+	return
+	
+	DigCount:
+		NumDiggers := 0
+		for index in defDiggers
+		{
+			GuiControlGet, OutputVar ,,Digger%index%
+			NumDiggers += OutputVar
+		}
+		GuiControl,Text,NumDig,%NumDiggers% Digger Slots Required
 	return
 	
 	ToggleNGUs:
@@ -2924,6 +3002,7 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Submit, NoHide  ; Save the input from the user to each control's associated variable.
 	GUIApply()
 	SaveINI()
+	MsgBox, Saved!
 	return
 }
 
@@ -2940,6 +3019,10 @@ GUIApply() ;Called when the GUI is RUN or Save Defaults
 	for index in MagicNGU
 	{
 		MagicNGU[index]:= MNGU%index%
+	}
+	for index in DiggerLoadout
+	{
+		DiggerLoadout[index]:= Digger%index%
 	}
 }
 
@@ -3199,6 +3282,7 @@ NoRebirthRun() ;Attempts to do a No Rebirth run.
 		}
 		AugmentationMenu()
 		Augmentation(OptimalAugmentation) ;TODO Figure out how to accomodate the fact that it might be better to do a lower level aug that has the multiplier aug unlocked. Maybe do an image search for "Locked"?
+		DiggersSet(DiggerLoadout)
 		FightMenu()
 		NukeBoss()
 		FightBoss()
@@ -3262,11 +3346,29 @@ SaveINI()
 	Iniwrite, %MNGU6%, Settings.ini,Default Run Options,defNGU_EnergyNGU
 	Iniwrite, %MNGU7%, Settings.ini,Default Run Options,defNGU_AdventureBeta
 	
-	Iniwrite, %EquipLoadout3ForMoneyPit%,Settings.ini,Miscellaneous Settings,EquipLoadout3ForMoneyPit ;TODO
+	for index in DiggerLoadout
+	{
+		Digger%index% := DiggerLoadout[index]
+	}
+	
+	Iniwrite, %Digger1%, Settings.ini,Diggers,defDigger_1
+	Iniwrite, %Digger2%, Settings.ini,Diggers,defDigger_2
+	Iniwrite, %Digger3%, Settings.ini,Diggers,defDigger_3
+	Iniwrite, %Digger4%, Settings.ini,Diggers,defDigger_4
+	Iniwrite, %Digger5%, Settings.ini,Diggers,defDigger_5
+	Iniwrite, %Digger6%, Settings.ini,Diggers,defDigger_6
+	Iniwrite, %Digger7%, Settings.ini,Diggers,defDigger_7
+	Iniwrite, %Digger8%, Settings.ini,Diggers,defDigger_8
+	Iniwrite, %Digger9%, Settings.ini,Diggers,defDigger_9
+	Iniwrite, %Digger10%, Settings.ini,Diggers,defDigger_10
+	Iniwrite, %Digger11%, Settings.ini,Diggers,defDigger_11
+	Iniwrite, %Digger12%, Settings.ini,Diggers,defDigger_12
+	
+	Iniwrite, %EquipLoadout3ForMoneyPit%,Settings.ini,Miscellaneous Settings,EquipLoadout3ForMoneyPit
 	Iniwrite, %DoNotSave%,Settings.ini,Miscellaneous Settings,DoNotSave
 	Iniwrite, %DoubleBasicTrainingPerk%,Settings.ini,Miscellaneous Settings,DoubleBasicTrainingPerk
 	Iniwrite, %AlwaysCap%,Settings.ini,Miscellaneous Settings,AlwaysCap
-	Iniwrite, 10,Settings.ini,Miscellaneous Settings,ImageSearchVariance
+	Iniwrite, %ImageSearchVariance%,Settings.ini,Miscellaneous Settings,ImageSearchVariance
 
 }
 
@@ -3306,6 +3408,19 @@ LoadINI()
 	Iniread, defNGU_TimeMachine, Settings.ini,Default Run Options,defNGU_TimeMachine,0
 	Iniread, defNGU_EnergyNGU, Settings.ini,Default Run Options,defNGU_EnergyNGU,0
 	Iniread, defNGU_AdventureBeta, Settings.ini,Default Run Options,defNGU_AdventureBeta,0
+	
+	Iniread, defDigger_1, Settings.ini,Diggers,defDigger_1,0
+	Iniread, defDigger_2, Settings.ini,Diggers,defDigger_2,0
+	Iniread, defDigger_3, Settings.ini,Diggers,defDigger_3,0
+	Iniread, defDigger_4, Settings.ini,Diggers,defDigger_4,0
+	Iniread, defDigger_5, Settings.ini,Diggers,defDigger_5,0
+	Iniread, defDigger_6, Settings.ini,Diggers,defDigger_6,0
+	Iniread, defDigger_7, Settings.ini,Diggers,defDigger_7,0
+	Iniread, defDigger_8, Settings.ini,Diggers,defDigger_8,0
+	Iniread, defDigger_9, Settings.ini,Diggers,defDigger_9,0
+	Iniread, defDigger_10, Settings.ini,Diggers,defDigger_10,0
+	Iniread, defDigger_11, Settings.ini,Diggers,defDigger_11,0
+	Iniread, defDigger_12, Settings.ini,Diggers,defDigger_12,0
 	
 	Iniread, EquipLoadout3ForMoneyPit,Settings.ini,Miscellaneous Settings,EquipLoadout3ForMoneyPit,0
 	Iniread, DoNotSave,Settings.ini,Miscellaneous Settings,DoNotSave,0
