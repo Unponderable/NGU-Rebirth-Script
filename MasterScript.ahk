@@ -1,4 +1,4 @@
-;MasterScript 0.5
+;MasterScript 0.5a
 ;Written by Unponderable and Tatsumasa.
 
 ;Check the README for setup instructions.
@@ -297,6 +297,7 @@ Global ChallengeNumber
 Global NACFlag := 0
 Global 100LFlag := 0
 Global NRCFlag := 0
+Global NoTMFlag := 0
 
 RunStart()
 ;StartTest()
@@ -460,7 +461,7 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,IdleBothY)
+	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
 	Send %X%
@@ -750,6 +751,9 @@ AdventureRight(X) ; Moves you X Adventure zones forward (inside the Adventure me
 
 ITOPOD(Floor:=0) ; Starts adventuring in ITOPOD (inside the Adventure menu). If specified, will type in floor to idle on. If not specified, will go to 'optimal' floor.
 {
+	if NoTMFlag = 1
+		return
+	
 	CurrentStep := A_ThisFunc
 	Click2(ITOPODX, ITOPODY)
 	Sleep 500
@@ -1189,6 +1193,9 @@ AdvTrainingPlus(X) ; Clicks to add energy to the Xth item in the Adv. Training L
 
 TimeMachineMenu() ; Clicks on the Time Machine menu
 {
+	if NoTMFlag = 1
+		return
+	
 	CurrentStep := A_ThisFunc
 	Click2(MainMenuX, TimeMachineMainY)
 	Sleep 500
@@ -1196,6 +1203,9 @@ TimeMachineMenu() ; Clicks on the Time Machine menu
 
 TimeMachineEnergy() ; Clicks to add energy to the time machine (inside the Time Mahine Menu), if you're not capped.
 {
+	if NoTMFlag = 1
+		return
+	
 	CurrentStep := A_ThisFunc
 	
 	TM_BB1 := PixelGetColor2(TimeMachineEnergyBBX,TimeMachineEnergyBBY)
@@ -1217,6 +1227,9 @@ TimeMachineEnergy() ; Clicks to add energy to the time machine (inside the Time 
 
 TimeMachineMagic() ; Clicks to add magic to the time machine (inside the Time Mahine Menu), if you're not capped.
 {
+	if NoTMFlag = 1
+		return
+	
 	CurrentStep := A_ThisFunc
 	
 	TM_BB1 := PixelGetColor2(TimeMachineEnergyBBX,TimeMachineMagicBBY)
@@ -1636,6 +1649,9 @@ DiggersActivate4()
 ;Set OnlyCap to anything other than zero to skip the DiggerSmartActivate() function (effectively just hitting the cap button)
 DiggersSet(DiggerArray:=0,OnlyCap:=0)
 {
+	if NoTMFlag = 1
+		return
+	
 	DiggersMenu()
 	
 	For index, value in DiggerArray
@@ -2274,6 +2290,9 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	SearchFileName = TimeMachine.png
 	While SearchTMX!  ;Until Time Machine is unlocked, loop: Add all energy and magic to Wandoos, Nuke bosses, fight boss
 	{
+		if NoTMFlag = 1
+			break
+			
 		if (A_Index > 0) && (RebirthTimerTime > 900000) && (!NRCFlag) ; If you've been through this loop once and rebirth time has exceeded 15 min, rebirth now.
 		{
 			if Nag = 0
@@ -2454,7 +2473,7 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 	SleepStatus = 8 seconds - Rebirth Time: %RebirthTime%
 	Sleep 8000
 	SleepStatus = Active
-	CurrentFarmingShort() ;currently runs ITOPOD()
+	CurrentFarmingShort() ;Runs ITOPOD
 	InventoryMenu()
 	Loadout(1)
 	
@@ -2467,7 +2486,11 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 	WandoosCapEnergy()
 	While RebirthTimerTime <= Multi1
 	{
-		if Mod(a_index, 20) = 0 ;Every 20 loops, move to last unlocked adventure zone
+		AdvLoopWait := 20
+		if NoTMFlag
+			AdvLoopWait := 5 ;For No TM challenge, need to check for new zones more frequently...
+		
+		if Mod(a_index, AdvLoopWait) = 0 ;Every 20 loops, move to last unlocked adventure zone
 		{
 			AdventureMenu()
 			AdventureStart()
@@ -2480,11 +2503,13 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 				AdventureRight(MaxAdventureZone)
 				TitanCheck2()
 			}
-			SleepStatus = 8 seconds - Rebirth Time: %RebirthTime%
-			Sleep 8000
-			SleepStatus = Active
-			CurrentFarmingShort()
-			TimeMachineMenu()
+			if !NoTMFlag
+			{
+				SleepStatus = 8 seconds - Rebirth Time: %RebirthTime%
+				Sleep 8000
+				SleepStatus = Active
+				CurrentFarmingShort()
+			}
 		}
 		TimeMachineMenu()
 		Energy4X()
@@ -2799,7 +2824,7 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	
 	Gui, Add, Tab3,, Run|Settings|NGUs|Diggers|Challenge Sequence|About
 	Gui, Add, Text,section, Challenge:
-	Gui, Add, DropDownList, vChallengeChoice gChallengeChoiceChange x+10, None||Basic|No Augs|24-Hour|100 Level|No Equipment|Troll|No Rebirth|Blind
+	Gui, Add, DropDownList, vChallengeChoice gChallengeChoiceChange x+10, None||Basic|No Augs|24-Hour|100 Level|No Equipment|Troll|No Rebirth|Blind|No NGU|No TM
 	Gui, Add, Text,xs,
 	Gui, Add, Text,section, Rebirth duration:
 	Gui, Add, Edit, vRunDurationChoiceText x+10 w40
@@ -3129,6 +3154,14 @@ ChallengeNumberSet() ;Converts the challenge choice to an appropriate number. Al
 	{
 		ChallengeNumber:=9
 	}
+	else if ChallengeChoice=No NGU
+	{
+		ChallengeNumber:=10
+	}
+	else if ChallengeChoice=No TM
+	{
+		ChallengeNumber:=11
+	}
 	else
 	{
 		MsgBox, No valid challenge selected.
@@ -3141,7 +3174,7 @@ ChallengeRun(X)
 {
 	EnableNGUs := 0 ;disable NGUs during challenges
 	
-	if (X = 1) || (X = 3) || (X = 5) || (X = 9) ;Basics, 24-Hour, NEC, Blind
+	if (X = 1) || (X = 3) || (X = 5) || (X = 9) || (X=10) ;Basics, 24-Hour, NEC, Blind, No NGU
 	{
 		ChallengeRunSequence(X)
 	}
@@ -3161,6 +3194,12 @@ ChallengeRun(X)
 		Global 100LFlag := 1
 		ChallengeRunSequence(X)
 		Global 100LFlag := 0
+	}
+	if X=11
+	{
+		Global NoTMFlag := 1
+		ChallengeRunSequence(X)
+		Global NoTMFlag := 0
 	}
 }
 
