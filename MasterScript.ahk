@@ -228,8 +228,17 @@ Global Shoulder1Y := 775 - 323
 Global Shoulder2Y := 805 - 323
 Global Buster1Y := 840 - 323
 Global Buster2Y := 870 - 323
+Global Exo1Y := 447
+Global Exo2Y := 477
+Global LaserSword1Y := 511
+Global LaserSword2Y := 541
 
 Global AugBBX := 515
+Global AugScrollBarX := 945
+Global AugScrollBarTopY := 257
+Global AugScrollBarBottomY := 567
+
+Global AugScrollStatus := "unknown"
 
 Global AdvTrainingPlusX := 1210 - 329
 Global AdvTrainingBothY := 550 - 323
@@ -952,6 +961,8 @@ AugmentationScissors() ; Adds energy to Safety Scissors and then Danger Scissors
 	
 	CurrentStep := A_ThisFunc
 	
+	AugScrollUp()
+	
 	Aug_BB1 := PixelGetColor2(AugBBX,Scissors1Y)
 	Sleep, 10
 	Aug_BB2 := PixelGetColor2(AugBBX,Scissors1Y)
@@ -993,6 +1004,8 @@ AugmentationMilk() ; Adds energy to Milk Infusion and then Drinking the Milk Too
 	
 	CurrentStep := A_ThisFunc
 	
+	AugScrollUp()
+	
 	Aug_BB1 := PixelGetColor2(AugBBX,Milk1Y)
 	Sleep, 10
 	Aug_BB2 := PixelGetColor2(AugBBX,Milk1Y)
@@ -1032,6 +1045,9 @@ AugmentationCannon() ; Adds energy to Cannon Implant and then Missile Launcher, 
 	}
 	
 	CurrentStep := A_ThisFunc
+	
+	AugScrollUp()
+	
 	Aug_BB1 := PixelGetColor2(AugBBX,Cannon1Y)
 	Sleep, 10
 	Aug_BB2 := PixelGetColor2(AugBBX,Cannon1Y)
@@ -1071,6 +1087,9 @@ AugmentationShoulder() ; Adds energy to Shoulder Mounted and then Actual Ammunit
 	}
 	
 	CurrentStep := A_ThisFunc
+	
+	AugScrollUp()
+	
 	Aug_BB1 := PixelGetColor2(AugBBX,Shoulder1Y)
 	Sleep, 10
 	Aug_BB2 := PixelGetColor2(AugBBX,Shoulder1Y)
@@ -1110,6 +1129,9 @@ AugmentationBuster() ; Adds energy to Energy Buster and then Charge Shot, if you
 	}
 	
 	CurrentStep := A_ThisFunc
+	
+	AugScrollUp()
+	
 	Aug_BB1 := PixelGetColor2(AugBBX,Buster1Y)
 	Sleep, 10
 	Aug_BB2 := PixelGetColor2(AugBBX,Buster1Y)
@@ -1141,7 +1163,91 @@ AugmentationBuster() ; Adds energy to Energy Buster and then Charge Shot, if you
 	}
 }
 
-Augmentation(X) ;Adds energy to Augmentation X (up to 4 = Energy Buster)
+AugmentationExoskeleton() ; Adds energy to Advanced Exoskeleton and then Energy Shield, if you're not capped.
+{
+	if NACFlag = 1
+	{
+		return
+	}
+	
+	CurrentStep := A_ThisFunc
+	
+	AugScrollDown()
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,Exo1Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Exo1Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Exo1Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Exo1Y)
+		Sleep 500
+	}
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,Exo2Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,Exo2Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,Exo2Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, Exo2Y)
+		Sleep 500
+	}
+}
+
+AugmentationLaserSword() ; Adds energy to Laser Sword and then Quadruple Sided Laser, if you're not capped.
+{
+		if NACFlag = 1
+	{
+		return
+	}
+	
+	CurrentStep := A_ThisFunc
+	
+	AugScrollDown()
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,LaserSword1Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,LaserSword1Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,LaserSword1Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, LaserSword1Y)
+		Sleep 500
+	}
+	
+	Aug_BB1 := PixelGetColor2(AugBBX,LaserSword2Y)
+	Sleep, 10
+	Aug_BB2 := PixelGetColor2(AugBBX,LaserSword2Y)
+	Sleep, 10
+	Aug_BB3 := PixelGetColor2(AugBBX,LaserSword2Y)
+	if ((Aug_BB1 != 0xFFFFFF) && (Aug_BB2 != 0xFFFFFF) && (Aug_BB3 != 0xFFFFFF))
+	{
+		;MsgBox, You're probably capped and don't need to add energy.
+	}
+	else
+	{
+		Click2(AugmentationPlusX, LaserSword2Y)
+		Sleep 500
+	}
+}
+
+Augmentation(X) ;Adds energy to Augmentation X (up to 6 = Laser Sword)
 {
 	if NACFlag = 1
 	{
@@ -1169,6 +1275,44 @@ Augmentation(X) ;Adds energy to Augmentation X (up to 4 = Energy Buster)
 	{
 		AugmentationBuster()
 	}
+	else if X=5
+	{
+		AugmentationExoskeleton()
+	}
+	else if X=6
+	{
+		AugmentationLaserSword()
+	}
+}
+
+AugScrollDown()
+{
+	if AugScrollStatus = down
+	{
+		return
+	}
+	
+	Click2(AugScrollBarX, AugScrollBarBottomY)
+	Sleep 500
+	Click2(AugScrollBarX, AugScrollBarBottomY)
+	Sleep 500
+	
+	AugScrollStatus := "down"
+}
+
+AugScrollUp()
+{
+	if AugScrollStatus = up
+	{
+		return
+	}
+	
+	Click2(AugScrollBarX, AugScrollBarTopY)
+	Sleep 500
+	Click2(AugScrollBarX, AugScrollBarTopY)
+	Sleep, 500
+	
+	AugScrollStatus := "up"
 }
 
 ;====Adv. Training====
@@ -2856,7 +3000,7 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Add, DropDownList, x+10 vWandoosChoice altSubmit Choose%Var%, None|98|MEH|XL
 	Gui, Add, Text,xs section,Augmentation
 	Var := defOptimalAugmentation + 1
-	Gui, Add, DropDownList, x+10 vAugChoice altSubmit Choose%Var%, Safety Scissors|Milk Infusion|Cannon Implant|Shoulder Mounted|Energy Buster
+	Gui, Add, DropDownList, x+10 vAugChoice altSubmit Choose%Var%, Safety Scissors|Milk Infusion|Cannon Implant|Shoulder Mounted|Energy Buster|Advanced Exoskeleton|Laser Sword
 	Gui, Add, Text,xs,Advanced Options:
 	Gui, Add, Checkbox, vEquipLoadout3ForMoneyPit Checked%EquipLoadout3ForMoneyPit%,Loadout 3 for Money Pit
 	Gui, Add, Checkbox,vDoNotSave Checked%DoNotSave%,Do Not Save
