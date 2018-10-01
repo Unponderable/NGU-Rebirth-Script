@@ -340,8 +340,10 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requires SetupOffsets() to have already been called once. Can also specify right-click, a-click, d-click, and Ctrl-click.
 {
 	;MsgBox, %X% %Y% %Button%
-	
-	WinActivate, Play NGU IDLE
+	IfWinNotActive, Play NGU IDLE
+	{
+		WinActivate, Play NGU IDLE
+	}
 	
 	X += TopLeftX
 	Y += TopLeftY
@@ -2660,8 +2662,11 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 		TimeMachineEnergy()
 		if !EnableNGUs
 			TimeMachineEnergy()
-		FightMenu()
-		NukeBoss()
+		if a_index != 1 ;don't nuke the first loop to gold diggers a chance to get turned on
+		{
+			FightMenu()
+			NukeBoss()
+		}
 		AugmentationMenu()
 		Augmentation(OptimalAugmentation) ;setting
 		WandoosMenu()
