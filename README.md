@@ -1,12 +1,13 @@
 # NGU Rebirth Script
 
-Rebirth and Challenge AutoHotKey script for NGU Idle 0.403-1
+Rebirth and Challenge AutoHotKey script for NGU Idle 0.405
 
 Written by __Unponderable__ and __Tatsumasa__\
 Also thanks to __EvoGeek__, the genesis of much of this script
 
 #### Change Log
 
+0.5a - Added support for Advanced Exoskeleton and Laser Sword augments.\
 0.5 - Full Gold Diggers implementation.\
 0.4g - Added beta support for Gold Diggers. Script will assume you have at least 2 slots and will assign them at the start of a run.\
 0.4f - Time Machine and Augmentation functions will now check if you're capped. If capped, it won't add energy/magic.\
