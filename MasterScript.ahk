@@ -498,7 +498,7 @@ EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,IdleBothY)
+	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
 	Send %X%
@@ -524,7 +524,7 @@ EnergyCustomPercent1Set(X) ;Sets Custom Energy Percent Button 1 to be X.
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,IdleBothY)
+	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
 	Send %X%
@@ -573,7 +573,7 @@ MagicCustomPercent1Set(X) ;Sets Custom Magic Percent Button 1 to be X.
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,IdleBothY)
+	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
 	Send %X%
