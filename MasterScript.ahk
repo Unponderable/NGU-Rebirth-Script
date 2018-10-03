@@ -2333,6 +2333,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	}
 	AugmentationMenu()
 	EnergyCustom1() ; requires XP purchase
+	AugmentationScissors()
 	AugmentationMilk()
 	EnergyMax()
 	InventoryMenu()
@@ -2381,6 +2382,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	}
 	RegainEnergy() ;Reclaim energy, add Custom1 energy to Cannon
 	EnergyCustom1()
+	AugmentationMilk()
 	AugmentationCannon()
 	EnergyMax()
 	Search1X := 640 - 329 + TopLeftX
@@ -2427,6 +2429,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	}
 	RegainEnergy() ;Reclaim energy, add Custom1 energy to Shoulder Mounted
 	EnergyCustom1()
+	AugmentationCannon()
 	AugmentationShoulder()
 	EnergyMax()
 	Search1X := 500 - 329 + TopLeftX
@@ -2953,7 +2956,7 @@ StartTest() ;Used for debug/testing purposes
 {
 	WinActivate, Play NGU IDLE
 	ScriptStart()
-	
+
 	;MsgBox, Test done!	
 }
 
