@@ -2579,13 +2579,6 @@ PreShortRun() ; Sets Wandoos, sets Number Boost and Counterfeit Gold to autocast
 	SpellCheck(1)
 	SpellUncheck(3)
 	SpellCheck(4)
-	AugmentationMenu()
-	Augmentation(1) ;has no purpose other than to click somewhere in the menu
-	Loop 7
-	{
-		Send {WheelUp}
-		Sleep 100
-	}
 	InventoryMenu()
 	Loadout(2)
 	YggMenu()
