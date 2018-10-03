@@ -2333,7 +2333,6 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	}
 	AugmentationMenu()
 	EnergyCustom1() ; requires XP purchase
-	AugmentationScissors()
 	AugmentationMilk()
 	EnergyMax()
 	InventoryMenu()
@@ -2382,7 +2381,6 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	}
 	RegainEnergy() ;Reclaim energy, add Custom1 energy to Cannon
 	EnergyCustom1()
-	AugmentationMilk()
 	AugmentationCannon()
 	EnergyMax()
 	Search1X := 640 - 329 + TopLeftX
@@ -2429,7 +2427,6 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	}
 	RegainEnergy() ;Reclaim energy, add Custom1 energy to Shoulder Mounted
 	EnergyCustom1()
-	AugmentationCannon()
 	AugmentationShoulder()
 	EnergyMax()
 	Search1X := 500 - 329 + TopLeftX
@@ -3363,9 +3360,12 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 		CurrentStatus = First RB #%Rebirths%
 		WinActivate, Play NGU IDLE
 		FirstRebirth2()
+		ChallengeCheck()
+		if ChallengeFlag = 0
+			break
 		RebirthBoss37Check()
 	}
-	ChallengeCheck()
+
 	
 	Rebirths := 1
 	While ChallengeFlag = 1 And Rebirths <= Challenge1RunIterations ;Run up to 10 3-minute rebirths (by default)
