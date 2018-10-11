@@ -2691,6 +2691,11 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 			NGUSet(EnergyNGU,MagicNGU)
 		}
 		DiggersSet(DiggerLoadout)
+		if a_index = 1 ; once diggers are on, re-enter ITOPOD at a probably better optimal level
+		{
+			AdventureMenu()
+			ITOPOD()
+		}
 	}
 	;CurrentMerging() ;Until I add settings for boosting/merging
 	;BoostCube() 
