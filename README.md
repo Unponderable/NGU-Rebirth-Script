@@ -25,8 +25,8 @@ Also thanks to __EvoGeek__, the genesis of much of this script
 The Script uses AutoHotKey. Must be downloaded and installed!
 
 Must have 1-energy-capped all Basic Training skills\
-Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD, Gold Diggers\
-Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, 2+ Digger Slots, Custom Energy Button 1\
+Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD\
+Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, Custom Energy Button 1\
 Must have puchased with AP: Insta Training Cap (10,000 AP)
 
 I strongly suggest having Auto Boost, Auto Merge, and Advanced Loot Filter, as the script does not (currently) do inventory management.
