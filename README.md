@@ -3,7 +3,8 @@
 Rebirth and Challenge AutoHotKey script for NGU Idle 0.405
 
 Written by __Unponderable__ and __Tatsumasa__\
-Also thanks to __EvoGeek__, the genesis of much of this script
+Also thanks to __EvoGeek__, the genesis of much of this script.\
+Come visit us in Discord: https://discord.gg/5revMxD
 
 #### Change Log
 
@@ -38,7 +39,7 @@ I strongly suggest having Auto Boost, Auto Merge, and Advanced Loot Filter, as t
 2. Setup beards as desired. Beards will not be touched in this script. Magic beards are more useful for this scripts' purposes.
 3. Set Loadout 1 to be your general run gear. This will be what you wear for most of your run(s).
 4. Set Loadout 2 to be heavy in gold find (without sacrificing too much power/toughness). Used only for the first few kills for time machine purposes.
-5. Ensure all Augmentation/Time Machine targets are set to zero.
+5. Ensure all Augmentation/Time Machine targets are set to zero.\
 5a. If you're doing a long run, ensure advanced training limits are set to appropriate limits. Long runs will try to boost adv training wandoos speed.
 6. Change in-game setting "Unassign E/M on Loadout Swap?" to YES and "Check for Updates" to OFF.
 7. Make a manual save, just in case stuff doesn't work.
