@@ -412,7 +412,7 @@ Timer() ; Sets up a tooltip at ToolTipX and ToolTipY to display what's going on 
 	FormatTime, LastRebirthTime, %LastRebirthYear%, HH:mm:ss
 	
 	IfWinActive, Play NGU IDLE
-		ToolTip, Diagnostic Tooltip`n`nOverall Time: %OverallTime%`nCurrent Status: %CurrentStatus%`nRebirth Time: %RebirthTime%`nLast RebirthTime: %LastRebirthTime%`nLast Rebirth Milli: %LastRebirthTimerTime%`nCurrent Function: %CurrentStep%`n`nStats:`n# of Completions: %Completions%`n`nEsc: Quit`nF12: Pause/Unpause (experimental), ToolTipX, ToolTipY
+		ToolTip, Diagnostic Tooltip`n`nOverall Time: %OverallTime%`nCurrent Status: %CurrentStatus%`nRebirth Time: %RebirthTime%`nLast RebirthTime: %LastRebirthTime%`nLast Rebirth Milli: %LastRebirthTimerTime%`nCurrent Function: %CurrentStep%`n`nStats:`n# of Completions: %Completions%`n`nEsc: Quit`nF12: Pause/Unpause, ToolTipX, ToolTipY
 	Else
 		ToolTip
 	
@@ -1945,7 +1945,7 @@ YGGCheck() ; Iff Yggdrasil button is green, switch to Loadout 6 and Harvest/Eat 
 	}
 }
 
-IronPillCheckShort() ;If Blood Magic is purple, stop autocasting, dump blood into magic (excess energy into time machine), wait 5 minutes, cast Iron Pill, then resume autocasting
+IronPillCheckShort() ;If Blood Magic is purple, stop autocasting, dump blood into magic (excess energy/magic into time machine), wait 5 minutes, cast Iron Pill, then resume autocasting
 {
 	CurrentStep := A_ThisFunc
 	Search1X := 500 - 329 + TopLeftX
@@ -1966,7 +1966,9 @@ IronPillCheckShort() ;If Blood Magic is purple, stop autocasting, dump blood int
 		BloodAssign_CostEfficient(8)
 		TimeMachineMenu()
 		TimeMachineEnergy()
+		TimeMachineMagic()
 		SleepStatus = 5 minutes - Rebirth Time: %RebirthTime%
+		CurrentStep := WAITING 5 MINUTES BEFORE CASTING IRON PILL!
 		Sleep 300000
 		SleepStatus = Active
 		BloodMagicMenu()
