@@ -1968,7 +1968,7 @@ IronPillCheckShort() ;If Blood Magic is purple, stop autocasting, dump blood int
 		TimeMachineEnergy()
 		TimeMachineMagic()
 		SleepStatus = 5 minutes - Rebirth Time: %RebirthTime%
-		CurrentStep := WAITING 5 MINUTES BEFORE CASTING IRON PILL!
+		CurrentStep := "WAITING 5 MINUTES BEFORE CASTING IRON PILL!"
 		Sleep 300000
 		SleepStatus = Active
 		BloodMagicMenu()
