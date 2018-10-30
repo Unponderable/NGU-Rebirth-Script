@@ -2738,6 +2738,7 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 	
 	Multi3 := X * 60000
 	
+	Loadout(1)
 	if !100LFlag ;not in a 100-level challenge
 	{
 		RegainBoth()
