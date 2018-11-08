@@ -2757,7 +2757,7 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 		if !100LFlag ;not in a 100-level challenge
 		{
 			AdvTrainingMenu()
-			Energy2X()
+			Energy4X()
 			AdvTrainingPlus(4)
 			AdvTrainingPlus(5)
 			BloodMagicMenu()
