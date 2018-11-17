@@ -313,8 +313,8 @@ Global 100LFlag := 0
 Global NRCFlag := 0
 Global NoTMFlag := 0
 
-;RunStart()
-StartTest()
+RunStart()
+;StartTest()
 
 SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the game, based on an image search. Run everytime you run a script.
 {
@@ -326,9 +326,8 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 	
 	WinGetPos,,,WinW,WinH
 	SearchFileName = TopLeft.png
-	;ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *%ImageSearchVariance% %SearchFileName%
-	ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *10 %SearchFileName%
-	
+	ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *%ImageSearchVariance% %SearchFileName%
+		
 	If SearchX
 	{
 		TopLeftX := SearchX
