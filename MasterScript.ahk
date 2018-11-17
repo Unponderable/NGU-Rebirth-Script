@@ -312,6 +312,7 @@ Global NACFlag := 0
 Global 100LFlag := 0
 Global NRCFlag := 0
 Global NoTMFlag := 0
+Global NGUSetCalledOnce = 1
 
 RunStart()
 ;StartTest()
