@@ -1,4 +1,4 @@
-;MasterScript 0.5a
+;MasterScript
 ;Written by Unponderable and Tatsumasa.
 
 ;Check the README for setup instructions.
@@ -255,9 +255,14 @@ Global BloodMagicCapX := 890 - 329
 Global BloodMagicY := 550 - 323
 Global BloodMagicSpellsX := 710 - 329
 Global BloodMagicSpellsY := 435 - 323
-Global CastBloodMagicSpellsX := 710 - 329
-Global CastBloodMagicSpellsY := 540 - 323
-Global CastBloodMagicSpellsCheckX := 830 - 329
+
+Global CastBloodMagicSpellsX1 := 660 - 329
+Global CastBloodMagicSpellsY1 := 540 - 323
+Global CastBloodMagicSpellsCheckX1 := 840 - 329
+Global CastBloodMagicSpellsX2 := 1000 - 329
+Global CastBloodMagicSpellsY2 := 606 - 301
+Global CastBloodMagicSpellsCheckX2 := 1178 - 329
+Global CastBloodMagicSpellsY3 := 734 - 301
 
 Global WandoosPlusX := 875 - 329
 Global WandoosCapX := 945 - 329
@@ -308,8 +313,8 @@ Global 100LFlag := 0
 Global NRCFlag := 0
 Global NoTMFlag := 0
 
-RunStart()
-;StartTest()
+;RunStart()
+StartTest()
 
 SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the game, based on an image search. Run everytime you run a script.
 {
@@ -321,7 +326,8 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 	
 	WinGetPos,,,WinW,WinH
 	SearchFileName = TopLeft.png
-	ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *%ImageSearchVariance% %SearchFileName%
+	;ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *%ImageSearchVariance% %SearchFileName%
+	ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *10 %SearchFileName%
 	
 	If SearchX
 	{
@@ -1443,19 +1449,45 @@ BloodMagicSpellMenu() ; Clicks on the "Cast Some Spoopy Spells" button inside th
 BloodMagicSpellCast(X) ; Clicks on the Xth spell inside the "Cast Some Spoopy Spells" menu
 {
 	CurrentStep := A_ThisFunc
-	PixelDiff = 70
-	TempY := CastBloodMagicSpellsY + PixelDiff * (X - 1)
-	Click2(CastBloodMagicSpellsX, TempY)
+	
+	Click2(BloodMagicSpellX(X), BloodMagicSpellY(X))
 	Sleep 500
 }
 
 BloodMagicSpellCheck(X) ; Clicks on the checkbox next to the Xth spell inside the "Cast Some Spoopy Spells" menu
 {
 	CurrentStep := A_ThisFunc
-	PixelDiff = 70
-	TempY := CastBloodMagicSpellsY + PixelDiff * (X - 1)
-	Click2(CastBloodMagicSpellsCheckX, TempY)
+	TempX := BloodMagicSpellX(X)+CastBloodMagicSpellsCheckX1-CastBloodMagicSpellsX1
+	Click2(TempX, BloodMagicSpellY(X))
 	Sleep 500
+}
+
+BloodMagicSpellX(X) ; Gets the X coordinate for the Xth blood spell
+{
+	if ((X=1)||(X=3)||(X=5))
+	{
+		return CastBloodMagicSpellsX1
+	}
+	else if ((X=2)||(X=4)||(X=6))
+	{
+		return CastBloodMagicSpellsX2
+	}
+}
+
+BloodMagicSpellY(X) ; Gets the Y coordinate for the Xth blood spell
+{
+	if ((X=1)||(X=2))
+	{
+		return CastBloodMagicSpellsY1
+	}
+	else if ((X=3)||(X=4))
+	{
+		return CastBloodMagicSpellsY2
+	}
+	else if ((X=5)||(X=6))
+	{
+		return CastBloodMagicSpellsY3
+	}
 }
 
 ;====Wandoos====
@@ -2169,13 +2201,12 @@ BoringCheck() ;Checks if you're adventuring in Boring-Ass Earth. If so, moves to
 SpellCheck(X) ; Checks if the Xth blood magic spell is set to autocast. If it's not, it sets it to autocast.
 {
 	CurrentStep := A_ThisFunc
-	PixelDiff := 70
-	Search1X := 815 - 329 + TopLeftX
-	Search1Y := 525 + (PixelDiff * (X - 1)) - 323 + TopLeftY
-	Search2X := 845 - 329 + TopLeftX
-	Search2Y := 555 + (PixelDiff * (X - 1)) - 323 + TopLeftY
+	
+	Search1X := BloodMagicSpellX(X)+CastBloodMagicSpellsCheckX1-CastBloodMagicSpellsX1+TopLeftX
+	Search1Y := BloodMagicSpellY(X)+TopLeftY
+			
 	SearchFileName = BloodMagicBlankCheck.png
-	ImageSearch, SearchX, SearchY, Search1X-25, Search1Y-25, Search2X+25, Search2Y+25, *%ImageSearchVariance% %SearchFileName%
+	ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName%
 	If SearchX
 	{
 		MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
@@ -2186,18 +2217,27 @@ SpellCheck(X) ; Checks if the Xth blood magic spell is set to autocast. If it's 
 SpellUncheck(X) ; Checks if the Xth blood magic spell is NOT set to autocast. If it is, it unsets it.
 {
 	CurrentStep := A_ThisFunc
-	PixelDiff := 70
-	Search1X := 815 - 329 + TopLeftX
-	Search1Y := 525 + PixelDiff * (X - 1) - 323 + TopLeftY
-	Search2X := 845 - 329 + TopLeftX
-	Search2Y := 555 + PixelDiff * (X - 1) - 323 + TopLeftY
+	
+	Search1X := BloodMagicSpellX(X)+CastBloodMagicSpellsCheckX1-CastBloodMagicSpellsX1+TopLeftX
+	Search1Y := BloodMagicSpellY(X)+TopLeftY
+	
 	SearchFileName = BloodMagicCheck.png
-	;ImageSearch, SearchX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
-	ImageSearch, SearchX, SearchY, Search1X-25, Search1Y-25, Search2X+25, Search2Y+25, *%ImageSearchVariance% %SearchFileName%
+	SearchFileName2 = BloodMagicCheck2.png
+	
+	ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName%
 	If SearchX
 	{
 		MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
 		Sleep 500
+	}
+	Else ;Because 4G made Counterfeit Gold have a different checkmark, need to check for that too
+	{
+		ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName2%
+		If SearchX
+		{
+			MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
+			Sleep 500
+		}
 	}
 }
 
@@ -2961,7 +3001,8 @@ StartTest() ;Used for debug/testing purposes
 {
 	WinActivate, Play NGU IDLE
 	ScriptStart()
-
+	
+	
 	;MsgBox, Test done!	
 }
 

@@ -1,6 +1,6 @@
 # NGU Rebirth Script
 
-Rebirth and Challenge AutoHotKey script for NGU Idle 0.405
+Rebirth and Challenge AutoHotKey script for NGU Idle 0.409-2
 
 Written by __Unponderable__ and __Tatsumasa__\
 Also thanks to __EvoGeek__, the genesis of much of this script.\
@@ -8,6 +8,7 @@ Come visit us in Discord: https://discord.gg/5revMxD
 
 #### Change Log
 
+0.5b - Fixes to support new blood spells/blood spell arrangement. Themes other than Normal are not supported.\
 0.5a - Added support for Advanced Exoskeleton and Laser Sword augments.\
 0.5 - Full Gold Diggers implementation.\
 0.4g - Added beta support for Gold Diggers. Script will assume you have at least 2 slots and will assign them at the start of a run.\
@@ -29,6 +30,7 @@ Must have 1-energy-capped all Basic Training skills\
 Must have unlocked: Wandoos, NGUs, Yggdrasil, ITOPOD\
 Must have purchased with XP: Training Auto Advance, 2+ Loadout Slots, Custom Energy Button 1\
 Must have puchased with AP: Insta Training Cap (10,000 AP)
+Must use the Normal (default) UI theme
 
 I strongly suggest having Auto Boost, Auto Merge, and Advanced Loot Filter, as the script does not (currently) do inventory management.
 
@@ -54,7 +56,7 @@ __A__: Come back when you have more stats or change the challenge run sequence t
 
 __Q__: HALP. It's giving me an error about the game not being visible/not finding TopLeft.png!
 
-__A__: The script attempts to match the image TopLeft.png with the top left corner of the game screen. Make sure NGU idle is fully visible on the screen. Make sure the script is being run in the same file directory as the images that it came with. If you're still having issues, you may have an incompatible aspect ratio or scaling factor. For reference, the script was tested in Chrome and Firefox at 100% zoom on a 1920x1080 resolution monitor.  Check to make sure your DPI is set to 100%. I guess try matching that, if possible? If that doesn't work, I don't really know how to fix it, sorry :-/
+__A__: The script attempts to match the image TopLeft.png with the top left corner of the game screen. Make sure NGU idle is fully visible on the screen. Make sure the script is being run in the same file directory as the images that it came with. If you're still having issues, you may have an incompatible aspect ratio or scaling factor. For reference, the script was tested in Chrome and Firefox at 100% zoom on a 1920x1080 resolution monitor.  Check to make sure your DPI is set to 100%. Try matching that, if possible. If that doesn't work, I don't really know how to fix it, sorry :-/
 
 __Q__: Why does the script come to a halt when Iron Pill is active?
 
