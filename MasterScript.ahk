@@ -1723,6 +1723,108 @@ NGUSet(EnergyNGUs:=0,MagicNGUs:=0)
 	NGUSet := 1
 }
 
+NGUSet2(EnergyNGUs:=0,MagicNGUs:=0) ;Unponderable's custom NGU setting function, based on the one above. Not implemented - here for an example in customizing. Requires setting EnergyCustom2 - I use 10 billion.
+{
+	NGUMenu()
+	
+	For index, value in EnergyNGUs ; Put energy into the NGUs
+	{
+			
+		PixelDiff = 35
+		TempY := NGUBothY + PixelDiff * (index - 1)
+		
+		NGU_BB1 := PixelGetColor2(NGUBBX,TempY)
+		Sleep, 10
+		NGU_BB2 := PixelGetColor2(NGUBBX,TempY)
+		Sleep, 10
+		NGU_BB3 := PixelGetColor2(NGUBBX,TempY)
+		if (((NGU_BB1 != 0xFFFFFF) && (NGU_BB2 != 0xFFFFFF) && (NGU_BB3 != 0xFFFFFF)) && (NGUSetCalledOnce = 1))
+		{
+			;MsgBox, You're probably capped and don't need to add energy.
+		}
+		else
+		{
+			if index = 1
+			{
+				EnergyCustom2()
+			}
+			if index <= 6
+			{	
+				NGUAdd(index)
+			}
+			if index = 7
+			{
+				Loop 3
+				{
+					NGUAdd(index)
+				}
+			}
+			if index >= 8
+			{
+				Energy2X()
+				NGUAdd(index)
+			}
+		}
+
+	}
+	
+	NGUMagicMenu()
+	
+	For index, value in MagicNGUs ;Put magic into the NGUs
+	{
+		PixelDiff = 35
+		TempY := NGUBothY + PixelDiff * (index - 1)
+		
+		NGU_BB1 := PixelGetColor2(NGUBBX,TempY)
+		Sleep, 10
+		NGU_BB2 := PixelGetColor2(NGUBBX,TempY)
+		Sleep, 10
+		NGU_BB3 := PixelGetColor2(NGUBBX,TempY)
+		if (((NGU_BB1 != 0xFFFFFF) && (NGU_BB2 != 0xFFFFFF) && (NGU_BB3 != 0xFFFFFF)) && (NGUSetCalledOnce = 1))
+		{
+			;MsgBox, You're probably capped and don't need to add energy.
+		}
+		else
+		{
+			if index = 1
+			{
+				EnergyCustom2()
+			}
+			if index <= 2
+			{	
+				NGUAdd(index)
+			}
+			if index = 3
+			{
+					NGUAdd(index)
+			}
+			if index = 4
+			{
+				Loop 2
+				{
+					NGUAdd(index)
+				}
+			}
+			if index = 5
+			{
+				Loop 12
+				{
+					NGUAdd(index)
+				}
+			}
+			if index = 6
+			{
+				Magic2X()
+			}
+			if index >= 6
+			{
+				NGUAdd(index)
+			}
+		}
+	}
+	NGUSetCalledOnce := 1
+}
+
 ;====Yggdrasil====
 
 YGGMenu() ; Clicks on the Yggdrasil menu
