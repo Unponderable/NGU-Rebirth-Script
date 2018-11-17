@@ -289,7 +289,7 @@ Global DiggersRightCapX := 1185 - 329
 Global DiggersTopCapY := 510 - 323
 Global DiggersBottomCapY := 700 - 323
 Global DiggersLeftActiveX := 660 - 329
-Global DiggersRightActiveX := 975 - 329
+Global DiggersRightActiveX := 985 - 329
 Global DiggersTopActiveY := 565 - 323
 Global DiggersBottomActiveY := 755 - 323
 
