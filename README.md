@@ -1,6 +1,6 @@
 # NGU Rebirth Script
 
-Rebirth and Challenge AutoHotKey script for NGU Idle 0.409-2
+Rebirth and Challenge AutoHotKey script for NGU Idle 0.412-2
 
 Written by __Unponderable__ and __Tatsumasa__\
 Also thanks to __EvoGeek__, the genesis of much of this script.\
