@@ -8,6 +8,7 @@ Come visit us in Discord: https://discord.gg/5revMxD
 
 #### Change Log
 
+0.5c - Fixes for compatibility with 0.412-2.\
 0.5b - Fixes to support new blood spells/blood spell arrangement. Themes other than Normal are not supported.\
 0.5a - Added support for Advanced Exoskeleton and Laser Sword augments.\
 0.5 - Full Gold Diggers implementation.\
