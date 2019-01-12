@@ -198,9 +198,9 @@ Global AdventureArrowY := 555 - 323
 Global ITOPODX := 725 - 329
 Global ITOPODY := 555 - 323
 Global ITOPODConfirmX := 955 - 329
-Global ITOPODConfirmY := 680 - 323
-Global ITOPODOptimalX := 705
-Global ITOPODOptimalY := 254
+Global ITOPODConfirmY := 620 - 323
+Global ITOPODOptimalX := 1020 - 329
+Global ITOPODOptimalY := 533 - 323
 
 Global InventoryX := 670 - 329
 Global InventoryY := 650 - 323
