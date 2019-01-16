@@ -159,15 +159,18 @@ Global SaveY := 805 - 323
 
 Global Energy2X := 820 - 329
 Global Energy4X := 850 - 329
-Global Magic2X := 1090 - 329
-Global Magic4X := 1120 - 329
+Global Magic2X := 970 - 329
+Global Magic4X := 1000 - 329
 Global CapBothY := 340 - 323
 Global IdleBothY := 365 - 323
 Global EnergyInputX := 662 - 329
 
-Global PercentEnergy2X := 970 - 329
-Global PercentMagic2X := 1240 - 329
-Global PercentBothY := 390 - 323
+Global PercentEnergy2X := 810 - 329
+Global PercentMagic2X := 950 - 329
+Global PercentBothY := 445 - 371
+
+Global CustomValue1X := 1098 - 329
+Global CustomValue2X := 1210 - 329
 
 Global RebirthMainX := 400 - 329
 Global RebirthMainY := 735 - 323
@@ -470,7 +473,7 @@ EnergyMax() ; Clicks the Max Energy Button
 EnergyCustom1() ; Clicks the 1st Custom Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(PercentEnergy2X, IdleBothY)
+	Click2(CustomValue1X, IdleBothY)
 	Sleep 500
 }
 
@@ -486,7 +489,7 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 	
 	Send, {Shift down}
 	Sleep 500
-	Click2(PercentEnergy2X, IdleBothY)
+	Click2(CustomValue1X, IdleBothY)
 	Sleep 500
 	Send, {Shift up}
 	Sleep 500
@@ -496,7 +499,7 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 EnergyCustom2() ; Clicks the 2nd Custom Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(PercentEnergy2X, CapBothY)
+	Click2(CustomValue1X, CapBothY)
 	Sleep 500
 }
 
@@ -512,14 +515,14 @@ EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 	
 	Send, {Shift down}
 	Sleep 500
-	Click2(PercentEnergy2X, CapBothY)
+	Click2(CustomValue1X, CapBothY)
 	Sleep 500
 	Send, {Shift up}
 	Sleep 500
 	
 }
 
-EnergyPercent1() ; Clicks either the 1st Custom Percent Energy Button
+EnergyPercent1() ; Clicks the 1st Custom Percent Energy Button
 {
 	CurrentStep := A_ThisFunc
 	Click2(PercentEnergy2X-25, PercentBothY)
@@ -545,7 +548,7 @@ EnergyCustomPercent1Set(X) ;Sets Custom Energy Percent Button 1 to be X.
 	
 }
 
-EnergyPercent2() ; Clicks either the 2nd Custom Percent Energy Button
+EnergyPercent2() ; Clicks the 2nd Custom Percent Energy Button
 {
 	CurrentStep := A_ThisFunc
 	Click2(PercentEnergy2X, PercentBothY)
