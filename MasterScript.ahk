@@ -171,6 +171,8 @@ Global PercentBothY := 445 - 371
 
 Global CustomValue1X := 1098 - 329
 Global CustomValue2X := 1210 - 329
+Global IdlePercent1X := 1140 - 329
+Global IdlePercent2X := 1160 - 329
 
 Global RebirthMainX := 400 - 329
 Global RebirthMainY := 735 - 323
@@ -318,7 +320,7 @@ Global NoTMFlag := 0
 Global NGUSetCalledOnce = 1
 
 RunStart()
-;StartTest()
+;^p::StartTest()
 
 SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the game, based on an image search. Run everytime you run a script.
 {
@@ -331,7 +333,7 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 	WinGetPos,,,WinW,WinH
 	SearchFileName = TopLeft.png
 	ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *%ImageSearchVariance% %SearchFileName%
-		
+			
 	If SearchX
 	{
 		TopLeftX := SearchX
@@ -341,6 +343,7 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 	else
 	{
 		MsgBox, Failed to initiate - NGU Idle game not fully visible or can't find TopLeft.png on screen.`nCheck the FAQ.
+		;MsgBox,%WinW% %WinH%
 		Exit
 	}
 	
@@ -466,7 +469,7 @@ Energy4X() ; Clicks the 1/4 Idle Energy Button
 EnergyMax() ; Clicks the Max Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(Energy2X, PercentBothY)
+	Click2(Energy2X+25, PercentBothY)
 	Sleep 500
 }
 
@@ -541,7 +544,7 @@ EnergyCustomPercent1Set(X) ;Sets Custom Energy Percent Button 1 to be X.
 	
 	Send, {Shift down}
 	Sleep 500
-	Click2(PercentEnergy2X-25, PercentBothY)
+	Click2(PercentEnergy2X, PercentBothY)
 	Sleep 500
 	Send, {Shift up}
 	Sleep 500
@@ -552,6 +555,31 @@ EnergyPercent2() ; Clicks the 2nd Custom Percent Energy Button
 {
 	CurrentStep := A_ThisFunc
 	Click2(PercentEnergy2X, PercentBothY)
+	Sleep 500
+}
+
+EnergyCustomIdlePercent() ;Clicks on the Custom Idle Energy % button. Requires AP purchase
+{
+	CurrentStep := A_ThisFunc
+	Click2(IdlePercent1X, PercentBothY)
+	Sleep 500
+}
+
+EnergyCustomIdlePercentSet(X) ;Sets Custom Idle Energy % Button to be X.
+{
+	CurrentStep := A_ThisFunc
+	
+	Click2(EnergyInputX,PercentBothY)
+	Sleep 500
+	
+	Send %X%
+	Sleep 500
+	
+	Send, {Shift down}
+	Sleep 500
+	Click2(IdlePercent1X, PercentBothY)
+	Sleep 500
+	Send, {Shift up}
 	Sleep 500
 }
 
@@ -590,7 +618,7 @@ MagicCustomPercent1Set(X) ;Sets Custom Magic Percent Button 1 to be X.
 	
 	Send, {Shift down}
 	Sleep 500
-	Click2(PercentMagic2X-25, PercentBothY)
+	Click2(PercentMagic2X, PercentBothY)
 	Sleep 500
 	Send, {Shift up}
 	Sleep 500
@@ -600,6 +628,38 @@ MagicPercent2() ; Clicks the 2nd Custom Percent Magic Button
 {
 	CurrentStep := A_ThisFunc
 	Click2(PercentMagic2X, PercentBothY)
+	Sleep 500
+}
+
+MagicMax() ; Clicks the Max Magic Button
+{
+	CurrentStep := A_ThisFunc
+	Click2(Magic2X+25, PercentBothY)
+	Sleep 500
+}
+
+MagicCustomIdlePercent() ;Clicks on the Custom Magic Energy % button. Requires AP purchase
+{
+	CurrentStep := A_ThisFunc
+	Click2(IdlePercent2X, PercentBothY)
+	Sleep 500
+}
+
+MagicCustomIdlePercentSet(X)  ;Sets Custom Idle Magic % Button to be X.
+{
+	CurrentStep := A_ThisFunc
+	
+	Click2(EnergyInputX,PercentBothY)
+	Sleep 500
+	
+	Send %X%
+	Sleep 500
+	
+	Send, {Shift down}
+	Sleep 500
+	Click2(IdlePercent2X, PercentBothY)
+	Sleep 500
+	Send, {Shift up}
 	Sleep 500
 }
 
@@ -1671,21 +1731,6 @@ NGUSet(EnergyNGUs:=0,MagicNGUs:=0)
 {
 	NGUMenu()
 	
-	;if !NGUSet
-	;{
-	;	EnergyCount:=0 ; Figure out the % of energy to put into each
-	;	For index, value in EnergyNGUs
-	;	{
-	;		if EnergyNGUs[index] = 1
-	;		{
-	;			EnergyCount++
-	;		}
-	;	}
-	;	;EnergyCustomPercent1Set(Floor(100/EnergyCount)) ;Set the %
-	;
-	;}
-	;EnergyPercent1()
-	
 	if EnergyNGUs
 		Energy4X()
 	
@@ -1698,20 +1743,6 @@ NGUSet(EnergyNGUs:=0,MagicNGUs:=0)
 	}
 	
 	NGUMagicMenu()
-	
-	;if !NGUSet
-	;{
-	;	MagicCount:=0 ; Figure out the % of magic to put into each
-	;	For index, value in MagicNGUs
-	;	{
-	;		if MagicNGUs[index] = 1
-	;		{
-	;			MagicCount++
-	;		}
-	;	}
-	;	MagicCustomPercent1Set(Floor(100/MagicCount)) ;Set the %
-	;}
-	;MagicPercent1()
 	
 	if MagicNGUs
 		Magic4X()
@@ -1827,6 +1858,62 @@ NGUSet2(EnergyNGUs:=0,MagicNGUs:=0) ;Unponderable's custom NGU setting function,
 		}
 	}
 	NGUSetCalledOnce := 1
+}
+
+;Applies energy and magic to NGUs, dividing energy/magic evenly
+;Requires AP Purchase: Custom Idle Energy/Magic % Buttons
+NGUSet3(EnergyNGUs:=0,MagicNGUs:=0) 
+{
+	NGUMenu()
+	
+	if !NGUSet
+	{
+		EnergyCount:=0 ; Figure out the % of energy to put into each
+		For index, value in EnergyNGUs
+		{
+			if EnergyNGUs[index] = 1
+			{
+				EnergyCount++
+			}
+		}
+		EnergyCustomIdlePercentSet(Floor(100/EnergyCount)) ;Set the %
+	
+	}
+	EnergyCustomIdlePercent()	
+	
+	For index, value in EnergyNGUs ; Put energy into the NGUs
+	{
+		if EnergyNGUs[index] = 1
+		{
+			NGUAdd(index)
+		}
+	}
+		
+	NGUMagicMenu()
+	
+	if !NGUSet
+	{
+		MagicCount:=0 ; Figure out the % of magic to put into each
+		For index, value in MagicNGUs
+		{
+			if MagicNGUs[index] = 1
+			{
+				MagicCount++
+			}
+		}
+		MagicCustomIdlePercentSet(Floor(100/MagicCount)) ;Set the %
+	}
+	MagicCustomIdlePercent()
+	
+	For index, value in MagicNGUs ;Put magic into the NGUs
+	{
+		if MagicNGUs[index] = 1
+		{
+			NGUAdd(index)
+		}
+	}
+	
+	NGUSet := 1
 }
 
 ;====Yggdrasil====
@@ -2082,7 +2169,7 @@ YGGCheck() ; Iff Yggdrasil button is green, switch to Loadout 6 and Harvest/Eat 
 	}
 }
 
-IronPillCheckShort() ;If Blood Magic is purple, stop autocasting, dump blood into magic (excess energy/magic into time machine), wait 5 minutes, cast Iron Pill, then resume autocasting
+IronPillCheckShort() ;If Blood Magic is purple, stop autocasting, dump blood into magic (excess energy/magic into time machine), wait 5 minutes, cast Iron Pill and Blood MacGuffin spells, then resume autocasting
 {
 	CurrentStep := A_ThisFunc
 	Search1X := 500 - 329 + TopLeftX
@@ -2111,6 +2198,8 @@ IronPillCheckShort() ;If Blood Magic is purple, stop autocasting, dump blood int
 		BloodMagicMenu()
 		BloodMagicSpellMenu()
 		BloodMagicSpellCast(2)
+		BloodMagicSpellCast(5)
+		BloodMagicSpellCast(6)
 		;SendEvent, {Alt Down}{PrintScreen}{Alt Up}
 		BloodMagicMenu()
 		BloodMagicSpellMenu()
@@ -2434,7 +2523,7 @@ PreFirstRebirth2() ; Sets Custom Energy 1 to 1,000,000, Sets Wandoos option as a
 {
 	CurrentStep := A_ThisFunc
 	WandoosMenu()
-	EnergyCustom1Set(1000000)
+	;EnergyCustom1Set(1000000)
 	Loop 3
 	{
 		Send {WheelUp}
@@ -2460,7 +2549,7 @@ PreFirstRebirth2() ; Sets Custom Energy 1 to 1,000,000, Sets Wandoos option as a
 	RebirthMenu()
 }
 
-FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scripts. Assumes EnergyCustom1 = 1,000,000
+FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scripts.
 {
 	CurrentStep := A_ThisFunc
 	CurrentStatus = First RB
@@ -2479,7 +2568,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		TitanCheck2()
 	}
 	AugmentationMenu()
-	EnergyCustom1() ; requires XP purchase
+	Energy4X()
 	AugmentationMilk()
 	EnergyMax()
 	InventoryMenu()
@@ -2527,7 +2616,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		ImageSearch, SearchCannonX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	}
 	RegainEnergy() ;Reclaim energy, add Custom1 energy to Cannon
-	EnergyCustom1()
+	Energy4X()
 	AugmentationCannon()
 	EnergyMax()
 	Search1X := 640 - 329 + TopLeftX
@@ -2573,13 +2662,13 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		ImageSearch, SearchShoulderX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	}
 	RegainEnergy() ;Reclaim energy, add Custom1 energy to Shoulder Mounted
-	EnergyCustom1()
+	Energy4X()
 	AugmentationShoulder()
 	EnergyMax()
-	Search1X := 500 - 329 + TopLeftX
-	Search1Y := 565 - 323 + TopLeftY
-	Search2X := 605 - 329 + TopLeftX
-	Search2Y := 590 - 323 + TopLeftY
+	Search1X := TopLeftX
+	Search1Y := TopLeftY
+	Search2X := TopLeftX + 500
+	Search2Y := TopLeftY + 500
 	SearchFileName = TimeMachine.png
 	While SearchTMX!  ;Until Time Machine is unlocked, loop: Add all energy and magic to Wandoos, Nuke bosses, fight boss
 	{
@@ -2693,12 +2782,17 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		FightMenu()
 		NukeBoss()
 		FightBoss()
-		Search1X := 450 - 329 + TopLeftX
-		Search1Y := 570 - 323 + TopLeftY
-		Search2X := 620 - 329 + TopLeftX
-		Search2Y := 640 - 323 + TopLeftY
+		Search1X := TopLeftX
+		Search1Y := TopLeftY
+		Search2X := TopLeftX + 500
+		Search2Y := TopLeftY + 500
 		SearchFileName = BloodMagic.png
 		ImageSearch, SearchBMX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
+		if !SearchBMX
+		{
+			SearchFileName = BloodMagic2.png
+			ImageSearch, SearchBMX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
+		}
 		IronPillCheckShort()
 	}
 	InventoryMenu()
@@ -3012,16 +3106,27 @@ RebirthBoss37Check() ;Does a rebirth, does some initial boss fighting, then dete
 	FightBoss()
 	
 	;check if blood magic is unlocked
-	Search1X := 500 - 329 + TopLeftX
-	Search1Y := 595 - 323 + TopLeftY
-	Search2X := 605 - 329 + TopLeftX
-	Search2Y := 620 - 323 + TopLeftY
+	Search1X := TopLeftX
+	Search1Y := TopLeftY
+	Search2X := TopLeftX + 500
+	Search2Y := TopLeftY + 500
 	SearchFileName = BloodMagic.png
 	ImageSearch, SearchBMX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
+	
 	If SearchBMX
 	{
 		Boss37Check = 1
 		RebirthMenu()
+	}
+	else
+	{
+		SearchFileName = BloodMagic2.png
+		ImageSearch, SearchBMX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
+		If SearchBMX
+		{
+			Boss37Check = 1
+			RebirthMenu()
+		}
 	}
 }
 
@@ -3105,7 +3210,9 @@ RunStart()
 StartTest() ;Used for debug/testing purposes
 {
 	WinActivate, Play NGU IDLE
+	ImageSearchVariance :=10
 	ScriptStart()
+	
 	
 	
 	;MsgBox, Test done!	
@@ -3143,7 +3250,7 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Tab, Settings
 	Gui, Add, Text, section,Adventure Zone
 	Var := defMaxAdventureZone + 1
-	Gui, Add, DropDownList, x+10 vAdvZoneChoice altSubmit Choose%Var%, All|1. Tutorial Zone|2. Sewers|3. Forest|4. Cave of Many Things|5. The Sky|6. High Security Base|7. Titan - GRB|8. Clock Dimension|9. Titan - GCT|10. The 2D Universe|11. Ancient Battlefield|12. Titan - Jake|13. A Very Strange Place|14. Mega Lands|15. Titan - UUG|16. The Beardverse|17. Titan - Walderp|18. Badly Drawn World|19. Boring-Ass Earth|20. Titan - The Beast|21. (Unreleased)
+	Gui, Add, DropDownList, x+10 vAdvZoneChoice altSubmit Choose%Var%, All|1. Tutorial Zone|2. Sewers|3. Forest|4. Cave of Many Things|5. The Sky|6. High Security Base|7. Titan - GRB|8. Clock Dimension|9. Titan - GCT|10. The 2D Universe|11. Ancient Battlefield|12. Titan - Jake|13. A Very Strange Place|14. Mega Lands|15. Titan - UUG|16. The Beardverse|17. Titan - Walderp|18. Badly Drawn World|19. Boring-Ass Earth|20. Titan - The Beast|21. Chocolate World|22. The Evilverse|23. Pretty Pink Princess|24. Titan - GREASY NERD|25. Meta Land|26. Interdimensional Party|27. Titan - THE GODMOTHER
 	Gui, Add, Text,xs section, Blood Spell
 	Var := defMaxSustainableBloodSpellNumber
 	Gui, Add, DropDownList, x+10 vBloodSpellChoice altSubmit Choose%Var%, 1. Poke Yourself|2. Filthy Papercuts|3. A Big-Ass Hickey|4. Barbed Wire|5. Grand Theft Blood Bank|6. Self Decapitation|7. Hug a Woodchipper|8. Turn Yourself Inside Out
