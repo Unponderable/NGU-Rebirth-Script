@@ -189,6 +189,7 @@ Global BlindY := 745 - 323
 Global FightX := 945 - 329
 Global NukeY := 430 - 323
 Global FightY := 530 - 323
+Global StopY := 480 - 323
 
 Global MoneyPitX := 940 - 329
 Global MoneyPitY := 610 - 323
@@ -748,6 +749,13 @@ FightBoss() ; Clicks on the Fight Button (in the Fight Boss menu)
 {
 	CurrentStep := A_ThisFunc
 	Click2(FightX, FightY)
+	Sleep 500
+}
+
+StopFight() ; Clicks on the Stop Button (in the Fight Boss menu)
+{
+	CurrentStep := A_ThisFunc
+	Click2(FightX, StopY)
 	Sleep 500
 }
 
@@ -2557,6 +2565,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	NukeBoss()
 	Sleep, 1000
 	FightBoss()
+	StopFight()
 	AdventureMenu()
 	if MaxAdventureZone=0
 	{
@@ -2612,6 +2621,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		FightMenu()
 		NukeBoss()
 		FightBoss()
+		StopFight()
 		AugmentationMenu()
 		ImageSearch, SearchCannonX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	}
@@ -2658,6 +2668,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		FightMenu()
 		NukeBoss()
 		FightBoss()
+		StopFight()
 		AugmentationMenu()
 		ImageSearch, SearchShoulderX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	}
@@ -2707,6 +2718,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		FightMenu()
 		NukeBoss()
 		FightBoss()
+		StopFight()
 		ImageSearch, SearchTMX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	}
 	InventoryMenu() ;Equip Loadout 1
@@ -2782,6 +2794,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		FightMenu()
 		NukeBoss()
 		FightBoss()
+		StopFight()
 		Search1X := TopLeftX
 		Search1Y := TopLeftY
 		Search2X := TopLeftX + 500
@@ -2840,6 +2853,7 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 	Sleep 2000
 	SleepStatus = Active
 	FightBoss()
+	StopFight()
 	AdventureMenu()
 	if MaxAdventureZone=0
 	{
@@ -2952,6 +2966,7 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 	{
 		FightBoss()
 	}
+	StopFight()
 	SaveCheck()
 	MoneyPitCheckShort()
 	IronPillCheckShort()
@@ -3058,6 +3073,7 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 		FightBoss()
 		Sleep 100
 	}
+	StopFight()
 	RebirthMenu()
 	LastRebirthTimerTime := A_TickCount - RebirthTimerStart
 }
@@ -3104,6 +3120,7 @@ RebirthBoss37Check() ;Does a rebirth, does some initial boss fighting, then dete
 	Sleep 2000
 	SleepStatus = Active
 	FightBoss()
+	StopFight()
 	
 	;check if blood magic is unlocked
 	Search1X := TopLeftX
@@ -3734,6 +3751,7 @@ NoRebirthRun() ;Attempts to do a No Rebirth run.
 		FightMenu()
 		NukeBoss()
 		FightBoss()
+		StopFight()
 		if Mod(a_index, 3) = 0 ;Every 3 loops, try to harvest Ygg fruits and check whether the challenge is done.
 		{
 			YGGMenu()
