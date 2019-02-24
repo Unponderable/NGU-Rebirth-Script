@@ -2582,11 +2582,7 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 	EnergyMax()
 	InventoryMenu()
 	Loadout(1)
-	Search1X := 640 - 329 + TopLeftX
-	Search1Y := 700 - 323 + TopLeftY
-	Search2X := 840 - 329 + TopLeftX
-	Search2Y := 730 - 323 + TopLeftY
-	SearchFileName = Cannon.png
+	
 	While ((SearchCannonX!) && (!NACFlag)) ;Until Cannon Implant is unlocked, loop: Add all energy and magic to Wandoos, Nuke bosses, fight boss
 	{
 		if (A_Index > 0) && (RebirthTimerTime > 900000) && (!NRCFlag) ; If you've been through this loop once and rebirth time has exceeded 15 min, rebirth now.
@@ -2623,17 +2619,18 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		FightBoss()
 		StopFight()
 		AugmentationMenu()
+		Search1X := 640 - 329 + TopLeftX
+		Search1Y := 700 - 323 + TopLeftY
+		Search2X := 840 - 329 + TopLeftX
+		Search2Y := 730 - 323 + TopLeftY
+		SearchFileName = Cannon.png
 		ImageSearch, SearchCannonX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	}
 	RegainEnergy() ;Reclaim energy, add Custom1 energy to Cannon
 	Energy4X()
 	AugmentationCannon()
 	EnergyMax()
-	Search1X := 640 - 329 + TopLeftX
-	Search1Y := 770 - 323 + TopLeftY
-	Search2X := 840 - 329 + TopLeftX
-	Search2Y := 800 - 323 + TopLeftY
-	SearchFileName = Shoulder.png
+	
 	While ((SearchShoulderX!) && (!NACFlag)) ;Until Shoulder Mounted is unlocked, loop: Add all energy and magic to Wandoos, Nuke bosses, fight boss
 	{
 		if (A_Index > 0) && (RebirthTimerTime > 900000) && (!NRCFlag) ; If you've been through this loop once and rebirth time has exceeded 15 min, rebirth now.
@@ -2670,17 +2667,18 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		FightBoss()
 		StopFight()
 		AugmentationMenu()
+		Search1X := 640 - 329 + TopLeftX
+		Search1Y := 770 - 323 + TopLeftY
+		Search2X := 840 - 329 + TopLeftX
+		Search2Y := 800 - 323 + TopLeftY
+		SearchFileName = Shoulder.png
 		ImageSearch, SearchShoulderX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	}
 	RegainEnergy() ;Reclaim energy, add Custom1 energy to Shoulder Mounted
 	Energy4X()
 	AugmentationShoulder()
 	EnergyMax()
-	Search1X := TopLeftX
-	Search1Y := TopLeftY
-	Search2X := TopLeftX + 500
-	Search2Y := TopLeftY + 500
-	SearchFileName = TimeMachine.png
+	
 	While SearchTMX!  ;Until Time Machine is unlocked, loop: Add all energy and magic to Wandoos, Nuke bosses, fight boss
 	{
 		if NoTMFlag = 1
@@ -2719,6 +2717,12 @@ FirstRebirth2() ;Does a rebirth from number = 1. Called first in challenge scrip
 		NukeBoss()
 		FightBoss()
 		StopFight()
+		
+		Search1X := TopLeftX
+		Search1Y := TopLeftY
+		Search2X := TopLeftX + 500
+		Search2Y := TopLeftY + 500
+		SearchFileName = TimeMachine.png
 		ImageSearch, SearchTMX, SearchY, Search1X, Search1Y, Search2X, Search2Y, *%ImageSearchVariance% %SearchFileName%
 	}
 	InventoryMenu() ;Equip Loadout 1
