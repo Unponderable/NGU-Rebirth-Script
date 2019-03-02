@@ -638,14 +638,14 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(CustomValue1X, IdleBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 	
 }
@@ -664,14 +664,14 @@ EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2({Shift down})
 	Sleep 500
 	Click2(CustomValue1X, CapBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 	
 }
@@ -690,14 +690,14 @@ EnergyCustomPercent1Set(X) ;Sets Custom Energy Percent Button 1 to be X.
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(PercentEnergy2X, PercentBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 	
 }
@@ -723,14 +723,14 @@ EnergyCustomIdlePercentSet(X) ;Sets Custom Idle Energy % Button to be X.
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(IdlePercent1X, PercentBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2({Shift up})
 	Sleep 500
 }
 
@@ -764,14 +764,14 @@ MagicCustomPercent1Set(X) ;Sets Custom Magic Percent Button 1 to be X.
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2("%X%")
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(PercentMagic2X, PercentBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 }
 
@@ -803,37 +803,37 @@ MagicCustomIdlePercentSet(X)  ;Sets Custom Idle Magic % Button to be X.
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(IdlePercent2X, PercentBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 }
 
 RegainEnergy() ; Presses R to regain all energy when not on Adventure screen
 {
 	CurrentStep := A_ThisFunc
-	Send {R}
+	Send2("{R}")
 	Sleep 500
 }
 
 RegainMagic() ; Presses T to regain all magic when not on Adventure screen
 {
 	CurrentStep := A_ThisFunc
-	Send {T}
+	Send2("{T}")
 	Sleep 500
 }
 
 RegainBoth() ; Presses R and T to regain all energy and magic when not on Adventure screen
 {
 	CurrentStep := A_ThisFunc
-	Send {R}
+	Send2("{R}")
 	Sleep 500
-	Send {T}
+	Send2("{T}")
 	Sleep 500
 }
 
@@ -969,7 +969,7 @@ AdventureLeft(X) ; Moves you X Adventure zones backward (inside the Adventure me
 	Loop %X%
 	{
 		;Click2(AdventureLeftArrowX, AdventureArrowY)
-		Send,{Left}
+		Send2("{Left}")
 		Sleep 250
 	}
 	Sleep 500
@@ -981,7 +981,7 @@ AdventureRight(X) ; Moves you X Adventure zones forward (inside the Adventure me
 	Loop %X%
 	{
 		;Click2(AdventureRightArrowX, AdventureArrowY)
-		Send,{Right}
+		Send2("{Right}")
 		Sleep 250
 	}
 	Sleep 500
@@ -1000,11 +1000,11 @@ ITOPOD(Floor:=0) ; Starts adventuring in ITOPOD (inside the Adventure menu). If 
 	{
 		Click2(ITOPODMinX,ITOPODMinY)
 		Sleep 500
-		Send %Floor%
+		Send2(%Floor%)
 		Sleep 500
 		Click2(ITOPODMinX,ITOPODMaxY)
 		Sleep 500
-		Send %Floor%
+		Send2(%Floor%)
 		Sleep 500
 	}
 	else
@@ -1060,7 +1060,7 @@ InventoryMerge(X,Y) ; Inside the inventory menu, sequentially merges the first X
 	CurrentStep := A_ThisFunc
 	PixelDiff := 50
 	Counter := 0
-	Send {d down}
+	Send2("{d down}")
 	Sleep 250
 	
 	if X > 5 ;idiot-proofing
@@ -1084,18 +1084,18 @@ InventoryMerge(X,Y) ; Inside the inventory menu, sequentially merges the first X
 			TransformCheck()
 			If TransformFlag = 1
 			{
-				Send {ctrl down}
+				Send2("{ctrl down}")
 				Sleep 250
 				Click2(TempX, TempY)
 				Sleep 250
-				Send {ctrl up}
+				Send2("{ctrl up}")
 				Sleep 250
 			}
 			Counter2++
 		}
 		Counter++
 	}
-	Send {d up}
+	Send2("{d up}")
 	Sleep 500
 }
 
@@ -1127,19 +1127,19 @@ InventoryBoost(X,Y,Z:=1) ; Inside the inventory menu, on inventory page Z, seque
 	While Counter < X
 	{
 		TempX := InventoryX + PixelDiff * Counter
-		Send {a down}
+		Send2("{a down}")
 		Sleep 250
 		Click2(TempX, TempY)
 		Sleep 250
 		Counter++
 	}
-	Send {a up}
+	Send2("{a up}")
 	Sleep 500
 }
 
 ExtraBoosts() ; Boosts accessories 4, 3, 6, and the weapon
 {
-	Send {a down}
+	Send2("{a down}")
 	Sleep 500
 	Click2(Acces1X, Acces4Y)
 	Sleep 500
@@ -1148,7 +1148,7 @@ ExtraBoosts() ; Boosts accessories 4, 3, 6, and the weapon
 	Click2(Acces2X, Acces3Y)
 	Sleep 500
 	Click2(WeaponX, WeaponCubeY)
-	Send {a up}
+	Send2("{a up}")
 	Sleep 500
 }
 
@@ -2699,6 +2699,10 @@ PreFirstRebirth2() ; Sets Custom Energy 1 to 1,000,000, Sets Wandoos option as a
 	{
 		Send {WheelUp}
 		Sleep 100
+	}
+	if (BackgroundMode = 1)
+	{
+		AugScrollUp()
 	}
 	InventoryMenu()
 	Loadout(2)
