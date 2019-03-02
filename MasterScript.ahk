@@ -136,6 +136,7 @@ Global NGUSet
 
 Global TopLeftX = 0
 Global TopLeftY = 0
+Global WindowId = 0
 
 Global MainMenuX := 550 - 329 ;main menu ("FEATURES") X coordinate
 Global FightBossMainY := 395 - 323
@@ -331,7 +332,7 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 		MsgBox, Failed to initiate - NGU Idle window not active.`nRun the script when the game window is active.
 		Exit
 	}
-	
+	WinGet, WindowId, ID, A
 	WinGetPos,,,WinW,WinH
 	SearchFileName = TopLeft.png
 	ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *%ImageSearchVariance% %SearchFileName%
@@ -392,6 +393,8 @@ Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requir
 	}
 	else
 	{
+		X += TopLeftX
+		Y += TopLeftY
 		Sleep, 100
 		PostMessage, 0x200, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_MOUSEMOVE
 		Sleep, 100
@@ -519,18 +522,24 @@ Send2(inp)
 			{
 				if (chars[A_LoopField])
 				{
-					while (GetKeyState("Control") || GetKeyState("Alt")) {} ; safeguard from sending ctrl/alt to the game
+					while (GetKeyState("Control") || GetKeyState("Alt")) ; safeguard from sending ctrl/alt to the game
+					{
+						Sleep, 10
+					} 
 					PostMessage, 0x100, % chars[A_LoopField],,, ahk_id %WindowId% ; key down
 					PostMessage, 0x101, % chars[A_LoopField],,, ahk_id %WindowId% ; key up
 				}
-				else { ; numbers only require key up event
-					while (GetKeyState("Control") || GetKeyState("Alt")) {}     
+				else ; numbers only require key up event
+				{ 
+					while (GetKeyState("Control") || GetKeyState("Alt"))
+					{
+						Sleep, 10
+					}     
 					PostMessage, 0x101, % numbers[A_LoopField],,, ahk_id %WindowId% ; key up
-			}
+				}
 			}
 		}
 	}
-
 }
 
 PixelGetColor2(X,Y)
@@ -667,7 +676,7 @@ EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 	Send2(%X%)
 	Sleep 500
 	
-	Send2({Shift down})
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(CustomValue1X, CapBothY)
 	Sleep 500
@@ -730,7 +739,7 @@ EnergyCustomIdlePercentSet(X) ;Sets Custom Idle Energy % Button to be X.
 	Sleep 500
 	Click2(IdlePercent1X, PercentBothY)
 	Sleep 500
-	Send2({Shift up})
+	Send2("{Shift up}")
 	Sleep 500
 }
 
@@ -2236,7 +2245,7 @@ DiggerSmartActivate(Position)
 	
 	If !FoundX
 	{
-		MouseClick,L,XSearch,YSearch
+		Click2(XSearch - TopLeftX, YSearch - TopLeftY)
 		Sleep 500
 	}
 
@@ -2561,7 +2570,7 @@ SpellCheck(X) ; Checks if the Xth blood magic spell is set to autocast. If it's 
 	ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName%
 	If SearchX
 	{
-		MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
+		Click2(SearchX - TopLeftX, SearchY - TopLeftY) ; don't Click2 here - already offset
 		Sleep 500
 	}
 }
@@ -2579,7 +2588,7 @@ SpellUncheck(X) ; Checks if the Xth blood magic spell is NOT set to autocast. If
 	ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName%
 	If SearchX
 	{
-		MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
+		Click2(SearchX - TopLeftX, SearchY - TopLeftY) ; don't Click2 here - already offset
 		Sleep 500
 	}
 	Else ;Because 4G made Counterfeit Gold have a different checkmark, need to check for that too
@@ -2587,7 +2596,7 @@ SpellUncheck(X) ; Checks if the Xth blood magic spell is NOT set to autocast. If
 		ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName2%
 		If SearchX
 		{
-			MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
+			Click2(SearchX - TopLeftX, SearchY - TopLeftY) ; don't Click2 here - already offset
 			Sleep 500
 		}
 	}
@@ -2682,11 +2691,6 @@ PreFirstRebirth2() ; Sets Custom Energy 1 to 1,000,000, Sets Wandoos option as a
 	CurrentStep := A_ThisFunc
 	WandoosMenu()
 	;EnergyCustom1Set(1000000)
-	Loop 3
-	{
-		Send {WheelUp}
-		Sleep 100
-	}
 	Wandoos(WandoosVersion)
 	BloodMagicMenu()
 	BloodMagicSpellMenu()
@@ -2695,12 +2699,16 @@ PreFirstRebirth2() ; Sets Custom Energy 1 to 1,000,000, Sets Wandoos option as a
 	SpellCheck(4)
 	AugmentationMenu()
 	Augmentation(1) ;has no purpose other than to click somewhere in the menu
-	Loop 7
+	if (BackgroundMode = 0)
 	{
-		Send {WheelUp}
-		Sleep 100
+		Loop 7
+		{
+			Send {WheelUp}
+			Sleep 100
+		}
 	}
-	if (BackgroundMode = 1)
+
+	else (BackgroundMode = 1)
 	{
 		AugScrollUp()
 	}
@@ -2980,11 +2988,6 @@ PreShortRun() ; Sets Wandoos, sets Number Boost and Counterfeit Gold to autocast
 {
 	CurrentStep := A_ThisFunc
 	WandoosMenu()
-	Loop 3
-	{
-		Send {WheelUp}
-		Sleep 100
-	}
 	Wandoos(WandoosVersion)
 	BloodMagicMenu()
 	BloodMagicSpellMenu()
