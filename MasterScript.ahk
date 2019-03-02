@@ -61,6 +61,7 @@ Global EquipLoadout3ForMoneyPit
 Global DoNotSave
 Global DoubleBasicTrainingPerk
 Global AlwaysCap
+Global BackgroundMode
 Global ImageSearchVariance
 
 Global RebirthTimeSetting := defRebirthTimeSetting 
@@ -135,6 +136,7 @@ Global NGUSet
 
 Global TopLeftX = 0
 Global TopLeftY = 0
+Global WindowId = 0
 
 Global MainMenuX := 550 - 329 ;main menu ("FEATURES") X coordinate
 Global FightBossMainY := 395 - 323
@@ -330,7 +332,7 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 		MsgBox, Failed to initiate - NGU Idle window not active.`nRun the script when the game window is active.
 		Exit
 	}
-	
+	WinGet, WindowId, ID, A
 	WinGetPos,,,WinW,WinH
 	SearchFileName = TopLeft.png
 	ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *%ImageSearchVariance% %SearchFileName%
@@ -348,38 +350,197 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 		Exit
 	}
 	
+	if (BackgroundMode = 1)
+	{
+		WinGet, WindowId, ID, A
+		global WindowId := WindowId
+		CoordMode, Mouse, Screen ; We need coordmode set to screen because imagesearch doesn't work with inactive windows
+		CoordMode, Pixel, Screen
+		CoordMode, Tooltip, Screen
+	}
 }
 
 Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requires SetupOffsets() to have already been called once. Can also specify right-click, a-click, d-click, and Ctrl-click.
 {
-	;MsgBox, %X% %Y% %Button%
-	IfWinNotActive, Play NGU IDLE
+	if (BackgroundMode = 0)
 	{
-		WinActivate, Play NGU IDLE
+		;MsgBox, %X% %Y% %Button%
+		IfWinNotActive, Play NGU IDLE
+		{
+			WinActivate, Play NGU IDLE
+		}
+		X += TopLeftX
+		Y += TopLeftY
+		
+		if (Button = "Left")
+		{
+			Click,%X%,%Y%
+		}
+		else if (Button = "Right")
+		{
+			Click,right,%X%,%Y%
+		}
+		else if (Button = "a")
+		{
+			Send {a down}{Click, %X%,%Y%}{a up}
+		}
+		else if (Button = "d")
+		{
+			Send {d down}{Click, %X%,%Y%}{d up}
+		}
+		else if (Button = "Ctrl")
+		{
+			Send ^{Click, %X%,%Y%}
+		}
 	}
-	
-	X += TopLeftX
-	Y += TopLeftY
-	
-	if (Button = "Left")
+	else
 	{
-		Click,%X%,%Y%
+		X += TopLeftX
+		Y += TopLeftY + 8
+		Sleep, 100
+		PostMessage, 0x200, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_MOUSEMOVE
+		Sleep, 100
+
+		if (Button = "Left") {
+			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN
+			Sleep, 100
+			PostMessage, 0x202, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONUP
+		}
+
+		else if (Button = "Right") { 
+			PostMessage, 0x204, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_RBUTTONDOWN
+			Sleep, 100
+			PostMessage, 0x205, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_RBUTTONUP
+		}
+		else if (Button = "a")
+		{
+			PostMessage, 0x100, 0x41,,, ahk_id %WindowId% ; key down
+			Sleep, 100
+			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN
+	    	Sleep, 50
+	    	PostMessage, 0x202, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONUP
+	    	Sleep, 50
+    		PostMessage, 0x101, 0x41,,, ahk_id %WindowId% ; key up
+		}
+		else if (Button = "d")
+		{
+			PostMessage, 0x100, 0x44,,, ahk_id %WindowId% ; key down
+			Sleep, 100
+			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN
+	    	Sleep, 50
+	    	PostMessage, 0x202, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONUP
+	    	Sleep, 50
+    		PostMessage, 0x101, 0x44,,, ahk_id %WindowId% ; key up
+		}
+		else if (Button = "Ctrl")
+		{
+			PostMessage, 0x100, 0x11,,, ahk_id %WindowId% ; key down
+			Sleep, 100
+			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN
+	    	Sleep, 50
+	    	PostMessage, 0x202, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONUP
+	    	Sleep, 50
+    		PostMessage, 0x101, 0x11,,, ahk_id %WindowId% ; key up
+		}
 	}
-	else if (Button = "Right")
+
+}
+
+Send2(inp)
+{
+	if (BackgroundMode = 0)
 	{
-		Click,right,%X%,%Y%
+		WinActivate, debugg
+		send, %inp%
 	}
-	else if (Button = "a")
+	else
 	{
-		Send {a down}{Click, %X%,%Y%}{a up}
-	}
-	else if (Button = "d")
-	{
-		Send {d down}{Click, %X%,%Y%}{d up}
-	}
-	else if (Button = "Ctrl")
-	{
-		Send ^{Click, %X%,%Y%}
+		StringLower, inp, inp
+		if (inp = "{shift down}")
+		{
+			PostMessage, 0x100, 0x10,,, ahk_id %WindowId% ; key down
+		}
+		else if (inp = "{shift up}")
+		{
+			PostMessage, 0x101, 0x10,,, ahk_id %WindowId% ; key up
+		}
+		else if (inp = "ctrl down")
+		{
+			PostMessage, 0x100, 0x11,,, ahk_id %WindowId%
+		}
+		else if (inp = "ctrl up")
+		{
+			PostMessage, 0x101, 0x11,,, ahk_id %WindowId%
+		}
+		else if (inp = "{left}")
+		{
+			PostMessage, 0x100, 0x25,,, ahk_id %WindowId%
+			Sleep 100
+			PostMessage, 0x101, 0x25,,, ahk_id %WindowId%
+		}
+		else if (inp = "{right}")
+		{
+			PostMessage, 0x100, 0x27,,, ahk_id %WindowId%
+			Sleep 100
+			PostMessage, 0x101, 0x27,,, ahk_id %WindowId%
+		}
+		else if (inp = "{d down}")
+		{
+			PostMessage, 0x100, 0x44,,, ahk_id %WindowId%
+		}
+		else if (inp = "{d up}")
+		{
+			PostMessage, 0x101, 0x44,,, ahk_id %WindowId%
+		}
+		else if (inp = "{a down}")
+		{
+			PostMessage, 0x100, 0x41,,, ahk_id %WindowId%
+		}
+		else if (inp = "{a up}")
+		{
+			PostMessage, 0x101, 0x41,,, ahk_id %WindowId%
+		}
+		else if (Button = "{R}")
+		{
+			PostMessage, 0x100, 0x52,,, ahk_id %WindowId% ; key down
+			sleep, 100
+			PostMessage, 0x101, 0x52,,, ahk_id %WindowId% ; key up
+
+		}
+		else if (Button = "{T}")
+		{
+			PostMessage, 0x100, 0x54,,, ahk_id %WindowId% ; key down
+			sleep, 100
+			PostMessage, 0x101, 0x54,,, ahk_id %WindowId% ; key up
+		}
+		else
+		{
+			chars := {"a": 0x41, "b": 0x42, "c": 0x43, "d": 0x44, "e": 0x45, "f": 0x46, "g": 0x47, "h": 0x48
+			, "i": 0x49, "j": 0x4A, "k": 0x4B, "l": 0x4C, "m": 0x4D, "n": 0x4E, "o": 0x4F, "p": 0x50, "q": 0x51
+			, "r": 0x52, "s": 0x53, "t": 0x54, "u": 0x55, "v": 0x56, "w": 0x57, "x": 0x58, "y": 0x59, "z": 0x5A
+			, " ": 0x20}
+			numbers := {0: 0x30, 1: 0x31, 2: 0x32, 3: 0x33, 4: 0x34, 5: 0x35, 6: 0x36, 7: 0x37, 8: 0x38, 9: 0x39}
+			Loop, parse, str
+			{
+				if (chars[A_LoopField])
+				{
+					while (GetKeyState("Control") || GetKeyState("Alt")) ; safeguard from sending ctrl/alt to the game
+					{
+						Sleep, 10
+					} 
+					PostMessage, 0x100, % chars[A_LoopField],,, ahk_id %WindowId% ; key down
+					PostMessage, 0x101, % chars[A_LoopField],,, ahk_id %WindowId% ; key up
+				}
+				else ; numbers only require key up event
+				{ 
+					while (GetKeyState("Control") || GetKeyState("Alt"))
+					{
+						Sleep, 10
+					}     
+					PostMessage, 0x101, % numbers[A_LoopField],,, ahk_id %WindowId% ; key up
+				}
+			}
+		}
 	}
 }
 
@@ -488,14 +649,14 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(CustomValue1X, IdleBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 	
 }
@@ -514,14 +675,14 @@ EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(CustomValue1X, CapBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 	
 }
@@ -540,14 +701,14 @@ EnergyCustomPercent1Set(X) ;Sets Custom Energy Percent Button 1 to be X.
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(PercentEnergy2X, PercentBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 	
 }
@@ -573,14 +734,14 @@ EnergyCustomIdlePercentSet(X) ;Sets Custom Idle Energy % Button to be X.
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(IdlePercent1X, PercentBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 }
 
@@ -614,14 +775,14 @@ MagicCustomPercent1Set(X) ;Sets Custom Magic Percent Button 1 to be X.
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2("%X%")
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(PercentMagic2X, PercentBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 }
 
@@ -653,37 +814,37 @@ MagicCustomIdlePercentSet(X)  ;Sets Custom Idle Magic % Button to be X.
 	Click2(EnergyInputX,PercentBothY)
 	Sleep 500
 	
-	Send %X%
+	Send2(%X%)
 	Sleep 500
 	
-	Send, {Shift down}
+	Send2("{Shift down}")
 	Sleep 500
 	Click2(IdlePercent2X, PercentBothY)
 	Sleep 500
-	Send, {Shift up}
+	Send2("{Shift up}")
 	Sleep 500
 }
 
 RegainEnergy() ; Presses R to regain all energy when not on Adventure screen
 {
 	CurrentStep := A_ThisFunc
-	Send {R}
+	Send2("{R}")
 	Sleep 500
 }
 
 RegainMagic() ; Presses T to regain all magic when not on Adventure screen
 {
 	CurrentStep := A_ThisFunc
-	Send {T}
+	Send2("{T}")
 	Sleep 500
 }
 
 RegainBoth() ; Presses R and T to regain all energy and magic when not on Adventure screen
 {
 	CurrentStep := A_ThisFunc
-	Send {R}
+	Send2("{R}")
 	Sleep 500
-	Send {T}
+	Send2("{T}")
 	Sleep 500
 }
 
@@ -819,7 +980,7 @@ AdventureLeft(X) ; Moves you X Adventure zones backward (inside the Adventure me
 	Loop %X%
 	{
 		;Click2(AdventureLeftArrowX, AdventureArrowY)
-		Send,{Left}
+		Send2("{Left}")
 		Sleep 250
 	}
 	Sleep 500
@@ -831,7 +992,7 @@ AdventureRight(X) ; Moves you X Adventure zones forward (inside the Adventure me
 	Loop %X%
 	{
 		;Click2(AdventureRightArrowX, AdventureArrowY)
-		Send,{Right}
+		Send2("{Right}")
 		Sleep 250
 	}
 	Sleep 500
@@ -850,11 +1011,11 @@ ITOPOD(Floor:=0) ; Starts adventuring in ITOPOD (inside the Adventure menu). If 
 	{
 		Click2(ITOPODMinX,ITOPODMinY)
 		Sleep 500
-		Send %Floor%
+		Send2(%Floor%)
 		Sleep 500
 		Click2(ITOPODMinX,ITOPODMaxY)
 		Sleep 500
-		Send %Floor%
+		Send2(%Floor%)
 		Sleep 500
 	}
 	else
@@ -910,7 +1071,7 @@ InventoryMerge(X,Y) ; Inside the inventory menu, sequentially merges the first X
 	CurrentStep := A_ThisFunc
 	PixelDiff := 50
 	Counter := 0
-	Send {d down}
+	Send2("{d down}")
 	Sleep 250
 	
 	if X > 5 ;idiot-proofing
@@ -934,18 +1095,18 @@ InventoryMerge(X,Y) ; Inside the inventory menu, sequentially merges the first X
 			TransformCheck()
 			If TransformFlag = 1
 			{
-				Send {ctrl down}
+				Send2("{ctrl down}")
 				Sleep 250
 				Click2(TempX, TempY)
 				Sleep 250
-				Send {ctrl up}
+				Send2("{ctrl up}")
 				Sleep 250
 			}
 			Counter2++
 		}
 		Counter++
 	}
-	Send {d up}
+	Send2("{d up}")
 	Sleep 500
 }
 
@@ -977,19 +1138,19 @@ InventoryBoost(X,Y,Z:=1) ; Inside the inventory menu, on inventory page Z, seque
 	While Counter < X
 	{
 		TempX := InventoryX + PixelDiff * Counter
-		Send {a down}
+		Send2("{a down}")
 		Sleep 250
 		Click2(TempX, TempY)
 		Sleep 250
 		Counter++
 	}
-	Send {a up}
+	Send2("{a up}")
 	Sleep 500
 }
 
 ExtraBoosts() ; Boosts accessories 4, 3, 6, and the weapon
 {
-	Send {a down}
+	Send2("{a down}")
 	Sleep 500
 	Click2(Acces1X, Acces4Y)
 	Sleep 500
@@ -998,7 +1159,7 @@ ExtraBoosts() ; Boosts accessories 4, 3, 6, and the weapon
 	Click2(Acces2X, Acces3Y)
 	Sleep 500
 	Click2(WeaponX, WeaponCubeY)
-	Send {a up}
+	Send2("{a up}")
 	Sleep 500
 }
 
@@ -2086,7 +2247,7 @@ DiggerSmartActivate(Position)
 	
 	If !FoundX
 	{
-		MouseClick,L,XSearch,YSearch
+		Click2(XSearch - TopLeftX, YSearch - TopLeftY)
 		Sleep 500
 	}
 
@@ -2411,7 +2572,7 @@ SpellCheck(X) ; Checks if the Xth blood magic spell is set to autocast. If it's 
 	ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName%
 	If SearchX
 	{
-		MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
+		Click2(SearchX - TopLeftX, SearchY - TopLeftY) ; don't Click2 here - already offset
 		Sleep 500
 	}
 }
@@ -2429,7 +2590,7 @@ SpellUncheck(X) ; Checks if the Xth blood magic spell is NOT set to autocast. If
 	ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName%
 	If SearchX
 	{
-		MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
+		Click2(SearchX - TopLeftX, SearchY - TopLeftY) ; don't Click2 here - already offset
 		Sleep 500
 	}
 	Else ;Because 4G made Counterfeit Gold have a different checkmark, need to check for that too
@@ -2437,7 +2598,7 @@ SpellUncheck(X) ; Checks if the Xth blood magic spell is NOT set to autocast. If
 		ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName2%
 		If SearchX
 		{
-			MouseClick, L, SearchX, SearchY ; don't Click2 here - already offset
+			Click2(SearchX - TopLeftX, SearchY - TopLeftY) ; don't Click2 here - already offset
 			Sleep 500
 		}
 	}
@@ -2532,11 +2693,6 @@ PreFirstRebirth2() ; Sets Custom Energy 1 to 1,000,000, Sets Wandoos option as a
 	CurrentStep := A_ThisFunc
 	WandoosMenu()
 	;EnergyCustom1Set(1000000)
-	Loop 3
-	{
-		Send {WheelUp}
-		Sleep 100
-	}
 	Wandoos(WandoosVersion)
 	BloodMagicMenu()
 	BloodMagicSpellMenu()
@@ -2545,10 +2701,18 @@ PreFirstRebirth2() ; Sets Custom Energy 1 to 1,000,000, Sets Wandoos option as a
 	SpellCheck(4)
 	AugmentationMenu()
 	Augmentation(1) ;has no purpose other than to click somewhere in the menu
-	Loop 7
+	if (BackgroundMode = 0)
 	{
-		Send {WheelUp}
-		Sleep 100
+		Loop 7
+		{
+			Send {WheelUp}
+			Sleep 100
+		}
+	}
+
+	else (BackgroundMode = 1)
+	{
+		AugScrollUp()
 	}
 	InventoryMenu()
 	Loadout(2)
@@ -2826,11 +2990,6 @@ PreShortRun() ; Sets Wandoos, sets Number Boost and Counterfeit Gold to autocast
 {
 	CurrentStep := A_ThisFunc
 	WandoosMenu()
-	Loop 3
-	{
-		Send {WheelUp}
-		Sleep 100
-	}
 	Wandoos(WandoosVersion)
 	BloodMagicMenu()
 	BloodMagicSpellMenu()
@@ -3286,6 +3445,7 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Add, Checkbox,vDoNotSave Checked%DoNotSave%,Do Not Save
 	Gui, Add, Checkbox,vDoubleBasicTrainingPerk Checked%DoubleBasicTrainingPerk%,Double Basic Training Perk
 	Gui, Add, Checkbox,vAlwaysCap Checked%AlwaysCap%,Always Cap Blood Magic/Wandoos
+	Gui, Add, Checkbox,vBackgroundMode Checked%BackgroundMode%,Use background clicking/keyboard
 	Gui, Add, Text,section,ImageSearch Variance:
 	Gui, Add, Edit,x+10 w50
 	Gui, Add, Updown, vImageSearchVariance Range0-255,%ImageSearchVariance%
@@ -3838,6 +3998,7 @@ SaveINI()
 	Iniwrite, %DoNotSave%,Settings.ini,Miscellaneous Settings,DoNotSave
 	Iniwrite, %DoubleBasicTrainingPerk%,Settings.ini,Miscellaneous Settings,DoubleBasicTrainingPerk
 	Iniwrite, %AlwaysCap%,Settings.ini,Miscellaneous Settings,AlwaysCap
+	Iniwrite, %BackgroundMode%,Settings.ini,Miscellaneous Settings,BackgroundMode
 	Iniwrite, %ImageSearchVariance%,Settings.ini,Miscellaneous Settings,ImageSearchVariance
 
 }
@@ -3896,6 +4057,7 @@ LoadINI()
 	Iniread, DoNotSave,Settings.ini,Miscellaneous Settings,DoNotSave,0
 	Iniread, DoubleBasicTrainingPerk,Settings.ini,Miscellaneous Settings,DoubleBasicTrainingPerk,0
 	Iniread, AlwaysCap,Settings.ini,Miscellaneous Settings,AlwaysCap,0
+	Iniread, BackgroundMode,Settings.ini,Miscellaneous Settings,BackgroundMode,0
 	Iniread, ImageSearchVariance,Settings.ini,Miscellaneous Settings,ImageSearchVariance,10
 }
 
