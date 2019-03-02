@@ -61,6 +61,7 @@ Global EquipLoadout3ForMoneyPit
 Global DoNotSave
 Global DoubleBasicTrainingPerk
 Global AlwaysCap
+Global BackgroundMode
 Global ImageSearchVariance
 
 Global RebirthTimeSetting := defRebirthTimeSetting 
@@ -348,39 +349,71 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 		Exit
 	}
 	
+	if (BackgroundMode = 1)
+	{
+		WinGet, WindowId, ID, A
+		global WindowId := WindowId
+	}
 }
 
 Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requires SetupOffsets() to have already been called once. Can also specify right-click, a-click, d-click, and Ctrl-click.
 {
-	;MsgBox, %X% %Y% %Button%
-	IfWinNotActive, Play NGU IDLE
+	if (BackgroundMode = 0)
 	{
-		WinActivate, Play NGU IDLE
+		;MsgBox, %X% %Y% %Button%
+		IfWinNotActive, Play NGU IDLE
+		{
+			WinActivate, Play NGU IDLE
+		}
+		
+		X += TopLeftX
+		Y += TopLeftY
+		
+		if (Button = "Left")
+		{
+			Click,%X%,%Y%
+		}
+		else if (Button = "Right")
+		{
+			Click,right,%X%,%Y%
+		}
+		else if (Button = "a")
+		{
+			Send {a down}{Click, %X%,%Y%}{a up}
+		}
+		else if (Button = "d")
+		{
+			Send {d down}{Click, %X%,%Y%}{d up}
+		}
+		else if (Button = "Ctrl")
+		{
+			Send ^{Click, %X%,%Y%}
+		}
 	}
-	
-	X += TopLeftX
-	Y += TopLeftY
-	
-	if (Button = "Left")
+	else
 	{
-		Click,%X%,%Y%
+		Sleep, 100
+		PostMessage, 0x200, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_MOUSEMOVE
+		Sleep, 100
+
+		if (Button = "Left") {
+			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN 
+			Sleep, 100
+			PostMessage, 0x202, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONUP
+		}
+
+		else if (Button = "Right") { 
+			PostMessage, 0x204, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_RBUTTONDOWN 
+			Sleep, 100
+			PostMessage, 0x205, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_RBUTTONUP  
+		}
+		else if (Button = "a")
+		{
+
+		}
+
 	}
-	else if (Button = "Right")
-	{
-		Click,right,%X%,%Y%
-	}
-	else if (Button = "a")
-	{
-		Send {a down}{Click, %X%,%Y%}{a up}
-	}
-	else if (Button = "d")
-	{
-		Send {d down}{Click, %X%,%Y%}{d up}
-	}
-	else if (Button = "Ctrl")
-	{
-		Send ^{Click, %X%,%Y%}
-	}
+
 }
 
 PixelGetColor2(X,Y)
@@ -3286,6 +3319,7 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Add, Checkbox,vDoNotSave Checked%DoNotSave%,Do Not Save
 	Gui, Add, Checkbox,vDoubleBasicTrainingPerk Checked%DoubleBasicTrainingPerk%,Double Basic Training Perk
 	Gui, Add, Checkbox,vAlwaysCap Checked%AlwaysCap%,Always Cap Blood Magic/Wandoos
+	Gui, Add, Checkbox,vBackgroundMode Checked%BackgroundMode%,Use background clicking/keyboard
 	Gui, Add, Text,section,ImageSearch Variance:
 	Gui, Add, Edit,x+10 w50
 	Gui, Add, Updown, vImageSearchVariance Range0-255,%ImageSearchVariance%
@@ -3838,6 +3872,7 @@ SaveINI()
 	Iniwrite, %DoNotSave%,Settings.ini,Miscellaneous Settings,DoNotSave
 	Iniwrite, %DoubleBasicTrainingPerk%,Settings.ini,Miscellaneous Settings,DoubleBasicTrainingPerk
 	Iniwrite, %AlwaysCap%,Settings.ini,Miscellaneous Settings,AlwaysCap
+	Iniwrite, %BackgroundMode%,Settings.ini,Miscellaneous Settings,BackgroundMode
 	Iniwrite, %ImageSearchVariance%,Settings.ini,Miscellaneous Settings,ImageSearchVariance
 
 }
@@ -3896,6 +3931,7 @@ LoadINI()
 	Iniread, DoNotSave,Settings.ini,Miscellaneous Settings,DoNotSave,0
 	Iniread, DoubleBasicTrainingPerk,Settings.ini,Miscellaneous Settings,DoubleBasicTrainingPerk,0
 	Iniread, AlwaysCap,Settings.ini,Miscellaneous Settings,AlwaysCap,0
+	Iniread, BackgroundMode,Settings.ini,Miscellaneous Settings,BackgroundMode,0
 	Iniread, ImageSearchVariance,Settings.ini,Miscellaneous Settings,ImageSearchVariance,10
 }
 
