@@ -3689,6 +3689,10 @@ else IfEqual, OutputVarControl, Button8
 else IfEqual, OutputVarControl, Static13
 
 	Help := "ImageSearch is how the script detects some things in the game.`nVariance is the fuzz factor if the colors on your screen are slightly off from the image.`nAllowable values are 0-255, but if you get much higher than 50, you're at high risk for script nonfunctionality."	
+
+else IfEqual, OutputVarControl, Button9
+
+	Help := "EXPERIMENTAL: Keys and clicks will be sent without the window being focused.`nWindow must still be maximized and visible (like on a second monitor)!"
 	
 ;ToolTip % OutputVarControl
 ToolTip % Help
