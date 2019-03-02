@@ -366,7 +366,6 @@ Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requir
 		{
 			WinActivate, Play NGU IDLE
 		}
-		MsgBox, clicking normal
 		X += TopLeftX
 		Y += TopLeftY
 		
