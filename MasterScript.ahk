@@ -354,6 +354,9 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 	{
 		WinGet, WindowId, ID, A
 		global WindowId := WindowId
+		CoordMode, Mouse, Screen ; We need coordmode set to screen because imagesearch doesn't work with inactive windows
+		CoordMode, Pixel, Screen
+		CoordMode, Tooltip, Screen
 	}
 }
 
@@ -393,7 +396,7 @@ Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requir
 	else
 	{
 		X += TopLeftX
-		Y += TopLeftY
+		Y += TopLeftY + 8
 		Sleep, 100
 		PostMessage, 0x200, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_MOUSEMOVE
 		Sleep, 100
