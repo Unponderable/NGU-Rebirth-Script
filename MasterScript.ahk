@@ -441,6 +441,98 @@ Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requir
 
 }
 
+Send2(inp)
+{
+	if (BackgroundMode = 0)
+	{
+		WinActivate, debugg
+		send, %inp%
+	}
+	else
+	{
+		StringLower, inp, inp
+		if (inp = "{shift down}")
+		{
+			PostMessage, 0x100, 0x10,,, ahk_id %WindowId% ; key down
+		}
+		else if (inp = "{shift up}")
+		{
+			PostMessage, 0x101, 0x10,,, ahk_id %WindowId% ; key up
+		}
+		else if (inp = "ctrl down")
+		{
+			PostMessage, 0x100, 0x11,,, ahk_id %WindowId%
+		}
+		else if (inp = "ctrl up")
+		{
+			PostMessage, 0x101, 0x11,,, ahk_id %WindowId%
+		}
+		else if (inp = "{left}")
+		{
+			PostMessage, 0x100, 0x25,,, ahk_id %WindowId%
+			Sleep 100
+			PostMessage, 0x101, 0x25,,, ahk_id %WindowId%
+		}
+		else if (inp = "{right}")
+		{
+			PostMessage, 0x100, 0x27,,, ahk_id %WindowId%
+			Sleep 100
+			PostMessage, 0x101, 0x27,,, ahk_id %WindowId%
+		}
+		else if (inp = "{d down}")
+		{
+			PostMessage, 0x100, 0x44,,, ahk_id %WindowId%
+		}
+		else if (inp = "{d up}")
+		{
+			PostMessage, 0x101, 0x44,,, ahk_id %WindowId%
+		}
+		else if (inp = "{a down}")
+		{
+			PostMessage, 0x100, 0x41,,, ahk_id %WindowId%
+		}
+		else if (inp = "{a up}")
+		{
+			PostMessage, 0x101, 0x41,,, ahk_id %WindowId%
+		}
+		else if (Button = "{R}")
+		{
+			PostMessage, 0x100, 0x52,,, ahk_id %WindowId% ; key down
+			sleep, 100
+			PostMessage, 0x101, 0x52,,, ahk_id %WindowId% ; key up
+
+		}
+		else if (Button = "{T}")
+		{
+			PostMessage, 0x100, 0x54,,, ahk_id %WindowId% ; key down
+			sleep, 100
+			PostMessage, 0x101, 0x54,,, ahk_id %WindowId% ; key up
+		}
+		else
+		{
+			chars := {"a": 0x41, "b": 0x42, "c": 0x43, "d": 0x44, "e": 0x45, "f": 0x46, "g": 0x47, "h": 0x48
+			, "i": 0x49, "j": 0x4A, "k": 0x4B, "l": 0x4C, "m": 0x4D, "n": 0x4E, "o": 0x4F, "p": 0x50, "q": 0x51
+			, "r": 0x52, "s": 0x53, "t": 0x54, "u": 0x55, "v": 0x56, "w": 0x57, "x": 0x58, "y": 0x59, "z": 0x5A
+			, " ": 0x20}
+			numbers := {0: 0x30, 1: 0x31, 2: 0x32, 3: 0x33, 4: 0x34, 5: 0x35, 6: 0x36, 7: 0x37, 8: 0x38, 9: 0x39}
+			Loop, parse, str
+			{
+				if (chars[A_LoopField])
+				{
+					while (GetKeyState("Control") || GetKeyState("Alt")) {} ; safeguard from sending ctrl/alt to the game
+					PostMessage, 0x100, % chars[A_LoopField],,, ahk_id %WindowId% ; key down
+					PostMessage, 0x101, % chars[A_LoopField],,, ahk_id %WindowId% ; key up
+				}
+				else { ; numbers only require key up event
+					while (GetKeyState("Control") || GetKeyState("Alt")) {}     
+					PostMessage, 0x101, % numbers[A_LoopField],,, ahk_id %WindowId% ; key up
+			}
+			}
+		}
+	}
+
+}
+
 PixelGetColor2(X,Y)
 {
 	X += TopLeftX
