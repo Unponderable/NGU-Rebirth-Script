@@ -365,7 +365,7 @@ Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requir
 		{
 			WinActivate, Play NGU IDLE
 		}
-		
+		MsgBox, clicking normal
 		X += TopLeftX
 		Y += TopLeftY
 		
@@ -397,21 +397,46 @@ Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requir
 		Sleep, 100
 
 		if (Button = "Left") {
-			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN 
+			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN
 			Sleep, 100
 			PostMessage, 0x202, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONUP
 		}
 
 		else if (Button = "Right") { 
-			PostMessage, 0x204, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_RBUTTONDOWN 
+			PostMessage, 0x204, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_RBUTTONDOWN
 			Sleep, 100
-			PostMessage, 0x205, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_RBUTTONUP  
+			PostMessage, 0x205, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_RBUTTONUP
 		}
 		else if (Button = "a")
 		{
-
+			PostMessage, 0x100, 0x41,,, ahk_id %WindowId% ; key down
+			Sleep, 100
+			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN
+	    	Sleep, 50
+	    	PostMessage, 0x202, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONUP
+	    	Sleep, 50
+    		PostMessage, 0x101, 0x41,,, ahk_id %WindowId% ; key up
 		}
-
+		else if (Button = "d")
+		{
+			PostMessage, 0x100, 0x44,,, ahk_id %WindowId% ; key down
+			Sleep, 100
+			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN
+	    	Sleep, 50
+	    	PostMessage, 0x202, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONUP
+	    	Sleep, 50
+    		PostMessage, 0x101, 0x44,,, ahk_id %WindowId% ; key up
+		}
+		else if (Button = "Ctrl")
+		{
+			PostMessage, 0x100, 0x11,,, ahk_id %WindowId% ; key down
+			Sleep, 100
+			PostMessage, 0x201, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONDOWN
+	    	Sleep, 50
+	    	PostMessage, 0x202, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_LBUTTONUP
+	    	Sleep, 50
+    		PostMessage, 0x101, 0x11,,, ahk_id %WindowId% ; key up
+		}
 	}
 
 }
