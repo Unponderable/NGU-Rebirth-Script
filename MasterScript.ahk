@@ -363,9 +363,10 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 		CoordMode, Pixel, Screen
 		CoordMode, Tooltip, Screen
 		
-		SysGet, VirtualWidth, 78
-		SysGet, VirtualHeight, 79
-		ImageSearch, TopLeftX, TopLeftY, 0, 0, %VirtualWidth%, %VirtualHeight%, *%ImageSearchVariance% %SearchFileName%
+		WinGetPos,X1,Y1,XWid,YWid
+		X2:=X1+XWid
+		Y2:=Y1+YWid
+		ImageSearch, TopLeftX, TopLeftY, %X1%, %Y1%, %X2%, %Y2%, *%ImageSearchVariance% %SearchFileName%
 		;MsgBox, %TopLeftX% and %TopLeftY%
 	}
 }
@@ -3404,7 +3405,7 @@ StartTest() ;Used for debug/testing purposes
 	ImageSearchVariance :=10
 	;BackgroundMode := 1
 	ScriptStart()
-
+	
 	;MsgBox, Test done!	
 }
 
