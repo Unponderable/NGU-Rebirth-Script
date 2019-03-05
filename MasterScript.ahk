@@ -313,6 +313,9 @@ Global BloodSpellChoice
 Global WandoosChoice
 Global AugChoice
 
+Global ScreenTopLeftX
+Global ScreenTopLeftY
+
 Global Nag := 0
 Global Boss37Check := 0
 Global ChallengeNumber
@@ -352,11 +355,18 @@ SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the 
 	
 	if (BackgroundMode = 1)
 	{
+		ScreenTopLeftX := TopLeftX
+		ScreenTopLeftY := TopLeftY
 		WinGet, WindowId, ID, A
 		global WindowId := WindowId
 		CoordMode, Mouse, Screen ; We need coordmode set to screen because imagesearch doesn't work with inactive windows
 		CoordMode, Pixel, Screen
 		CoordMode, Tooltip, Screen
+		
+		SysGet, VirtualWidth, 78
+		SysGet, VirtualHeight, 79
+		ImageSearch, TopLeftX, TopLeftY, 0, 0, %VirtualWidth%, %VirtualHeight%, *%ImageSearchVariance% %SearchFileName%
+		;MsgBox, %TopLeftX% and %TopLeftY%
 	}
 }
 
@@ -395,8 +405,8 @@ Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requir
 	}
 	else
 	{
-		X += TopLeftX
-		Y += TopLeftY + 8
+		X += ScreenTopLeftX
+		Y += ScreenTopLeftY
 		Sleep, 100
 		PostMessage, 0x200, 0, X&0xFFFF | Y<<16,, ahk_id %WindowId% ; WM_MOUSEMOVE
 		Sleep, 100
@@ -548,6 +558,7 @@ PixelGetColor2(X,Y)
 {
 	X += TopLeftX
 	Y += TopLeftY
+	;MsgBox,%X% %Y%
 	PixelGetColor, value, %X%, %Y%
 	return value
 }
@@ -1623,7 +1634,7 @@ TimeMachineMagic() ; Clicks to add magic to the time machine (inside the Time Ma
 	TM_BB3 := PixelGetColor2(TimeMachineEnergyBBX,TimeMachineMagicBBY)
 	if ((TM_BB1 != 0xFFFFFF) && (TM_BB2 != 0xFFFFFF) && (TM_BB3 != 0xFFFFFF))
 	{
-		;MsgBox, You're probably capped and don't need to add energy.
+		;MsgBox, You're probably capped and don't need to add magic.
 	}
 	else
 	{
@@ -3391,10 +3402,9 @@ StartTest() ;Used for debug/testing purposes
 {
 	WinActivate, Play NGU IDLE
 	ImageSearchVariance :=10
+	;BackgroundMode := 1
 	ScriptStart()
-	
-	
-	
+
 	;MsgBox, Test done!	
 }
 
