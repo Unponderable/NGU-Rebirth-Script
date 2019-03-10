@@ -132,7 +132,6 @@ Global SleepStatus
 Global CurrentStatus
 Global ChallengeFlag
 Global TransformFlag
-Global NGUSet
 
 Global TopLeftX = 0
 Global TopLeftY = 0
@@ -285,6 +284,8 @@ Global NGUBothPlusX := 845 - 329
 Global NGUBothY := 565 - 323
 Global NGUToMagicX := 695 - 329
 Global NGUToMagicY := 445 - 323
+Global NGUCapX := 620
+Global NGUCapY := 160
 
 Global YGGButtonsX := 1150 - 329
 Global YGGMaxY := 770 - 323
@@ -323,7 +324,6 @@ Global NACFlag := 0
 Global 100LFlag := 0
 Global NRCFlag := 0
 Global NoTMFlag := 0
-Global NGUSetCalledOnce = 1
 
 RunStart()
 ;^p::StartTest()
@@ -1905,196 +1905,14 @@ NGUAdd(X) ; Clicks to add energy/magic to the Xth item in NGUs. Call NGUMagicMen
 	Sleep 500
 }
 
-;Applies energy and magic to NGUs
-;EnergyNGUs and MagicNGUs are arrays of 1s and 0s corresponding to which NGU to dump into.
-;Until I work out something better or 4G releases Custom Idle % buttons, it puts in 1/4 of idle energy per NGU.
-NGUSet(EnergyNGUs:=0,MagicNGUs:=0) 
+NGU_CapBoth() ;Caps energy NGUs and then magic NGUs
 {
 	NGUMenu()
-	
-	if EnergyNGUs
-		Energy4X()
-	
-	For index, value in EnergyNGUs ; Put energy into the NGUs
-	{
-		if EnergyNGUs[index] = 1
-		{
-			NGUAdd(index)
-		}
-	}
-	
+	Click2(NGUCapX, NGUCapY)
+	Sleep 500
 	NGUMagicMenu()
-	
-	if MagicNGUs
-		Magic4X()
-	
-	For index, value in MagicNGUs ;Put magic into the NGUs
-	{
-		if MagicNGUs[index] = 1
-		{
-			NGUAdd(index)
-		}
-	}
-	
-	NGUSet := 1
-}
-
-NGUSet2(EnergyNGUs:=0,MagicNGUs:=0) ;Unponderable's custom NGU setting function, based on the one above. Not implemented - here for an example in customizing. Requires setting EnergyCustom2 - I use 10 billion.
-{
-	NGUMenu()
-	
-	For index, value in EnergyNGUs ; Put energy into the NGUs
-	{
-			
-		PixelDiff = 35
-		TempY := NGUBothY + PixelDiff * (index - 1)
-		
-		NGU_BB1 := PixelGetColor2(NGUBBX,TempY)
-		Sleep, 10
-		NGU_BB2 := PixelGetColor2(NGUBBX,TempY)
-		Sleep, 10
-		NGU_BB3 := PixelGetColor2(NGUBBX,TempY)
-		if (((NGU_BB1 != 0xFFFFFF) && (NGU_BB2 != 0xFFFFFF) && (NGU_BB3 != 0xFFFFFF)) && (NGUSetCalledOnce = 1))
-		{
-			;MsgBox, You're probably capped and don't need to add energy.
-		}
-		else
-		{
-			if index = 1
-			{
-				EnergyCustom2()
-			}
-			if index <= 6
-			{	
-				NGUAdd(index)
-			}
-			if index = 7
-			{
-				Loop 3
-				{
-					NGUAdd(index)
-				}
-			}
-			if index >= 8
-			{
-				Energy2X()
-				NGUAdd(index)
-			}
-		}
-
-	}
-	
-	NGUMagicMenu()
-	
-	For index, value in MagicNGUs ;Put magic into the NGUs
-	{
-		PixelDiff = 35
-		TempY := NGUBothY + PixelDiff * (index - 1)
-		
-		NGU_BB1 := PixelGetColor2(NGUBBX,TempY)
-		Sleep, 10
-		NGU_BB2 := PixelGetColor2(NGUBBX,TempY)
-		Sleep, 10
-		NGU_BB3 := PixelGetColor2(NGUBBX,TempY)
-		if (((NGU_BB1 != 0xFFFFFF) && (NGU_BB2 != 0xFFFFFF) && (NGU_BB3 != 0xFFFFFF)) && (NGUSetCalledOnce = 1))
-		{
-			;MsgBox, You're probably capped and don't need to add energy.
-		}
-		else
-		{
-			if index = 1
-			{
-				EnergyCustom2()
-			}
-			if index <= 2
-			{	
-				NGUAdd(index)
-			}
-			if index = 3
-			{
-					NGUAdd(index)
-			}
-			if index = 4
-			{
-				Loop 2
-				{
-					NGUAdd(index)
-				}
-			}
-			if index = 5
-			{
-				Loop 12
-				{
-					NGUAdd(index)
-				}
-			}
-			if index = 6
-			{
-				Magic2X()
-			}
-			if index >= 6
-			{
-				NGUAdd(index)
-			}
-		}
-	}
-	NGUSetCalledOnce := 1
-}
-
-;Applies energy and magic to NGUs, dividing energy/magic evenly
-;Requires AP Purchase: Custom Idle Energy/Magic % Buttons
-NGUSet3(EnergyNGUs:=0,MagicNGUs:=0) 
-{
-	NGUMenu()
-	
-	if !NGUSet
-	{
-		EnergyCount:=0 ; Figure out the % of energy to put into each
-		For index, value in EnergyNGUs
-		{
-			if EnergyNGUs[index] = 1
-			{
-				EnergyCount++
-			}
-		}
-		EnergyCustomIdlePercentSet(Floor(100/EnergyCount)) ;Set the %
-	
-	}
-	EnergyCustomIdlePercent()	
-	
-	For index, value in EnergyNGUs ; Put energy into the NGUs
-	{
-		if EnergyNGUs[index] = 1
-		{
-			NGUAdd(index)
-		}
-	}
-		
-	NGUMagicMenu()
-	
-	if !NGUSet
-	{
-		MagicCount:=0 ; Figure out the % of magic to put into each
-		For index, value in MagicNGUs
-		{
-			if MagicNGUs[index] = 1
-			{
-				MagicCount++
-			}
-		}
-		MagicCustomIdlePercentSet(Floor(100/MagicCount)) ;Set the %
-	}
-	MagicCustomIdlePercent()
-	
-	For index, value in MagicNGUs ;Put magic into the NGUs
-	{
-		if MagicNGUs[index] = 1
-		{
-			NGUAdd(index)
-		}
-	}
-	
-	NGUSet := 1
+	Click2(NGUCapX, NGUCapY)
+	Sleep 500
 }
 
 ;====Yggdrasil====
@@ -3118,7 +2936,7 @@ RebirthScript_Short(X) ;From the rebirth screen, performs a rebirth and does a r
 		TimeMachineMagic()
 		if EnableNGUs
 		{
-			NGUSet(EnergyNGU,MagicNGU)
+			NGU_CapBoth()
 		}
 		DiggersSet(DiggerLoadout)
 		if a_index = 1 ; once diggers are on, re-enter ITOPOD at a probably better optimal level
@@ -3203,7 +3021,7 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 			
 		}
 		if EnableNGUs
-			NGUSet(EnergyNGU,MagicNGU)
+			NGU_CapBoth()
 	}
 	RegainBoth()
 	if !100LFlag
@@ -3232,7 +3050,7 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 			}
 		}
 		if EnableNGUs
-			NGUSet(EnergyNGU,MagicNGU)
+			NGU_CapBoth()
 	}
 	SaveCheck()
 	MoneyPitCheckShort()
@@ -3465,24 +3283,24 @@ OptionSelect() ;Creates a GUI box to ask for challenge run preferences. TODO mak
 	Gui, Add, Checkbox, vEnableNGUs gToggleNGUs Checked%defEnableNGUs%, Put energy/magic into NGUs?
 	Gui, Add, Text,,Note: disabled during challenges.
 	Gui, Add, Text,,
-	Gui, Add, Text,section,Energy NGUs
-	Gui, Add, Checkbox,vENGU1 Checked%defNGU_Augments%,Augments
-	Gui, Add, Checkbox,vENGU2 Checked%defNGU_Wandoos%,Wandoos
-	Gui, Add, Checkbox,vENGU3 Checked%defNGU_Respawn%,Respawn
-	Gui, Add, Checkbox,vENGU4 Checked%defNGU_Gold%,Gold
-	Gui, Add, Checkbox,vENGU5 Checked%defNGU_Adventure%,Adventure
-	Gui, Add, Checkbox,vENGU6 Checked%defNGU_PowerAlpha%,Power A
-	Gui, Add, Checkbox,vENGU7 Checked%defNGU_DropChance%,Drop Chance
-	Gui, Add, Checkbox,vENGU8 Checked%defNGU_MagicNGU%,Magic NGU
-	Gui, Add, Checkbox,vENGU9 Checked%defNGU_PP%,PP
-	Gui, Add, Text,ys,Magic NGUs
-	Gui, Add, Checkbox,vMNGU1 Checked%defNGU_Yggdrasil%,Yggdrasil
-	Gui, Add, Checkbox,vMNGU2 Checked%defNGU_EXP%,EXP
-	Gui, Add, Checkbox,vMNGU3 Checked%defNGU_PowerBeta%,Power B
-	Gui, Add, Checkbox,vMNGU4 Checked%defNGU_Number%,Number
-	Gui, Add, Checkbox,vMNGU5 Checked%defNGU_TimeMachine%,Time Machine
-	Gui, Add, Checkbox,vMNGU6 Checked%defNGU_EnergyNGU%,Energy NGU
-	Gui, Add, Checkbox,vMNGU7 Checked%defNGU_AdventureBeta%,Adventure B
+	;Gui, Add, Text,section,Energy NGUs
+	;Gui, Add, Checkbox,vENGU1 Checked%defNGU_Augments%,Augments
+	;Gui, Add, Checkbox,vENGU2 Checked%defNGU_Wandoos%,Wandoos
+	;Gui, Add, Checkbox,vENGU3 Checked%defNGU_Respawn%,Respawn
+	;Gui, Add, Checkbox,vENGU4 Checked%defNGU_Gold%,Gold
+	;Gui, Add, Checkbox,vENGU5 Checked%defNGU_Adventure%,Adventure
+	;Gui, Add, Checkbox,vENGU6 Checked%defNGU_PowerAlpha%,Power A
+	;Gui, Add, Checkbox,vENGU7 Checked%defNGU_DropChance%,Drop Chance
+	;Gui, Add, Checkbox,vENGU8 Checked%defNGU_MagicNGU%,Magic NGU
+	;Gui, Add, Checkbox,vENGU9 Checked%defNGU_PP%,PP
+	;Gui, Add, Text,ys,Magic NGUs
+	;Gui, Add, Checkbox,vMNGU1 Checked%defNGU_Yggdrasil%,Yggdrasil
+	;Gui, Add, Checkbox,vMNGU2 Checked%defNGU_EXP%,EXP
+	;Gui, Add, Checkbox,vMNGU3 Checked%defNGU_PowerBeta%,Power B
+	;Gui, Add, Checkbox,vMNGU4 Checked%defNGU_Number%,Number
+	;Gui, Add, Checkbox,vMNGU5 Checked%defNGU_TimeMachine%,Time Machine
+	;Gui, Add, Checkbox,vMNGU6 Checked%defNGU_EnergyNGU%,Energy NGU
+	;Gui, Add, Checkbox,vMNGU7 Checked%defNGU_AdventureBeta%,Adventure B
 	
 	for index in defDiggers
 	{
