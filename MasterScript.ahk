@@ -461,7 +461,7 @@ Send2(inp)
 {
 	if (BackgroundMode = 0)
 	{
-		WinActivate, debugg
+		WinActivate, Play NGU IDLE
 		send, %inp%
 	}
 	else
@@ -3156,8 +3156,10 @@ RunStart()
 	WinWait,Run Options
 	WinWaitClose
 	;MsgBox, %LoopNumber% %RepeatChoice%
-	
+
 	WinActivate, Play NGU IDLE
+
+	
 	ScriptStart()
 	
 	if ChallengeChoice != None ;Challenge Run
@@ -3219,7 +3221,11 @@ RunStart()
 
 StartTest() ;Used for debug/testing purposes
 {
-	WinActivate, Play NGU IDLE
+	if (BackgroundMode = 0)
+	{
+		WinActivate, Play NGU IDLE
+	}
+
 	ImageSearchVariance :=10
 	;BackgroundMode := 1
 	ScriptStart()
@@ -3622,7 +3628,11 @@ ChallengeRun(X)
 
 ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in ChallengeNumber.
 {
-	WinActivate, Play NGU IDLE
+	if (BackgroundMode = 0)
+	{
+		WinActivate, Play NGU IDLE
+	}
+
 	SegmentTimerStart := A_TickCount
 	Boss37Check = 0
 	
@@ -3633,7 +3643,11 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 	While Boss37Check = 0 ;If you can't unlock blood magic on your second rebirth within the first few seconds, repeat FirstRebirth2 until you can.
 	{
 		CurrentStatus = First RB #%Rebirths%
-		WinActivate, Play NGU IDLE
+		if (BackgroundMode = 0)
+		{
+			WinActivate, Play NGU IDLE
+		}
+
 		FirstRebirth2()
 		ChallengeCheck()
 		if ChallengeFlag = 0
@@ -3646,7 +3660,11 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 	While ChallengeFlag = 1 And Rebirths <= Challenge1RunIterations ;Run up to 10 3-minute rebirths (by default)
 	{
 		CurrentStatus = %Challenge1RunLength% min RB #%Rebirths%/%Challenge1RunIterations%
-		WinActivate, Play NGU IDLE
+		if (BackgroundMode = 0)
+		{
+			WinActivate, Play NGU IDLE
+		}
+
 		RebirthScript2(Challenge1RunLength)
 		ChallengeCheck()
 		Rebirths++
@@ -3655,7 +3673,11 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 	While ChallengeFlag = 1 And Rebirths <= Challenge2RunIterations ;Run up to 5 7-minute rebirths (by default)
 	{
 		CurrentStatus = %Challenge2RunLength% min RB #%Rebirths%/%Challenge2RunIterations%
-		WinActivate, Play NGU IDLE
+		if (BackgroundMode = 0)
+		{
+			WinActivate, Play NGU IDLE
+		}
+
 		RebirthScript2(Challenge2RunLength)
 		ChallengeCheck()
 		Rebirths++
@@ -3664,7 +3686,11 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 	While ChallengeFlag = 1 And Rebirths <= Challenge3RunIterations ;Run up to 5 12-minute rebirths (by default)
 	{
 		CurrentStatus = %Challenge3RunLength% min RB #%Rebirths%/%Challenge3RunIterations%
-		WinActivate, Play NGU IDLE
+		if (BackgroundMode = 0)
+		{
+			WinActivate, Play NGU IDLE
+		}
+
 		RebirthScript2(Challenge3RunLength)
 		ChallengeCheck()
 		Rebirths++
@@ -3673,7 +3699,11 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 	While ChallengeFlag = 1 ;Run 60 minute rebirths until your challenge is done
 	{
 		CurrentStatus = 60 min RB #%Rebirths%
-		WinActivate, Play NGU IDLE
+		if (BackgroundMode = 0)
+		{
+			WinActivate, Play NGU IDLE
+		}
+
 		RebirthScript2(60)
 		ChallengeCheck()
 		Rebirths++
@@ -3685,7 +3715,11 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 
 NoRebirthRun() ;Attempts to do a No Rebirth run.
 {
-	WinActivate, Play NGU IDLE
+	if (BackgroundMode = 0)
+	{
+		WinActivate, Play NGU IDLE
+	}
+
 	SegmentTimerStart := A_TickCount
 	NRCFlag := 1
 	ChallengeMenu()
