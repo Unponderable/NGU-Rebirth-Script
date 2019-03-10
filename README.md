@@ -8,6 +8,7 @@ Come visit us in Discord: https://discord.gg/5revMxD
 
 #### Change Log
 
+0.6b - Uses the new Cap NGUs button (thanks, 4G!).
 0.6a - Background mode option added. Still requires the window to be visible. Thanks, Satyric!\
 0.5d - Lots of fixes for 0.413-7. Fixed script not detecting unlocking Time Machine or Blood Magic. Removed use of custom energy button for challenge runs. Script will now cast the MacGuffin spells when available. Updated zone list.\
 0.5c - Fixes for compatibility with 0.412-2.\
