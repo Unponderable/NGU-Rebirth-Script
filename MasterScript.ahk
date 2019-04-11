@@ -323,8 +323,8 @@ Global 100LFlag := 0
 Global NRCFlag := 0
 Global NoTMFlag := 0
 
-RunStart()
-;^p::StartTest()
+;RunStart()
+^p::StartTest()
 
 SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the game, based on an image search. Run everytime you run a script.
 {
@@ -534,6 +534,18 @@ Send2(inp)
 			sleep, 100
 			PostMessage, 0x101, 0x54,,, ahk_id %WindowId% ; key up
 		}
+		else if (Button = "{Esc}")
+		{
+			PostMessage, 0x100, 0x1B,,, ahk_id %WindowId% ; key down
+			sleep, 100
+			PostMessage, 0x101, 0x1B,,, ahk_id %WindowId% ; key up
+		}
+		else if (Button = "{Enter}")
+		{
+			PostMessage, 0x100, 0x0D,,, ahk_id %WindowId% ; key down
+			sleep, 100
+			PostMessage, 0x101, 0x0D,,, ahk_id %WindowId% ; key up
+		}
 		else
 		{
 			chars := {"a": 0x41, "b": 0x42, "c": 0x43, "d": 0x44, "e": 0x45, "f": 0x46, "g": 0x47, "h": 0x48
@@ -634,6 +646,11 @@ Save() ; Clicks the save button.
 	CurrentStep := A_ThisFunc
 	Click2(SaveX, SaveY)
 	Sleep 500
+	IfWinActive, Save Yer Game
+	{
+		Send2("{Enter}")
+		Sleep,500
+	}
 }
 
 ;====Energy Selection====
@@ -2427,7 +2444,7 @@ SpellUncheck(X) ; Checks if the Xth blood magic spell is NOT set to autocast. If
 	Search1Y := BloodMagicSpellY(X)+TopLeftY
 	
 	SearchFileName = BloodMagicCheck.png
-	SearchFileName2 = BloodMagicCheck2.png
+	;SearchFileName2 = BloodMagicCheck2.png
 	
 	ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName%
 	If SearchX
@@ -2435,15 +2452,15 @@ SpellUncheck(X) ; Checks if the Xth blood magic spell is NOT set to autocast. If
 		Click2(SearchX - TopLeftX, SearchY - TopLeftY) ; don't Click2 here - already offset
 		Sleep 500
 	}
-	Else ;Because 4G made Counterfeit Gold have a different checkmark, need to check for that too
-	{
-		ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName2%
-		If SearchX
-		{
-			Click2(SearchX - TopLeftX, SearchY - TopLeftY) ; don't Click2 here - already offset
-			Sleep 500
-		}
-	}
+	;Else ;Because 4G made Counterfeit Gold have a different checkmark, need to check for that too
+	;{
+	;	ImageSearch, SearchX, SearchY, Search1X-50, Search1Y-50, Search1X+50, Search1Y+50, *%ImageSearchVariance% %SearchFileName2%
+	;	If SearchX
+	;	{
+	;		Click2(SearchX - TopLeftX, SearchY - TopLeftY) ; don't Click2 here - already offset
+	;		Sleep 500
+	;	}
+	;}
 }
 
 NGUBloodAssign() ; Caps blood in descending order. Then, applies energy to Power+ and Tougness+. Then, assigns energy to all energy NGUs in descending order (twice as much to NGU Drop Chance). Then, assigns 1/4 of idle magic to each Magic NGU. NOT USED.
@@ -3234,6 +3251,7 @@ RunStart()
 
 StartTest() ;Used for debug/testing purposes
 {
+	BackgroundMode := 0
 	if (BackgroundMode = 0)
 	{
 		WinActivate, Play NGU IDLE ;kong
@@ -3241,8 +3259,10 @@ StartTest() ;Used for debug/testing purposes
 	}
 
 	ImageSearchVariance :=10
-	;BackgroundMode := 1
+	
 	ScriptStart()
+	
+	Save()
 	
 	;MsgBox, Test done!	
 }
