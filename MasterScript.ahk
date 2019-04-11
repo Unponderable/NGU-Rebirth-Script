@@ -158,22 +158,20 @@ Global ConfirmY := 640 - 323
 Global SaveX := 370 - 329
 Global SaveY := 805 - 323
 
-Global Energy2X := 820 - 329
-Global Energy4X := 850 - 329
-Global Magic2X := 970 - 329
-Global Magic4X := 1000 - 329
-Global CapBothY := 340 - 323
-Global IdleBothY := 365 - 323
-Global EnergyInputX := 662 - 329
+Global CustomInput1X := 363
+Global CustomInput2X := 467
+Global CapX := 673
+Global 2X := 703
+Global 4X := 739
+Global CustomPercent1X := 761
+Global CustomPercent2X := 797
+Global Idle2X := 865
+Global Idle4X := 900
+Global IdleCustomPercentX := 927
 
-Global PercentEnergy2X := 810 - 329
-Global PercentMagic2X := 950 - 329
-Global PercentBothY := 445 - 371
-
-Global CustomValue1X := 1098 - 329
-Global CustomValue2X := 1210 - 329
-Global IdlePercent1X := 1140 - 329
-Global IdlePercent2X := 1160 - 329
+Global EnergyY := 17
+Global MagicY := 41
+Global R3Y := 69
 
 Global RebirthMainX := 400 - 329
 Global RebirthMainY := 735 - 323
@@ -192,10 +190,10 @@ Global NukeY := 430 - 323
 Global FightY := 530 - 323
 Global StopY := 480 - 323
 
-Global MoneyPitX := 940 - 329
-Global MoneyPitY := 610 - 323
-Global DailySpinMenuX := 670 - 329
-Global DailySpinMenuY := 365 - 323
+Global MoneyPitX := 428
+Global MoneyPitY := 168
+Global DailySpinMenuX := 824
+Global DailySpinMenuY := 240
 Global DailySpinX = 1045 - 329
 Global DailySpinY = 880 - 323
 
@@ -330,27 +328,39 @@ RunStart()
 
 SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the game, based on an image search. Run everytime you run a script.
 {
-	IfWinNotActive, Play NGU IDLE
+	IfWinNotActive, Play NGU IDLE ;kong
 	{
-		MsgBox, Failed to initiate - NGU Idle window not active.`nRun the script when the game window is active.
-		Exit
+		IfWinNotActive, ahk_exe NGUIdle.exe ;kart
+		{
+			MsgBox, Failed to initiate - NGU Idle window not active.`nRun the script when the game window is active.
+			Exit
+		}
 	}
 	WinGet, WindowId, ID, A
 	WinGetPos,,,WinW,WinH
-	SearchFileName = TopLeft.png
-	ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *%ImageSearchVariance% %SearchFileName%
-			
-	If SearchX
+	
+	IfWinNotActive, ahk_exe NGUIdle.exe ;kart
 	{
-		TopLeftX := SearchX
-		TopLeftY := SearchY
-		;MsgBox %TopLeftX% %TopLeftY%
+		SearchFileName = TopLeft.png
+		ImageSearch, SearchX, SearchY, 0, 0, %WinW%, %WinH%, *%ImageSearchVariance% %SearchFileName%
+				
+		If SearchX
+		{
+			TopLeftX := SearchX
+			TopLeftY := SearchY
+			;MsgBox %TopLeftX% %TopLeftY%
+		}
+		else
+		{
+			MsgBox, Failed to initiate - NGU Idle game not fully visible or can't find TopLeft.png on screen.`nCheck the FAQ.
+			;MsgBox,%WinW% %WinH%
+			Exit
+		}
 	}
-	else
+	IfWinActive, ahk_exe NGUIdle.exe ;kart
 	{
-		MsgBox, Failed to initiate - NGU Idle game not fully visible or can't find TopLeft.png on screen.`nCheck the FAQ.
-		;MsgBox,%WinW% %WinH%
-		Exit
+		TopLeftX := 0
+		TopLeftY := 0
 	}
 	
 	if (BackgroundMode = 1)
@@ -376,10 +386,9 @@ Click2(X,Y,Button:="Left") ;Click2 clicks at X, Y _relative to the game_. Requir
 	if (BackgroundMode = 0)
 	{
 		;MsgBox, %X% %Y% %Button%
-		IfWinNotActive, Play NGU IDLE
-		{
-			WinActivate, Play NGU IDLE
-		}
+		WinActivate, Play NGU IDLE ;kong
+		WinActivate, ahk_exe NGUIdle.exe ;kart
+		
 		X += TopLeftX
 		Y += TopLeftY
 		
@@ -461,7 +470,8 @@ Send2(inp)
 {
 	if (BackgroundMode = 0)
 	{
-		WinActivate, Play NGU IDLE
+		WinActivate, Play NGU IDLE ;kong
+		WinActivate, ahk_exe NGUIdle.exe ;kart
 		send, %inp%
 	}
 	else
@@ -597,8 +607,10 @@ Timer() ; Sets up a tooltip at ToolTipX and ToolTipY to display what's going on 
 	LastRebirthYear += Floor (LastRebirthTimerTime / 1000), SECONDS
 	FormatTime, LastRebirthTime, %LastRebirthYear%, HH:mm:ss
 	
-	IfWinActive, Play NGU IDLE
+	IfWinActive, Play NGU IDLE ;kong
 		ToolTip, Diagnostic Tooltip`n`nOverall Time: %OverallTime%`nCurrent Status: %CurrentStatus%`nRebirth Time: %RebirthTime%`nLast RebirthTime: %LastRebirthTime%`nLast Rebirth Milli: %LastRebirthTimerTime%`nCurrent Function: %CurrentStep%`n`nStats:`n# of Completions: %Completions%`n`nEsc: Quit`nF12: Pause/Unpause, ToolTipX, ToolTipY
+	IfWinActive, ahk_exe NGUIdle.exe ;kart
+		ToolTip, Diagnostic Tooltip`n`nOverall Time: %OverallTime%`nCurrent Status: %CurrentStatus%`nRebirth Time: %RebirthTime%`nLast RebirthTime: %LastRebirthTime%`nFunction: %CurrentStep%`n`nStats:`n# of Completions: %Completions%`n`nEsc: Quit`nF12: Pause/Unpause, 0, 0
 	Else
 		ToolTip
 	
@@ -629,28 +641,28 @@ Save() ; Clicks the save button.
 Energy2X() ; Clicks the 1/2 Idle Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(Energy2X, IdleBothY)
+	Click2(Idle2X, EnergyY)
 	Sleep 500
 }
 
 Energy4X() ; Clicks the 1/4 Idle Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(Energy4X, IdleBothY)
+	Click2(Idle4X, EnergyY)
 	Sleep 500
 }
 
 EnergyMax() ; Clicks the Max Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(Energy2X+25, PercentBothY)
+	Click2(CapX, EnergyY)
 	Sleep 500
 }
 
 EnergyCustom1() ; Clicks the 1st Custom Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(CustomValue1X, IdleBothY)
+	Click2(CustomInput1X, MagicY)
 	Sleep 500
 }
 
@@ -658,7 +670,7 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,PercentBothY)
+	Click2(CustomInput2X,EnergyY)
 	Sleep 500
 	
 	Send2(%X%)
@@ -666,7 +678,7 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 	
 	Send2("{Shift down}")
 	Sleep 500
-	Click2(CustomValue1X, IdleBothY)
+	Click2(CustomInput1X, MagicY)
 	Sleep 500
 	Send2("{Shift up}")
 	Sleep 500
@@ -676,7 +688,7 @@ EnergyCustom1Set(X) ;Sets Custom Energy Button 1 to be X
 EnergyCustom2() ; Clicks the 2nd Custom Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(CustomValue1X, CapBothY)
+	Click2(CustomInput2X, MagicY)
 	Sleep 500
 }
 
@@ -684,7 +696,7 @@ EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,PercentBothY)
+	Click2(CustomInput2X,EnergyY)
 	Sleep 500
 	
 	Send2(%X%)
@@ -692,7 +704,7 @@ EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 	
 	Send2("{Shift down}")
 	Sleep 500
-	Click2(CustomValue1X, CapBothY)
+	Click2(CustomInput2X, MagicY)
 	Sleep 500
 	Send2("{Shift up}")
 	Sleep 500
@@ -702,7 +714,7 @@ EnergyCustom2Set(X) ;Sets Custom Energy Button 2 to be X. NOT USED
 EnergyPercent1() ; Clicks the 1st Custom Percent Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(PercentEnergy2X-25, PercentBothY)
+	Click2(CustomPercent1X, EnergyY)
 	Sleep 500
 }
 
@@ -710,7 +722,7 @@ EnergyCustomPercent1Set(X) ;Sets Custom Energy Percent Button 1 to be X.
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,PercentBothY)
+	Click2(CustomInput2X,EnergyY)
 	Sleep 500
 	
 	Send2(%X%)
@@ -718,7 +730,7 @@ EnergyCustomPercent1Set(X) ;Sets Custom Energy Percent Button 1 to be X.
 	
 	Send2("{Shift down}")
 	Sleep 500
-	Click2(PercentEnergy2X, PercentBothY)
+	Click2(CustomPercent1X, EnergyY)
 	Sleep 500
 	Send2("{Shift up}")
 	Sleep 500
@@ -728,14 +740,14 @@ EnergyCustomPercent1Set(X) ;Sets Custom Energy Percent Button 1 to be X.
 EnergyPercent2() ; Clicks the 2nd Custom Percent Energy Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(PercentEnergy2X, PercentBothY)
+	Click2(CustomPercent2X, EnergyY)
 	Sleep 500
 }
 
 EnergyCustomIdlePercent() ;Clicks on the Custom Idle Energy % button. Requires AP purchase
 {
 	CurrentStep := A_ThisFunc
-	Click2(IdlePercent1X, PercentBothY)
+	Click2(IdleCustomPercentX, EnergyY)
 	Sleep 500
 }
 
@@ -743,7 +755,7 @@ EnergyCustomIdlePercentSet(X) ;Sets Custom Idle Energy % Button to be X.
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,PercentBothY)
+	Click2(CustomInput2X,EnergyY)
 	Sleep 500
 	
 	Send2(%X%)
@@ -751,7 +763,7 @@ EnergyCustomIdlePercentSet(X) ;Sets Custom Idle Energy % Button to be X.
 	
 	Send2("{Shift down}")
 	Sleep 500
-	Click2(IdlePercent1X, PercentBothY)
+	Click2(IdleCustomPercentX, EnergyY)
 	Sleep 500
 	Send2("{Shift up}")
 	Sleep 500
@@ -762,21 +774,21 @@ EnergyCustomIdlePercentSet(X) ;Sets Custom Idle Energy % Button to be X.
 Magic2X() ; Clicks the 1/2 Idle Magic Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(Magic2X, IdleBothY)
+	Click2(Idle2X, MagicY)
 	Sleep 500
 }
 
 Magic4X() ; Clicks the 1/4 Idle Magic Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(Magic4X, IdleBothY)
+	Click2(Idle4X, MagicY)
 	Sleep 500
 }
 
 MagicPercent1() ; Clicks the 1st Custom Percent Magic Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(PercentMagic2X-25, PercentBothY)
+	Click2(CustomPercent1X, MagicY)
 	Sleep 500
 }
 
@@ -784,7 +796,7 @@ MagicCustomPercent1Set(X) ;Sets Custom Magic Percent Button 1 to be X.
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,PercentBothY)
+	Click2(CustomInput2X,EnergyY)
 	Sleep 500
 	
 	Send2("%X%")
@@ -792,7 +804,7 @@ MagicCustomPercent1Set(X) ;Sets Custom Magic Percent Button 1 to be X.
 	
 	Send2("{Shift down}")
 	Sleep 500
-	Click2(PercentMagic2X, PercentBothY)
+	Click2(CustomPercent1X, MagicY)
 	Sleep 500
 	Send2("{Shift up}")
 	Sleep 500
@@ -801,21 +813,21 @@ MagicCustomPercent1Set(X) ;Sets Custom Magic Percent Button 1 to be X.
 MagicPercent2() ; Clicks the 2nd Custom Percent Magic Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(PercentMagic2X, PercentBothY)
+	Click2(CustomPercent2X, MagicY)
 	Sleep 500
 }
 
 MagicMax() ; Clicks the Max Magic Button
 {
 	CurrentStep := A_ThisFunc
-	Click2(Magic2X+25, PercentBothY)
+	Click2(CapX, MagicY)
 	Sleep 500
 }
 
 MagicCustomIdlePercent() ;Clicks on the Custom Magic Energy % button. Requires AP purchase
 {
 	CurrentStep := A_ThisFunc
-	Click2(IdlePercent2X, PercentBothY)
+	Click2(IdleCustomPercentX, MagicY)
 	Sleep 500
 }
 
@@ -823,7 +835,7 @@ MagicCustomIdlePercentSet(X)  ;Sets Custom Idle Magic % Button to be X.
 {
 	CurrentStep := A_ThisFunc
 	
-	Click2(EnergyInputX,PercentBothY)
+	Click2(CustomInput2X,EnergyY)
 	Sleep 500
 	
 	Send2(%X%)
@@ -831,7 +843,7 @@ MagicCustomIdlePercentSet(X)  ;Sets Custom Idle Magic % Button to be X.
 	
 	Send2("{Shift down}")
 	Sleep 500
-	Click2(IdlePercent2X, PercentBothY)
+	Click2(IdleCustomPercentX, MagicY)
 	Sleep 500
 	Send2("{Shift up}")
 	Sleep 500
@@ -2039,13 +2051,13 @@ DiggersSet(DiggerArray:=0,OnlyCap:=0)
 				q:=4
 			
 			DiggersCap%q%()
-			if !OnlyCap
-				DiggerSmartActivate(q)
+			;if !OnlyCap
+				;DiggerSmartActivate(q)
 		}
 	}
 }
 
-;Activates the digger in Position if the checkbox is not checked
+;Activates the digger in Position if the checkbox is not checked /// No longer needed with v0.420
 DiggerSmartActivate(Position)
 {
 	if Position = 1 ;topleft
@@ -3074,7 +3086,7 @@ RebirthScript_AdvTraining(X) ;From the rebirth screen, performs a rebirth and do
 RebirthScript2(X) ;Looks at X and runs the appropriate function
 {
 	if DoubleBasicTrainingPerk = 1
-		AdvTrainTime:=12.5
+		AdvTrainTime:=12.5 ;TODO add a check for the new quirk that reduces this time even further
 	Else
 		AdvTrainTime:=25
 	
@@ -3157,7 +3169,8 @@ RunStart()
 	WinWaitClose
 	;MsgBox, %LoopNumber% %RepeatChoice%
 
-	WinActivate, Play NGU IDLE
+	WinActivate, Play NGU IDLE ;kong
+	WinActivate, ahk_exe NGUIdle.exe ;kart
 
 	
 	ScriptStart()
@@ -3223,7 +3236,8 @@ StartTest() ;Used for debug/testing purposes
 {
 	if (BackgroundMode = 0)
 	{
-		WinActivate, Play NGU IDLE
+		WinActivate, Play NGU IDLE ;kong
+		WinActivate, ahk_exe NGUIdle.exe ;kart
 	}
 
 	ImageSearchVariance :=10
@@ -3630,7 +3644,8 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 {
 	if (BackgroundMode = 0)
 	{
-		WinActivate, Play NGU IDLE
+		WinActivate, Play NGU IDLE ;kong
+		WinActivate, ahk_exe NGUIdle.exe ;kart
 	}
 
 	SegmentTimerStart := A_TickCount
@@ -3646,6 +3661,7 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 		if (BackgroundMode = 0)
 		{
 			WinActivate, Play NGU IDLE
+			WinActivate, ahk_exe NGUIdle.exe ;kart
 		}
 
 		FirstRebirth2()
@@ -3662,7 +3678,8 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 		CurrentStatus = %Challenge1RunLength% min RB #%Rebirths%/%Challenge1RunIterations%
 		if (BackgroundMode = 0)
 		{
-			WinActivate, Play NGU IDLE
+			WinActivate, Play NGU IDLE ;kong
+			WinActivate, ahk_exe NGUIdle.exe ;kart
 		}
 
 		RebirthScript2(Challenge1RunLength)
@@ -3675,7 +3692,8 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 		CurrentStatus = %Challenge2RunLength% min RB #%Rebirths%/%Challenge2RunIterations%
 		if (BackgroundMode = 0)
 		{
-			WinActivate, Play NGU IDLE
+			WinActivate, Play NGU IDLE ;kong
+			WinActivate, ahk_exe NGUIdle.exe ;kart
 		}
 
 		RebirthScript2(Challenge2RunLength)
@@ -3688,7 +3706,8 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 		CurrentStatus = %Challenge3RunLength% min RB #%Rebirths%/%Challenge3RunIterations%
 		if (BackgroundMode = 0)
 		{
-			WinActivate, Play NGU IDLE
+			WinActivate, Play NGU IDLE ;kong
+			WinActivate, ahk_exe NGUIdle.exe ;kart
 		}
 
 		RebirthScript2(Challenge3RunLength)
@@ -3701,7 +3720,8 @@ ChallengeRunSequence(ChallengeNumber) ;Runs the challenge specified in Challenge
 		CurrentStatus = 60 min RB #%Rebirths%
 		if (BackgroundMode = 0)
 		{
-			WinActivate, Play NGU IDLE
+			WinActivate, Play NGU IDLE ;kong
+			WinActivate, ahk_exe NGUIdle.exe ;kart
 		}
 
 		RebirthScript2(60)
@@ -3717,7 +3737,8 @@ NoRebirthRun() ;Attempts to do a No Rebirth run.
 {
 	if (BackgroundMode = 0)
 	{
-		WinActivate, Play NGU IDLE
+		WinActivate, Play NGU IDLE ;kong
+		WinActivate, ahk_exe NGUIdle.exe ;kart
 	}
 
 	SegmentTimerStart := A_TickCount
