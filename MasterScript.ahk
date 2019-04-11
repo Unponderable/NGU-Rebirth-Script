@@ -323,8 +323,8 @@ Global 100LFlag := 0
 Global NRCFlag := 0
 Global NoTMFlag := 0
 
-;RunStart()
-^p::StartTest()
+RunStart()
+;^p::StartTest()
 
 SetupOffsets() ; Defines TopLeftX and TopLeftY to be the top-left corner of the game, based on an image search. Run everytime you run a script.
 {
@@ -3259,10 +3259,9 @@ StartTest() ;Used for debug/testing purposes
 	}
 
 	ImageSearchVariance :=10
-	
 	ScriptStart()
 	
-	Save()
+	
 	
 	;MsgBox, Test done!	
 }
