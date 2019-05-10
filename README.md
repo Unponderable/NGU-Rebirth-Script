@@ -1,29 +1,10 @@
 # NGU Rebirth Script
 
-Rebirth and Challenge AutoHotKey script for NGU Idle 0.414-2
+Rebirth and Challenge AutoHotKey script for NGU Idle
 
 Written by __Unponderable__ and __Tatsumasa__\
 Also thanks to __EvoGeek__, the genesis of much of this script.\
 Come visit us in Discord: https://discord.gg/5revMxD
-
-#### Change Log
-
-0.6b - Uses the new Cap NGUs button (thanks, 4G!).\
-0.6a - Background mode option added. Still requires the window to be visible. Thanks, Satyric!\
-0.5d - Lots of fixes for 0.413-7. Fixed script not detecting unlocking Time Machine or Blood Magic. Removed use of custom energy button for challenge runs. Script will now cast the MacGuffin spells when available. Updated zone list.\
-0.5c - Fixes for compatibility with 0.412-2.\
-0.5b - Fixes to support new blood spells/blood spell arrangement. Themes other than Normal are not supported.\
-0.5a - Added support for Advanced Exoskeleton and Laser Sword augments.\
-0.5 - Full Gold Diggers implementation.\
-0.4g - Added beta support for Gold Diggers. Script will assume you have at least 2 slots and will assign them at the start of a run.\
-0.4f - Time Machine and Augmentation functions will now check if you're capped. If capped, it won't add energy/magic.\
-0.4e - Settings are now saved to an INI file and loaded on start. Added remaining settings to GUI.\
-0.4d - Added nominal support for adding to NGUs during a non-challenge run. Added setting for always capping blood magic/Wandoos.\
-0.4c - Various bugfixes. Added option to not use Wandoos. Added option to set default loop settings. Added support for Double Basic Training perk (see settings).\
-0.4 - Added new settings to let you customize how challenge runs are done. Fixed 100-LC using blood at the start of a run. Added some bonus settings, too.\
-0.3 - Better challenge support. Better GUI. Better everything. Fixed numerous bugs (and dumb design decisions).\
-0.2b - Added support for some of the challenges. Added a GUI to let you select some basic run options. Cleaned up some functions that weren't used.\
-0.1b - Initial release.
 
 
 #### Requirements to fully use this script
