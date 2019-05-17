@@ -150,6 +150,7 @@ Global WandoosMainY := 635 - 323
 Global NGUMainY := 665 - 323
 Global YGGMainY := 695 - 323
 Global DiggersMainY := 725 - 323
+Global HacksY := 495
 Global SelloutMainY := 830 - 323
 
 Global ConfirmX := 755 - 329
@@ -185,10 +186,10 @@ Global 24HCY := 565 - 323
 Global NECY := 625 - 323
 Global BlindY := 745 - 323
 
-Global FightX := 945 - 329
-Global NukeY := 430 - 323
-Global FightY := 530 - 323
-Global StopY := 480 - 323
+Global FightX := 626
+Global NukeY := 150
+Global FightY := 280
+Global StopY := 215
 
 Global MoneyPitX := 428
 Global MoneyPitY := 168
@@ -2112,6 +2113,24 @@ DiggerSmartActivate(Position)
 
 }
 
+;===HACKS===
+
+HacksMenu()
+{
+	CurrentStep := A_ThisFunc
+	Click2(MainMenuX, HacksY)
+	Sleep 250
+}
+
+DumpHacks() ;Work in Progress = dumps all resource3 into attack/defense
+{
+	HacksMenu()
+	Click2(CapX, R3Y)
+	Sleep 250
+	Click2(568,235)
+	Sleep 250
+}
+
 ;===SELLOUT SHOP===
 
 SelloutMenu()
@@ -3968,7 +3987,6 @@ LoadINI()
 	Iniread, ImageSearchVariance,Settings.ini,Miscellaneous Settings,ImageSearchVariance,10
 }
 
-;TODO rewrite imagesearches to use white/black pixelsearches, where possible
-;		In particular, to the Add energy/magic buttons to time machine
 ;TODO add option to start runs from current rebirth instead of starting a new one
 ;TODO Add objective to the display
+;TODO Add support for hacks - imagesearch for Hacks on Features menu
