@@ -41,7 +41,7 @@ __A__: Come back when you have more stats or change the challenge run sequence t
 
 __Q__: HALP. It's giving me an error about the game not being visible/not finding TopLeft.png!
 
-__A__: The script attempts to match the image TopLeft.png with the top left corner of the game screen. Make sure NGU idle is fully visible on the screen. Make sure the script is being run in the same file directory as the images that it came with. If you're still having issues, you may have an incompatible aspect ratio or scaling factor. For reference, the script was tested in Chrome and Firefox at 100% zoom on a 1920x1080 resolution monitor.  Check to make sure your DPI is set to 100%. Try matching that, if possible. If that doesn't work, I don't really know how to fix it, sorry :-/
+__A__: The script attempts to match the image TopLeft.png with the top left corner of the game screen. Make sure NGU idle is fully visible on the screen. Make sure the script is being run in the same file directory as the images that it came with. If you're still having issues, you may have an incompatible aspect ratio or scaling factor. For reference, the script was tested in Chrome and Firefox at 100% zoom on a 1920x1080 resolution monitor.  Check to make sure your DPI is set to 100%. Try matching that, if possible. Make sure night time mode/blue screen filter is off. If that doesn't work, I don't really know how to fix it, sorry :-/
 
 __Q__: Why does the script come to a halt when Iron Pill is active?
 
