@@ -2411,10 +2411,10 @@ TitanCheck() ; If the zone 1 back from the furthest unlocked zone isn't a titan,
 TitanCheck2() ;If current adventure zone is a titan, go one zone back. Note: doesn't work if you're in ITOPOD.
 {
 	CurrentStep := A_ThisFunc
-	Search1X := 895 - 329 + TopLeftX
-	Search1Y := 600 - 323 + TopLeftY
-	Search2X := 1000 - 329 + TopLeftX
-	Search2Y := 650 - 323 + TopLeftY
+	Search1X := 590 + TopLeftX
+	Search1Y := 230 + TopLeftY
+	Search2X := 666 + TopLeftX
+	Search2Y := 260 + TopLeftY
 	
 	AdventureMenu()
 	PixelSearch, SearchX, SearchY, Search1X, Search1Y, Search2X, Search2Y, 0x000000, 1, Fast ;Searches for the black pixels that comprise the countdown timer.
