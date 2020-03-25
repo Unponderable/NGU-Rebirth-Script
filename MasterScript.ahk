@@ -200,7 +200,7 @@ Global DailySpinY = 880 - 323
 
 Global AdventureLeftArrowX := 645 - 329
 Global AdventureRightArrowX := 1255 - 329
-Global AdventureArrowY := 555 - 323
+Global AdventureArrowY := 211
 Global ITOPODX := 725 - 329
 Global ITOPODY := 555 - 323
 Global ITOPODConfirmX := 955 - 329
